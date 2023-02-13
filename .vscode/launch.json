@@ -4,78 +4,19 @@
     // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
     "version": "0.2.0",
     "configurations": [
-        {
-            "name": "save images from bag file",
-            "type": "python",
-            "request": "launch",
-            "module": "tracker.programs.save_images_from_recorded_bag"
-        },
+       
         {
             "name": "Graphs of trendlines",
             "type": "python",
             "request": "launch",
-            "module": "tracker.programs.graphs_of_trendlines"
-        },
-        {
-            "name": "Create color ranges from the images",
-            "type": "python",
-            "request": "launch",
-            "module": "tracker.programs.npy_from_image",
-            "args": [
-                "<",
-                "${workspaceFolder}/input_npy.txt"
-            ]
-        },
-        {
-            "name": "Track from a recorded file",
-            "type": "python",
-            "request": "launch",
-            "module": "tracker.programs.track_from_recorded_file"
-        },
-        {
-            "name": "Read Recorded Images",
-            "type": "python",
-            "request": "launch",
-            "module": "tracker.programs.read_recorded_images"
-        },
-        {
-            "name": "Record Images",
-            "type": "python",
-            "request": "launch",
-            "module": "tracker.programs.record_images"
-        },
-        {
-            "name": "Real-time Color Tracker",
-            "type": "python",
-            "request": "launch",
-            "module": "tracker.programs.real_time_color_tracker"
-        },
-        {
-            "name": "Post Process Graphing",
-            "type": "python",
-            "request": "launch",
-            "module": "tracker.programs.post_process_graphing",
-            "console": "integratedTerminal"
-        },
-        {
-            "name": "Real-time Infrared Tracker",
-            "type": "python",
-            "request": "launch",
-            "module": "tracker.programs.real_time_infrared_tracker",
-            "console": "integratedTerminal"
-        },
-        {
-            "name": "Show  Trailing Objects",
-            "type": "python",
-            "request": "launch",
-            "module": "tracker.programs.show _trailing_objects",
+            "program": "src/graph_of_trendlines.py",
             "console": "integratedTerminal"
         },
         {
             "name": "Color Tracker",
             "type": "python",
             "request": "launch",
-            "module": "tracker.programs.color_tracker",
+            "program": "src/color_tracker.py",
             "console": "integratedTerminal"
         },
         {
