@@ -1,3 +1,7 @@
+# Parts of the program that specifically use the Intel RealSense D435i, but with the new changes that has not been verified.
+# In the future there may be other 3D cameras that can be chosen instead.
+
+
 from typing import Any, Tuple, Optional
 import pyrealsense2 as rs
 import cv2
