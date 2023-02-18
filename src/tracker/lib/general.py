@@ -1,5 +1,5 @@
 
-# Creates the files that are used in the programs
+# Creates some of the files that are used in the programs and other items
 ## TODO Create the data files if they are not already done. If possible, have an alternateive data file location.
 
 import cv2
