@@ -1,5 +1,6 @@
-
 ## Real-time color tracker ##
+# Tracks the largest object of a specified color and graphs the position on one graph with 3 lines representing the location in the x,y,z dimensions.
+# The tracking is delayed a little bit due to aligning the color and depth frames as it tracks.
 
 import os
 import argparse
@@ -148,7 +149,6 @@ def GUI_real_time_color_tracking(src, type_of_tracking, image ,color_ranges , mi
 
             first_time_check = True
             start_time = 0 # It should get a time the first round through
-                    # SET to True if you want all of the infrared images saved
 
             # counter for the frames it saves
             i = 0
@@ -189,9 +189,6 @@ def GUI_real_time_color_tracking(src, type_of_tracking, image ,color_ranges , mi
 
                     # Converts time from milliseconds to seconds
                 relative_timestamp = (timestamp - start_time) / 1000
-
-                # Writes the coordinates to each colored object
-                #csv_file_path = os.path.abspath(os.path.join(data_output_folder_path + '/'+ color_name + '.csv'))   
                 
                 csv_file_path = os.path.abspath(os.path.join(data_output_folder_path, self.color + '.csv'))   
                 with open(csv_file_path, 'a') as data_to_file:
