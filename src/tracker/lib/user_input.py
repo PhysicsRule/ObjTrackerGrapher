@@ -1,5 +1,6 @@
-# Library user input
+# For the terminal based programs, the user inputs are here.
 # This does not include selecting the color file as it is too specific to the color program
+
 import os
 import sys
 import time
