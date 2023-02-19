@@ -2,6 +2,7 @@
 # Predefined colors set here.
 # TODO in the future, make this editable by the user so they have their own predefined color ranges (bounds).
 # Gets the depth at the center of the colored object.
+# Started with Pyimagesearch code initially
 
 import os
 import cv2
