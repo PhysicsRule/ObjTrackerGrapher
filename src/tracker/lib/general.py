@@ -1,6 +1,6 @@
 
 # Creates some of the files that are used in the programs and other items
-## TODO Create the data files if they are not already done. If possible, have an alternateive data file location.
+## TODO Create the data files if they are not already done. If possible, have an alternative data file location.
 
 import cv2
 import os
@@ -30,7 +30,7 @@ def make_default_folder(data_input, data_output, color):
     return data_output_folder, data_output_folder_path
 
 def GUI_creates_an_array_of_csv_files (data_output_folder_path):
-# select mulitple files is useful when you want to graph many objects
+# select multiple files is useful when you want to graph many objects
     file_type = '.csv'
     num_files = 1
     dt = np.dtype([ ('filepath', np.unicode_, 60), ('filename', np.unicode_, 30)])    

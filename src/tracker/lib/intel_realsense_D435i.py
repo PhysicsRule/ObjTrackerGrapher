@@ -1,4 +1,5 @@
-# Parts of the program that specifically use the Intel RealSense D435i, but with the new changes that has not been verified.
+# Parts of the program that specifically use the Intel RealSense D435i, 
+# but with the new changes that has not been verified.
 # In the future there may be other 3D cameras that can be chosen instead.
 
 
@@ -256,7 +257,7 @@ def select_furthest_distance_infrared(pipeline):
         clipping_distance, depth_point, zeroed_z = select_location(infrared_image, rs_infrared, rs_depth)
         
         #TODO later call above to find the origin then call the following after
-        # for now this just sets all zeroed values as 0 insted of a specific origin, so the origin is the cent of the camera
+        # for now this just sets all zeroed values as 0 instead of a specific origin, so the origin is the cent of the camera
         zeroed_x, zeroed_y, zeroed_z = set_the_origin (depth_point)
 
 

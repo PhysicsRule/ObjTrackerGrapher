@@ -1,7 +1,7 @@
 # Sets up files
 # The data folder and sub folders (color_i, color_o etc.)  are not set up automatically. 
 # The data folder must be in the same directory as the program
-## TODO In the future create the necessary data folder and subfolders if not made 
+## TODO In the future create the necessary data folder and sub-folders if not made 
 
 import os
 from shutil import copyfile

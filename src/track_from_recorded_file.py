@@ -1,5 +1,7 @@
-## Take the recorded bag file and track it with color for now
+## Take the recorded bag file from IntelRealSense 2.0 software and track it with color for now.
+## Settings for the framerate and screen resolution must match our program when recording.
 ## TODO make it be for any tracking?
+## 
 
 import time
 import os
