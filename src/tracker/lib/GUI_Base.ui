@@ -682,7 +682,7 @@
       <rect>
        <x>920</x>
        <y>20</y>
-       <width>231</width>
+       <width>381</width>
        <height>71</height>
       </rect>
      </property>
@@ -692,8 +692,7 @@
       </font>
      </property>
      <property name="text">
-      <string>Graph Data
-From Tracker Only</string>
+      <string>Graph Data</string>
      </property>
     </widget>
     <widget class="QPushButton" name="video_button">
@@ -947,12 +946,12 @@ From Tracker Only</string>
       <rect>
        <x>920</x>
        <y>100</y>
-       <width>231</width>
+       <width>381</width>
        <height>21</height>
       </rect>
      </property>
      <property name="text">
-      <string>3D Graph</string>
+      <string>3D Graph or To zoom on 2nd data set</string>
      </property>
     </widget>
     <widget class="QLineEdit" name="r_height">

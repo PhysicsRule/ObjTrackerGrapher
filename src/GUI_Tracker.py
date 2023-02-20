@@ -28,6 +28,7 @@ from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg, NavigationTool
 from mpl_toolkits import mplot3d
 
 from tracker.lib.color import GUI_read_hsv_bounds
+from tracker.lib.general import find_objects_to_graph
 from tracker.lib.user_input import make_new_folder
 from tracker.lib.GUI_color_tracker import GUI_color_tracking
 from tracker.lib.GUI_real_time_color_tracker import GUI_real_time_color_tracking
@@ -530,51 +531,8 @@ class MyGUI(QMainWindow):
         data_output_folder_path = self.get_output_folder_path(base_path, data_output)
         
         # The array of the colors to be tracked
-        num_files = 1
-        dt_object = np.dtype([ ('filepath', np.unicode_, 60), ('filename', np.unicode_, 30), ('mass', np.float32)])
-        dt_2 = np.dtype([ ('blank1', np.unicode_, 5), ('blank2', np.unicode_, 5), ('filename', np.unicode_, 30), ('blank3', np.unicode_, 5), ('mass', np.float32)])
-
-        npy_found = False
-        for np_file_name in os.listdir(data_output_folder_path):
-            if np_file_name.endswith('.npy'):
-                try:
-                    np_path = os.path.abspath(os.path.join(data_output_folder_path, np_file_name,''))
-                    graph_color_ranges = np.load(np_path)
-                except:
-                    print("Couldn't load the npy file with the mass")
-                npy_found = True
-        if npy_found == False:                
-            # TODO have the user enter the data in the future
-            print('Since a npy file of the objects was not saved, mass was set to 1.')
-            mass = 1
-            object_count = 1
-            csv_file = False
-            for np_file_name in os.listdir(data_output_folder_path):
-                if np_file_name.endswith('.csv'):
-                    np_file_name = os.path.splitext(np_file_name)[0]
-                    csv_found = True
-                    if object_count == 1:
-                        graph_color_file = np.array([(('_'),('_'), (np_file_name),('_'),(mass))], dtype=dt_2)
-                        graph_color_ranges = graph_color_file
-                    else:
-                        graph_color_file = np.array([(('_'),('_'), (np_file_name),('_'),(mass))], dtype=dt_2)
-                        graph_color_ranges = np.hstack((graph_color_ranges,graph_color_file))
-            if csv_file == False:
-                print('*csv Data file was not found.')
-            else:
-                print ('graph_color_ranges', graph_color_ranges)
-        object_count = 1
-        for _,_,name,_,mass in graph_color_ranges:
-            if object_count == 1:
-                file_np = np.array([((data_output_folder_path), (name),(mass))], dtype=dt_object)
-                csv_files_array = file_np
-            else:
-                file_np = np.array([((data_output_folder_path), (name),(mass))], dtype=dt_object)
-                csv_files_array = np.hstack((csv_files_array,file_np))
-                print('csv_files_array',csv_files_array)
-            object_count += 1
-
-
+        graph_color_ranges, csv_files_array = find_objects_to_graph (data_output_folder_path)
+        
         # What variable is to be graphed for the 3rd graph. It always graphs position and velocity
         if self.select_momentum.isChecked(): which_parameter_to_plot = 'p'
         elif self.select_energy.isChecked(): which_parameter_to_plot = 'e'
@@ -657,27 +615,8 @@ class MyGUI(QMainWindow):
         data_output_folder_path = self.get_output_folder_path(base_path, data_output)
         
         # The array of the colors to be tracked
-        for np_file_name in os.listdir(data_output_folder_path):
-            if np_file_name.endswith('.npy'):
-                try:
-                    np_path = os.path.abspath(os.path.join(data_output_folder_path, np_file_name,''))
-                    graph_color_ranges = np.load(np_path)
-                except:
-                    print('select folder the graph is in')
-        print('file array to graph', graph_color_ranges)                    
+        graph_color_ranges, csv_files_array = find_objects_to_graph (data_output_folder_path)
 
-        dt_object = np.dtype([ ('filepath', np.unicode_, 60), ('filename', np.unicode_, 30), ('mass', np.float32)])
-        
-        object_count = 1
-        for _,_,name,_,mass in graph_color_ranges:
-            if object_count == 1:
-                file_np = np.array([((data_output_folder_path), (name),(mass))], dtype=dt_object)
-                csv_files_array = file_np
-            else:
-                file_np = np.array([((data_output_folder_path), (name),(mass))], dtype=dt_object)
-                csv_files_array = np.hstack((csv_files_array,file_np))
-                print(csv_files_array)
-            object_count += 1
         # Column header on position data 
         header_list = ['Time', 'x', 'y', 'z']
         # i represents each object tracked
