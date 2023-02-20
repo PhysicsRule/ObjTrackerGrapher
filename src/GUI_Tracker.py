@@ -36,11 +36,6 @@ from tracker.lib.graphing import GUI_graph_setup, three_D_graphs, plot_graphs, G
 
 from tracker.lib.color import choose_or_create_color_range
 
-
-
-
-
-
 class image_option:
     def __init__(self, show_RGB, save_RGB, show_depth, save_depth, show_mask, save_mask):
         self.show_RGB = show_RGB 
@@ -114,8 +109,6 @@ class TrendlineWindow(QWidget):
         self.setLayout(layout)
 class MyGUI(QMainWindow):
 
-    graph_widget: Optional[mlpcanvas]
-
     def __init__(self):
         super(MyGUI, self).__init__()
         ## TODO before making *.exe file !!
@@ -134,9 +127,11 @@ class MyGUI(QMainWindow):
         # default range for graph before zoomed in
         
         # Load existing data
+        #self.graph_widget = mlpcanvas()
         self.DataGraph.setHidden(True)
         self.window_color = NewColorWindow()
         self.window_trendline = TrendlineWindow()
+        
         # Folder Options Hidden
         self.folder_list.setHidden(True)        # List of folders to put the data into
         self.folder_name.setHidden(True)    
@@ -163,7 +158,7 @@ class MyGUI(QMainWindow):
         self.real_time_button.clicked.connect(self.run_real_time)
         self.tracker_button.clicked.connect(self.run_tracker)
         self.graph_button.clicked.connect(self.run_graph)
-        self.Button3DGraph.setHidden(True)
+        self.Button3DGraph.setHidden(False)
         self.Button3DGraph.clicked.connect(self.run_3D_graph)
         
         self.video_button.hide()
@@ -527,7 +522,7 @@ class MyGUI(QMainWindow):
         return src, type_of_tracking, self.image, self.color_ranges, min_radius_object, data_output_folder_path
 
     def run_graph(self, data_output_folder_path):
-
+        self.graph_widget = mlpcanvas()
         # The folder that will be graphed
         print('graph')
         base_path = os.getcwd()
@@ -536,17 +531,38 @@ class MyGUI(QMainWindow):
         
         # The array of the colors to be tracked
         num_files = 1
+        dt_object = np.dtype([ ('filepath', np.unicode_, 60), ('filename', np.unicode_, 30), ('mass', np.float32)])
+        dt_2 = np.dtype([ ('blank1', np.unicode_, 5), ('blank2', np.unicode_, 5), ('filename', np.unicode_, 30), ('blank3', np.unicode_, 5), ('mass', np.float32)])
+
+        npy_found = False
         for np_file_name in os.listdir(data_output_folder_path):
             if np_file_name.endswith('.npy'):
                 try:
                     np_path = os.path.abspath(os.path.join(data_output_folder_path, np_file_name,''))
                     graph_color_ranges = np.load(np_path)
                 except:
-                    print('select folder the graph is in')
-        print('file array to graph', graph_color_ranges)                    
-
-        dt_object = np.dtype([ ('filepath', np.unicode_, 60), ('filename', np.unicode_, 30), ('mass', np.float32)])
-        
+                    print("Couldn't load the npy file with the mass")
+                npy_found = True
+        if npy_found == False:                
+            # TODO have the user enter the data in the future
+            print('Since a npy file of the objects was not saved, mass was set to 1.')
+            mass = 1
+            object_count = 1
+            csv_file = False
+            for np_file_name in os.listdir(data_output_folder_path):
+                if np_file_name.endswith('.csv'):
+                    np_file_name = os.path.splitext(np_file_name)[0]
+                    csv_found = True
+                    if object_count == 1:
+                        graph_color_file = np.array([(('_'),('_'), (np_file_name),('_'),(mass))], dtype=dt_2)
+                        graph_color_ranges = graph_color_file
+                    else:
+                        graph_color_file = np.array([(('_'),('_'), (np_file_name),('_'),(mass))], dtype=dt_2)
+                        graph_color_ranges = np.hstack((graph_color_ranges,graph_color_file))
+            if csv_file == False:
+                print('*csv Data file was not found.')
+            else:
+                print ('graph_color_ranges', graph_color_ranges)
         object_count = 1
         for _,_,name,_,mass in graph_color_ranges:
             if object_count == 1:
@@ -555,7 +571,7 @@ class MyGUI(QMainWindow):
             else:
                 file_np = np.array([((data_output_folder_path), (name),(mass))], dtype=dt_object)
                 csv_files_array = np.hstack((csv_files_array,file_np))
-                print(csv_files_array)
+                print('csv_files_array',csv_files_array)
             object_count += 1
 
 
@@ -566,12 +582,12 @@ class MyGUI(QMainWindow):
         else : which_parameter_to_plot = 'a'
 
         # Define each canvas the 2 graphs will be located
-        self.graph_widget = mlpcanvas()
+        self.grid_layout.addWidget(self.graph_widget,0,0,alignment=Qt.Alignment())        
         # self.graph_widget_3D = mlpcanvas_3D()
         if not self.toolbar:
             self.addToolBar(NavigationToolbar2QT( self.graph_widget , self ))
             self.toolbar = True
-        self.grid_layout.addWidget(self.graph_widget,0,0,alignment=Qt.Alignment())
+
 
         # self.grid_layout.addWidget(self.graph_widget_3D, 0, 1, alignment=Qt.Alignment())
 

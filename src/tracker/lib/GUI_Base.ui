@@ -692,7 +692,8 @@
       </font>
      </property>
      <property name="text">
-      <string>Graph Data</string>
+      <string>Graph Data
+From Tracker Only</string>
      </property>
     </widget>
     <widget class="QPushButton" name="video_button">
@@ -1183,7 +1184,7 @@
       <rect>
        <x>100</x>
        <y>440</y>
-       <width>401</width>
+       <width>531</width>
        <height>41</height>
       </rect>
      </property>
@@ -1230,7 +1231,7 @@
       </font>
      </property>
      <property name="text">
-      <string>Type in the folder you want to track to or graph from</string>
+      <string>Type in the folder you want to track to or graph from. Then hit ENTER.</string>
      </property>
     </widget>
     <widget class="QCheckBox" name="save_tracking_mask_check">
