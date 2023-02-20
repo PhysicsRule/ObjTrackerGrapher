@@ -1,5 +1,6 @@
 
-# Files that are used in any program
+# Creates some of the files that are used in the programs and other items
+## TODO Create the data files if they are not already done. If possible, have an alternative data file location.
 
 import cv2
 import os
@@ -29,7 +30,7 @@ def make_default_folder(data_input, data_output, color):
     return data_output_folder, data_output_folder_path
 
 def GUI_creates_an_array_of_csv_files (data_output_folder_path):
-# select mulitple files is useful when you want to graph many objects
+# select multiple files is useful when you want to graph many objects
     file_type = '.csv'
     num_files = 1
     dt = np.dtype([ ('filepath', np.unicode_, 60), ('filename', np.unicode_, 30)])    
@@ -63,3 +64,51 @@ def open_the_video(src):
             print('Cannot read video file')
             sys.exit()
     return video
+
+def find_objects_to_graph (data_output_folder_path):
+# Use the npy file to located the objects or graph each csv file as a different object
+# TODO if using the csv file, allow for user to enter the mass of each object
+    dt_object = np.dtype([ ('filepath', np.unicode_, 60), ('filename', np.unicode_, 30), ('mass', np.float32)])
+    dt_2 = np.dtype([ ('blank1', np.unicode_, 5), ('blank2', np.unicode_, 5), ('filename', np.unicode_, 30), ('blank3', np.unicode_, 5), ('mass', np.float32)])
+
+    npy_found = False
+    for np_file_name in os.listdir(data_output_folder_path):
+        if np_file_name.endswith('.npy'):
+            try:
+                np_path = os.path.abspath(os.path.join(data_output_folder_path, np_file_name,''))
+                graph_color_ranges = np.load(np_path)
+            except:
+                print("Couldn't load the npy file with the mass")
+            npy_found = True
+    if npy_found == False:                
+        # TODO have the user enter the data in the future
+        print('Since a npy file of the objects was not saved, mass was set to 1.')
+        mass = 1
+        object_count = 1
+        csv_file = False
+        for np_file_name in os.listdir(data_output_folder_path):
+            if np_file_name.endswith('.csv'):
+                np_file_name = os.path.splitext(np_file_name)[0]
+                csv_found = True
+                if object_count == 1:
+                    graph_color_file = np.array([(('_'),('_'), (np_file_name),('_'),(mass))], dtype=dt_2)
+                    graph_color_ranges = graph_color_file
+                else:
+                    graph_color_file = np.array([(('_'),('_'), (np_file_name),('_'),(mass))], dtype=dt_2)
+                    graph_color_ranges = np.hstack((graph_color_ranges,graph_color_file))
+        if csv_file == False:
+            print('*csv Data file was not found.')
+        else:
+            print ('graph_color_ranges', graph_color_ranges)
+    object_count = 1
+    for _,_,name,_,mass in graph_color_ranges:
+        if object_count == 1:
+            file_np = np.array([((data_output_folder_path), (name),(mass))], dtype=dt_object)
+            csv_files_array = file_np
+        else:
+            file_np = np.array([((data_output_folder_path), (name),(mass))], dtype=dt_object)
+            csv_files_array = np.hstack((csv_files_array,file_np))
+            print('csv_files_array',csv_files_array)
+        object_count += 1
+
+    return graph_color_ranges, csv_files_array 

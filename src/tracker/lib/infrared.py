@@ -1,3 +1,5 @@
+# Not used right now.
+# TODO add this to the tracking method. When We do, the range of tolerance needs to be adjustable.
 import cv2
 import pyrealsense2 as rs
 import os

@@ -1,4 +1,7 @@
 ## Color Tracker
+## Track objects by color using Intel RealSense D435i.
+## The largest object of the color band chosen will be tracked by it's center.
+## Infrared tracking by subtracting the original scene was done in the past, so components of these features are still present.
 
 import os
 import argparse

@@ -1,12 +1,13 @@
 # Takes a *.csv file named 3Dposition.csv with the headers: Time, x,y,z
 # The program smooths the data, and finds the velocity and acceleration for each direction.
-# 9 Graphs are the result. I will continually look for new data as it is collected, but it does have a bit of a lag.
+# 9 Graphs are the result. 
+# Also creates *csv files of the velocity, and acceleration etc. data, then use these for plotting.
+# Uses a trimmed data matrix to find trendlines for just the domain in question
 # The first 3 data points will be removed as the smoothing makes them useless.
 
-### NOTES TO SELF: make the file and trendline an input again when done debugging and remark trim()
-###                exp and sine graphs don't work
-###                trim off time and xmin xmax the plot
-###                use poly for linear, quadratic, etc.. possibly taylor series...
+# TODO get the sine and exp trendlines working
+# TODO get the energy graphs to work with the GUI
+
 
 
 from numpy.lib.twodim_base import mask_indices
@@ -254,7 +255,7 @@ def FindMom(graph_data, data_frame, headerlist, PointsToSmooth, mass):
     return data_frame, graph_data, smooth_data_to_graph
 
 def FindKE(graph_data, data_frame, headerlist, PointsToSmooth, mass):
-    ## realtime grap as the animate function will repeat every so often. 
+    ## realtime graph as the animate function will repeat every so often. 
    
     # find Kinetic Energy data KE =0.5mv^2      where v=  sqrt((Vx^2+Vy^2+Vz^2))
      # .pow(2) says to take the value and raise it to the 2nd power in our case, thus square the entire column of values.
@@ -275,7 +276,7 @@ def FindKE(graph_data, data_frame, headerlist, PointsToSmooth, mass):
     return data_frame,graph_data, smooth_data_to_graph
 
 def FindTotalEnergy(graph_data, headerlist, PointsToSmooth, mass, vert_axis, zero_ref_for_PE):
-    ## realtime grap as the animate function will repeat every so often. 
+    ## realtime graph as the animate function will repeat every so often. 
    
     # find Total Energy by finding PE and adding it to KE
     

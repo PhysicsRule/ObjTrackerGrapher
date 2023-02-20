@@ -20,7 +20,6 @@ from tracker.lib.user_input import make_new_folder
 from tracker.lib.intel_realsense_D435i import get_all_frames_color, get_depth_meters, find_and_config_device, select_furthest_distance_color 
 from tracker.lib.color import make_color_hsv, find_object_by_color_with_red
 from tracker.lib.general import open_the_video, create_data_file, make_default_folder 
-from tracker.lib.graphs_right_after import nine_graphs
 
 
 # TODO use argparse values in config file later

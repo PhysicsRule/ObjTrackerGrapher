@@ -1,8 +1,10 @@
 # Takes a *.csv file named *.csv with the headers: Time, x,y,z
-# The program finds a trendline for x,y,z given a domain (tmin and tmax) to create other graphs
-# 9 Graphs are the result. 
-
-### NOTES TO SELF: make the file and trendline an input again when done debugging and remark trim()
+# 9 Graphs are the result 
+## Position vs. time, velocity vs. time, and either momentum or acceleration vs. time (along all 3 coordinate axes)
+## Energy vs. time will be included again in the future
+# The program will find a trendline for x,y,z given a domain (tmin and tmax) to create other graphs in the future.
+# For now, use graphing_trendlines.exe to get the trendliens until the GUI version has been added to the new platform.
+### Users state either linear or quadratic fits.
 ###                exp and sine graphs don't work
 
 import matplotlib.pyplot as plt
@@ -139,7 +141,7 @@ def GUI_graph (which_parameter_to_plot, data_output_folder_path, graph_color_ran
 
 
 def GUI_graph_trendline (fig, axes, line_style_array, line_color_array, which_parameter_to_plot, showlegend, trendline_folder_path, graph_color_ranges, csv_files_array ):
-
+## TODO The values for the trendlines times will be modified through the GUI in the future
     i = 0
     collision = 'n'
     ##collision = input('Do you want trendlines from a collision?\n')

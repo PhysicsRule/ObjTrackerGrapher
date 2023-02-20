@@ -682,7 +682,7 @@
       <rect>
        <x>920</x>
        <y>20</y>
-       <width>231</width>
+       <width>381</width>
        <height>71</height>
       </rect>
      </property>
@@ -946,12 +946,12 @@
       <rect>
        <x>920</x>
        <y>100</y>
-       <width>231</width>
+       <width>381</width>
        <height>21</height>
       </rect>
      </property>
      <property name="text">
-      <string>3D Graph</string>
+      <string>3D Graph or To zoom on 2nd data set</string>
      </property>
     </widget>
     <widget class="QLineEdit" name="r_height">
@@ -1183,7 +1183,7 @@
       <rect>
        <x>100</x>
        <y>440</y>
-       <width>401</width>
+       <width>531</width>
        <height>41</height>
       </rect>
      </property>
@@ -1230,7 +1230,7 @@
       </font>
      </property>
      <property name="text">
-      <string>Type in the folder you want to track to or graph from</string>
+      <string>Type in the folder you want to track to or graph from. Then hit ENTER.</string>
      </property>
     </widget>
     <widget class="QCheckBox" name="save_tracking_mask_check">

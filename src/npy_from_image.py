@@ -1,6 +1,6 @@
 ## Create a npy color range from a frame
 ## It should also be able to be used to select the frames you want to use to collect the data from, but it is not working right now
-## DOESN"T WORK unless images are named and named in alphabetical and numerical order##
+## DOESN'T WORK unless images are named and named in alphabetical and numerical order##
 ## You should be able to select the first and last frame to look through, but it has trouble reading them.
 ## There may be other errors ##
 

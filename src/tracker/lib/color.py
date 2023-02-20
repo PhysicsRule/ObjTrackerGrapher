@@ -1,4 +1,8 @@
-## TODO Have the RGB on the color_ranges / object_ranges so the trailing objects can be shown
+# Set the color bounds used in tracking.
+# Predefined colors set here.
+# TODO in the future, make this editable by the user so they have their own predefined color ranges (bounds).
+# Gets the depth at the center of the colored object.
+# Started with Pyimagesearch code initially
 
 import os
 import cv2
@@ -27,7 +31,7 @@ def find_hsv_bounds(object_name, radius_meters, mass, src) -> Optional[np.ndarra
         cap.set(3,640)
         cap.set(4,480)
     else:
-        # I would like to get this to work, but it does not right now
+        # TODO If the webcam doesn't work have another option to change camera
         frame = src[i] #The rs_color frame as a numpy array
     # Create a window named Press (s) when done.
     cv2.namedWindow("Press (s) when done")

@@ -8,7 +8,10 @@ Have the folder near your c: drive or on a flashdrive
 2. Install Intel RealSense SKD 2.0 and pyrealsense2 so you can run python projects with the camera
 ## Install Libraries
 To avoid having to add all of the python libraries individually, add the requirements.txt.
+ ## Download the data folder
+1. Download the data.zip folder into the main folder of your program. There are some sample data files to work with and the program requires them to run
+2. ignore the data folder by selecting the data folder: cntl-shift-p add gitignore
 ### If using Visual Studio...:
   1. Add the python environment 3.7
-  2. right click on the python 3.7 environment and install from requirements.txt for each program.
+  2. right click on the python 3.7 environment and install from requirements.txt for each program or do it with a virtual environment.(Ctrl+Shift+P), start typing the Python: Create Environment command to search, and then select the command.
  
