@@ -446,7 +446,7 @@ class MyGUI(QMainWindow):
         base_path = os.getcwd()
         
         #  self.image = get_settings_to_pass(self)
-        self.image = image_option(self.show_image_check.isChecked(), self.save_image_check.isChecked(), self.show_depth_check.isChecked(), self.save_depth_check.isChecked(), self.show_tracking_mask_check.isChecked(),self.save_tracking_mask_check.isChecked())
+        self.image = image_option(self.show_image_check.isChecked(), self.save_image_check.isChecked(), self.show_depth_check.isChecked(), self.save_depth_check.isChecked(), self.show_tracking_mask_check.isChecked(),self.save_tracking_mask_check.isChecked(), self.save_video.isChecked())
         
         ## TODO Add spot in GUI for this later. How do I do this?
         min_radius_object = 5

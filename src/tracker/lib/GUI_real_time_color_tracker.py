@@ -149,7 +149,7 @@ def GUI_real_time_color_tracking(src, type_of_tracking, image ,color_ranges , mi
 
             first_time_check = True
             start_time = 0 # It should get a time the first round through
-
+            video_img_array = []
             # counter for the frames it saves
             i = 0
 
@@ -233,6 +233,10 @@ def GUI_real_time_color_tracking(src, type_of_tracking, image ,color_ranges , mi
                 if image.save_RGB:
                     cv2.imwrite(image_file_path + str(i) +'.jpg', cv_color)
                     cv2.imwrite(image_file_path + str(i) +'.jpg', depth_colormap)
+                if image.save_video:
+                    height, width, layers = cv_color.shape
+                    size = (width,height)
+                    video_img_array.append(cv_color)
                 # Show masks
                 # ## cv2.imshow('mask', mask)
                 ## cv2.moveWindow('mask',1000,0)
@@ -244,6 +248,11 @@ def GUI_real_time_color_tracking(src, type_of_tracking, image ,color_ranges , mi
                 if k == 27 or k == 32:
                     print('end')
                     # Close all OpenCV windows
+                    if image.save_video:
+                        out = cv2.VideoWriter(image_file_path +'.mp4',cv2.VideoWriter_fourcc(*'DIVX'), 15, size)
+                        for i in range(len(video_img_array)):
+                            out.write(video_img_array[i])
+                            out.release()
                     cv2.destroyAllWindows()
                     break
 
