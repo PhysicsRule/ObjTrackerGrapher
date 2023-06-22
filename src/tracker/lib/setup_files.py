@@ -55,7 +55,7 @@ def set_up_color(src):
 def set_up_id():    
     #### Main Program to setup color tracker ####
     # Generic variables for the color tracker
-    # type_of_tracking = 'id' or 'id300'
+    # type_of_tracking = 'infrared' or 'id300'
 
     file_type = '.npy'
     data_folder = 'infrared_i'

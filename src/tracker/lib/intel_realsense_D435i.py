@@ -40,7 +40,7 @@ def find_and_config_device_mult_stream(file_path, type_of_tracking) -> Any:
     pipeline = rs.pipeline()
     
     config = rs.config()
-    if type_of_tracking == 'id':
+    if type_of_tracking == 'infrared':
         config.enable_stream(rs.stream.depth, 848 , 480, rs.format.z16, 90)
         config.enable_stream(rs.stream.infrared, 1, 848, 480, rs.format.y8, 90)
     elif type_of_tracking == 'id300':
@@ -279,7 +279,7 @@ def read_bag_file_and_config(types_of_streams_saved, data_output_folder_path, fo
         rs.config.disable_all_streams(config)
         rs.config.enable_device_from_file(config, bag_folder_path, repeat_playback=False)
         pipeline = rs.pipeline()        
-        if types_of_streams_saved == 'id':
+        if types_of_streams_saved == 'infrared':
             config.enable_stream(rs.stream.depth, 848 , 480, rs.format.z16, 90)
             config.enable_stream(rs.stream.infrared, 1, 848, 480, rs.format.y8, 90)
         elif types_of_streams_saved == 'id300':

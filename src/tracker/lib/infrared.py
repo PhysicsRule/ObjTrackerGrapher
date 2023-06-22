@@ -9,7 +9,7 @@ import argparse
 def find_and_config_device(file_path, type_of_tracking):
     pipeline = rs.pipeline()
     config = rs.config()
-    if type_of_tracking == 'id':
+    if type_of_tracking == 'infrared':
         config.enable_stream(rs.stream.depth, 848 , 480, rs.format.z16, 90)
         config.enable_stream(rs.stream.infrared, 1, 848, 480, rs.format.y8, 90)
     else:
