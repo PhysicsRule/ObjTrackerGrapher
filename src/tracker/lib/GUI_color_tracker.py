@@ -53,6 +53,7 @@ def GUI_color_tracking(src, type_of_tracking, image,color_ranges, min_radius_of_
             
         ## Color Tracking by making a mask for each color tracked
         hsv = make_color_hsv(cv_color)
+
         for (lower,upper, color_name, radius_meters, mass) in color_ranges:
             # Find location of the object in x,y pixels using color masks
             x_pixel, y_pixel, radius, mask = find_object_by_color(cv_color,hsv, lower,upper, color_name, radius_meters, mass, min_radius_of_object, max_num_point)     
@@ -65,8 +66,8 @@ def GUI_color_tracking(src, type_of_tracking, image,color_ranges, min_radius_of_
             if x_coord is None:
                 continue
             # Append to the file until there is an error at which it will close
-            
-                    # Start the timer
+
+            # Start the timer
             if first_time_check:
                 start_time = timestamp
                 # we might want this later and compare with start that has milliseconds
@@ -80,10 +81,11 @@ def GUI_color_tracking(src, type_of_tracking, image,color_ranges, min_radius_of_
             with open(csv_file_path, 'a') as data_to_file:
                 data_to_file.write(f'{relative_timestamp},{x_coord},{y_coord},{z_coord}\n')      
 
-            cv2.putText(cv_color, 'Time: ' + str(relative_timestamp), (0,20), cv2.FONT_HERSHEY_SIMPLEX, 0.75, (50,170,50), 2)
-            cv2.putText(cv_color, 'X coordinate: ' + str(x_coord), (0,40), cv2.FONT_HERSHEY_SIMPLEX, 0.75, (50,170,50), 2)
-            cv2.putText(cv_color, 'Y coordinate: ' + str(y_coord), (0,60), cv2.FONT_HERSHEY_SIMPLEX, 0.75, (50,170,50), 2)
-            cv2.putText(cv_color, 'Z coordinate: ' + str(z_coord), (0,80), cv2.FONT_HERSHEY_SIMPLEX, 0.75, (50,170,50), 2)
+            if color_name == color_ranges[0][2]:
+                cv2.putText(cv_color, 'Time: ' + str(relative_timestamp), (0,20), cv2.FONT_HERSHEY_SIMPLEX, 0.75, (50,170,50), 2)
+                cv2.putText(cv_color, 'X coordinate: ' + str(x_coord), (0,40), cv2.FONT_HERSHEY_SIMPLEX, 0.75, (50,170,50), 2)
+                cv2.putText(cv_color, 'Y coordinate: ' + str(y_coord), (0,60), cv2.FONT_HERSHEY_SIMPLEX, 0.75, (50,170,50), 2)
+                cv2.putText(cv_color, 'Z coordinate: ' + str(z_coord), (0,80), cv2.FONT_HERSHEY_SIMPLEX, 0.75, (50,170,50), 2)
             
         depth_image = np.asanyarray(rs_depth.get_data())
         depth_colormap = cv2.applyColorMap(cv2.convertScaleAbs(depth_image, alpha=0.10), cv2.COLORMAP_HSV)# Create a colormap from the depth data
