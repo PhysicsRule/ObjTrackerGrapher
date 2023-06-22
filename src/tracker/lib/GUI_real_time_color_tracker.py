@@ -145,7 +145,7 @@ def GUI_real_time_color_tracking(src, type_of_tracking, image ,color_ranges , mi
             self.new_data.connect(callback)
 
         def run(self):
-            image_file_path = os.path.abspath(os.path.join(data_output_folder_path + '/'+ self.color + '/'))  
+            image_file_path = os.path.abspath(os.path.join(data_output_folder_path + '/video/'))  
 
             first_time_check = True
             start_time = 0 # It should get a time the first round through
