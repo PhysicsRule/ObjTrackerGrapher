@@ -38,6 +38,8 @@ def GUI_color_tracking(src, type_of_tracking, image,color_ranges, min_radius_of_
 
     # Now that everything is setup, track the objects
     first_time_check = True
+    image_file_path = os.path.abspath(os.path.join(data_output_folder_path + '/video/'))  
+    video_img_array = []
     start_time = 0 # It should get a time the first round through
     i=0
 
@@ -87,18 +89,17 @@ def GUI_color_tracking(src, type_of_tracking, image,color_ranges, min_radius_of_
         depth_colormap = cv2.applyColorMap(cv2.convertScaleAbs(depth_image, alpha=0.10), cv2.COLORMAP_HSV)# Create a colormap from the depth data
         if image.show_depth:
             # Show depth colormap & color feed
+            cv2.circle(depth_colormap, (int(x_pixel), int(y_pixel)), int(radius), (255, 255, 255), 2)
             cv2.imshow('depth', depth_colormap)
-            cv2.moveWindow('depth',700,0)
-
+            cv2.moveWindow('depth',850,0)
         if image.show_RGB:
             cv2.imshow('Tracking', cv_color)
             cv2.moveWindow('Tracking',0,0)
         
         if image.show_mask and mask is not None:
             cv2.imshow('mask', mask)
-            cv2.moveWindow('mask',0,400)
-        i +=1
-
+            cv2.moveWindow('mask',0,500)
+        
         # Save the RGB and depth images to view later if you want, but it does slow the tracking down a bit.
         if image.save_RGB:
             color_file_path = os.path.abspath(os.path.join(data_output_folder_path, 'color'+  str(i) + '.jpg'))   
@@ -106,15 +107,27 @@ def GUI_color_tracking(src, type_of_tracking, image,color_ranges, min_radius_of_
         if image.save_depth:
             depth_file_path = os.path.abspath(os.path.join(data_output_folder_path, 'depth'+  str(i) + '.jpg'))   
             cv2.imwrite(depth_file_path, depth_colormap)
-        if image.save_depth:
+        if image.save_mask:
             mask_file_path = os.path.abspath(os.path.join(data_output_folder_path, 'mask'+  str(i) + '.jpg'))   
             cv2.imwrite(mask_file_path, mask)
+        if image.save_video:
+            height, width, layers = cv_color.shape
+            size = (width,height)
+            video_img_array.append(cv_color)
 
-        
+        i +=1
+
         # exit if spacebar or esc is pressed
         k = cv2.waitKey(1) & 0xff
         if k == 27 or k == 32:
             print('end')
+            # Close all OpenCV windows
+            if image.save_video:
+                out = cv2.VideoWriter(image_file_path +'.mp4',cv2.VideoWriter_fourcc(*'mp4v'), 15, size)
+                for i in range(len(video_img_array)):
+                    out.write(video_img_array[i])
+                out.release()
+            cv2.destroyAllWindows()
             break
 
     # Cleanup after loop break

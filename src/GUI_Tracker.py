@@ -38,13 +38,14 @@ from tracker.lib.graphing import GUI_graph_setup, three_D_graphs, plot_graphs, G
 from tracker.lib.color import choose_or_create_color_range
 
 class image_option:
-    def __init__(self, show_RGB, save_RGB, show_depth, save_depth, show_mask, save_mask):
+    def __init__(self, show_RGB, save_RGB, show_depth, save_depth, show_mask, save_mask, save_video):
         self.show_RGB = show_RGB 
         self.save_RGB = save_RGB
         self.show_depth = show_depth
         self.save_depth = save_depth
         self.show_mask = show_mask
         self.save_mask = save_mask
+        self.save_video = save_video
 
 class mlpcanvas(FigureCanvasQTAgg):
 
@@ -446,7 +447,7 @@ class MyGUI(QMainWindow):
         base_path = os.getcwd()
         
         #  self.image = get_settings_to_pass(self)
-        self.image = image_option(self.show_image_check.isChecked(), self.save_image_check.isChecked(), self.show_depth_check.isChecked(), self.save_depth_check.isChecked(), self.show_tracking_mask_check.isChecked(),self.save_tracking_mask_check.isChecked())
+        self.image = image_option(self.show_image_check.isChecked(), self.save_image_check.isChecked(), self.show_depth_check.isChecked(), self.save_depth_check.isChecked(), self.show_tracking_mask_check.isChecked(),self.save_tracking_mask_check.isChecked(), self.save_video.isChecked())
         
         ## TODO Add spot in GUI for this later. How do I do this?
         min_radius_object = 5

@@ -145,11 +145,11 @@ def GUI_real_time_color_tracking(src, type_of_tracking, image ,color_ranges , mi
             self.new_data.connect(callback)
 
         def run(self):
-            image_file_path = os.path.abspath(os.path.join(data_output_folder_path + '/'+ self.color + '/'))  
+            image_file_path = os.path.abspath(os.path.join(data_output_folder_path + '/video/'))  
 
             first_time_check = True
             start_time = 0 # It should get a time the first round through
-
+            video_img_array = []
             # counter for the frames it saves
             i = 0
 
@@ -206,7 +206,7 @@ def GUI_real_time_color_tracking(src, type_of_tracking, image ,color_ranges , mi
                     cv2.circle(depth_colormap, (int(x_pixel), int(y_pixel)), int(radius), (255, 255, 255), 2)
                     # Show depth colormap & color feed
                     cv2.imshow('depth', depth_colormap)
-                    cv2.moveWindow('depth',700,0)
+                    cv2.moveWindow('depth',850,0)
 
                 if image.show_RGB:
                     cv2.imshow('Tracking', cv_color)
@@ -214,7 +214,7 @@ def GUI_real_time_color_tracking(src, type_of_tracking, image ,color_ranges , mi
                 
                 if image.show_mask and mask is not None:
                     cv2.imshow('mask', mask)
-                    cv2.moveWindow('mask',0,400)
+                    cv2.moveWindow('mask',0,500)
                 
 
                 # Save the RGB and depth images to view later if you want, but it does slow the tracking down a bit.
@@ -224,18 +224,14 @@ def GUI_real_time_color_tracking(src, type_of_tracking, image ,color_ranges , mi
                 if image.save_depth:
                     depth_file_path = os.path.abspath(os.path.join(data_output_folder_path, 'depth'+  str(i) + '.jpg'))   
                     cv2.imwrite(depth_file_path, depth_colormap)
-                if image.save_depth:
+                if image.save_mask:
                     mask_file_path = os.path.abspath(os.path.join(data_output_folder_path, 'mask'+  str(i) + '.jpg'))   
                     cv2.imwrite(mask_file_path, mask)
-
+                if image.save_video:
+                    height, width, layers = cv_color.shape
+                    size = (width,height)
+                    video_img_array.append(cv_color)
                 i +=1
-
-                if image.save_RGB:
-                    cv2.imwrite(image_file_path + str(i) +'.jpg', cv_color)
-                    cv2.imwrite(image_file_path + str(i) +'.jpg', depth_colormap)
-                # Show masks
-                # ## cv2.imshow('mask', mask)
-                ## cv2.moveWindow('mask',1000,0)
                 
                 self.new_data.emit((x_coord, y_coord, z_coord, relative_timestamp))
                 
@@ -244,6 +240,11 @@ def GUI_real_time_color_tracking(src, type_of_tracking, image ,color_ranges , mi
                 if k == 27 or k == 32:
                     print('end')
                     # Close all OpenCV windows
+                    if image.save_video:
+                        out = cv2.VideoWriter(image_file_path +'.mp4',cv2.VideoWriter_fourcc(*'mp4v'), 15, size)
+                        for i in range(len(video_img_array)):
+                            out.write(video_img_array[i])
+                        out.release()
                     cv2.destroyAllWindows()
                     break
 
