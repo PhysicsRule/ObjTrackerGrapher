@@ -38,13 +38,14 @@ from tracker.lib.graphing import GUI_graph_setup, three_D_graphs, plot_graphs, G
 from tracker.lib.color import choose_or_create_color_range
 
 class image_option:
-    def __init__(self, show_RGB, save_RGB, show_depth, save_depth, show_mask, save_mask):
+    def __init__(self, show_RGB, save_RGB, show_depth, save_depth, show_mask, save_mask, save_video):
         self.show_RGB = show_RGB 
         self.save_RGB = save_RGB
         self.show_depth = show_depth
         self.save_depth = save_depth
         self.show_mask = show_mask
         self.save_mask = save_mask
+        self.save_video = save_video
 
 class mlpcanvas(FigureCanvasQTAgg):
 

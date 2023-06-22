@@ -88,7 +88,7 @@ def GUI_color_tracking(src, type_of_tracking, image,color_ranges, min_radius_of_
         if image.show_depth:
             # Show depth colormap & color feed
             cv2.imshow('depth', depth_colormap)
-            cv2.moveWindow('depth',700,0)
+            cv2.moveWindow('depth',850,0)
 
         if image.show_RGB:
             cv2.imshow('Tracking', cv_color)
@@ -96,7 +96,7 @@ def GUI_color_tracking(src, type_of_tracking, image,color_ranges, min_radius_of_
         
         if image.show_mask and mask is not None:
             cv2.imshow('mask', mask)
-            cv2.moveWindow('mask',0,400)
+            cv2.moveWindow('mask',0,500)
         i +=1
 
         # Save the RGB and depth images to view later if you want, but it does slow the tracking down a bit.
