@@ -1,7 +1,7 @@
 ## Main program for object tracking ##
 ## Used pyimagesearch.com for base code ##
 ## Put the *exe in a folder. with Data folder containing color_i and color_o folders
-
+## Used QtDesigner app
 
 from typing import List, Optional, Tuple
 from PyQt5.QtWidgets import *
@@ -34,6 +34,7 @@ from tracker.lib.GUI_color_tracker import GUI_color_tracking
 from tracker.lib.GUI_real_time_color_tracker import GUI_real_time_color_tracking
 from tracker.lib.GUI_graphing_trendlines import GUI_graph, GUI_graph_trendline, plot_style_color
 from tracker.lib.graphing import GUI_graph_setup, three_D_graphs, plot_graphs, GUI_trim
+from tracker.lib.intel_realsense_D435i import record_bag_file
 
 from tracker.lib.color import choose_or_create_color_range
 
@@ -163,8 +164,8 @@ class MyGUI(QMainWindow):
         self.Button3DGraph.setHidden(False)
         self.Button3DGraph.clicked.connect(self.run_3D_graph)
         
-        self.video_button.hide()
-        self.video_button.clicked.connect(self.run_video_only)
+        #self.video_button.hide()
+        self.video_button.clicked.connect(self.record_video_only)
         # Buttons: Minor
         self.color_button.clicked.connect(self.color_button_pressed)
         self.infrared_button.clicked.connect(self.infrared_button_pressed)
@@ -664,8 +665,11 @@ class MyGUI(QMainWindow):
         GUI_color_tracking(src, type_of_tracking, image, color_ranges, min_radius_object, data_output_folder_path)
         
 
-    def run_video_only(self):
-        print('video only')
+    def record_video_only(self):
+        print('recording video')
+        src, type_of_tracking, image, color_ranges, min_radius_object, data_output_folder_path = self.get_settings()
+        record_bag_file(data_output_folder_path, type_of_tracking)
+
 
     def toggle_window(self, window):
         if window.isVisible():

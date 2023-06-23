@@ -8,6 +8,7 @@ import pyrealsense2 as rs
 import cv2
 import numpy as np
 import time
+import os
 
 def warm_up_camera(pipeline) -> None:
     # Read video frame after waiting a bit for the camera to warm up
@@ -35,8 +36,7 @@ def find_and_config_device():
     warm_up_camera(pipeline)
     return pipeline
 
-
-def find_and_config_device_mult_stream(file_path, type_of_tracking) -> Any:
+def find_and_config_device_mult_stream(type_of_tracking) -> Any:
     pipeline = rs.pipeline()
     
     config = rs.config()
@@ -65,11 +65,6 @@ def find_and_config_device_mult_stream(file_path, type_of_tracking) -> Any:
     #config.enable_device(SerialForD435i)
 
     # Streams will get recorded to this .bag file
-    config.enable_record_to_file(file_path)
-    pipeline.start(config)
-    
-    
-    
     '''
     sensors = profile.get_device().query_sensors()
     for sensor in sensors:
@@ -84,9 +79,38 @@ def find_and_config_device_mult_stream(file_path, type_of_tracking) -> Any:
             #ep = sensor.set_option(rs.option.exposure, 78)
             #ep = sensor.set_option(rs.option.enable_auto_exposure)
     '''
-    return pipeline
+    return pipeline, config
 
 
+def record_bag_file(data_output_folder_path, type_of_tracking):
+# Record Images from pipeline
+# DOESN't Work as it cannot open the bag file for some reason
+# For now, just use the Intel Real Sense View if you installed it
+# https://www.intelrealsense.com/sdk-2/
+    filepath_bag = os.path.abspath(os.path.join(data_output_folder_path, 'bag_file.bag'))
+    pipeline, config = find_and_config_device_mult_stream(type_of_tracking)
+    config.enable_record_to_file(filepath_bag)
+    pipeline.start(config)
+    warm_up_camera(pipeline)
+
+    #wait_to_start = input('Hit enter to start and stop recording')
+    print('recording')
+    time.sleep(1)
+    time_to_record = 6 # seconds
+    if type_of_tracking == 'color': frames_to_record = time_to_record * 60
+    elif type_of_tracking == 'id300': frames_to_record = time_to_record * 300
+    elif type_of_tracking == 'infrared': frames_to_record = time_to_record * 90
+
+    # TODO Change this to while true and break at space bar when done testing
+    for _ in range(frames_to_record):
+        frames = pipeline.wait_for_frames()
+        # k = cv2.waitKey(1) & 0xff
+        # if k == 27 or k == 32:
+        #    print('end')
+        #    break
+    pipeline.stop()
+    read_bag_file_and_config(type_of_tracking, data_output_folder_path, 'bag_file', filepath_bag)
+    print('done recording')
 
 
 def get_all_frames_color(rs_pipeline) -> Optional[Tuple[Tuple[Any, Any, Any], Any]]:
@@ -296,6 +320,7 @@ def read_bag_file_and_config(types_of_streams_saved, data_output_folder_path, fo
         profile = pipeline.start(config)
         
         playback = profile.get_device().as_playback()
+        print('reading bag file')
         playback.set_real_time(False)
         time.sleep(2)
 
