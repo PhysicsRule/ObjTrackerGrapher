@@ -164,8 +164,9 @@ class MyGUI(QMainWindow):
         self.Button3DGraph.setHidden(False)
         self.Button3DGraph.clicked.connect(self.run_3D_graph)
         
-        #self.record_bag_button.hide()
+        
         self.record_bag_button.clicked.connect(self.record_bag)
+        self.track_from_bag_button.clicked.connect(self.track_from_bag)
         # Buttons: Minor
         self.color_button.clicked.connect(self.color_button_pressed)
         self.infrared_button.clicked.connect(self.infrared_button_pressed)
@@ -522,7 +523,7 @@ class MyGUI(QMainWindow):
         src=4
 
         # data_output_folder, data_output_folder_path = make_new_folder(data_output)
-        return src, type_of_tracking, self.image, self.color_ranges, min_radius_object, data_output_folder_path
+        return src, type_of_tracking, self.image, self.color_ranges, min_radius_object, data_output_folder_path, data_folder, data_output
 
     def run_graph(self, data_output_folder_path):
         self.graph_widget = mlpcanvas()
@@ -656,19 +657,28 @@ class MyGUI(QMainWindow):
         print('running real-time')
         #TODO embed graph in widget later
         self.DataGraph.setHidden(True)
-        src, type_of_tracking, image, color_ranges, min_radius_object, data_output_folder_path = self.get_settings()
+        src, type_of_tracking, image, color_ranges, min_radius_object, data_output_folder_path, data_folder, data_output = self.get_settings()
         GUI_real_time_color_tracking(src, type_of_tracking, image ,color_ranges , min_radius_object, data_output_folder_path)
 
     def run_tracker(self):
         print('tracker, not in realtime')
-        src, type_of_tracking, image, color_ranges, min_radius_object, data_output_folder_path = self.get_settings()
+        src, type_of_tracking, image, color_ranges, min_radius_object, data_output_folder_path, data_folder, data_output = self.get_settings()
+        # config by looking at the camera (remove this from tracking program below)
+        # find output folder here instead of 
         GUI_color_tracking(src, type_of_tracking, image, color_ranges, min_radius_object, data_output_folder_path)
         
 
     def record_bag(self):
         print('recording video')
-        src, type_of_tracking, image, color_ranges, min_radius_object, data_output_folder_path = self.get_settings()
+        src, type_of_tracking, image, color_ranges, min_radius_object, data_output_folder_path, data_folder, data_output = self.get_settings()
         record_bag_file(data_output_folder_path, type_of_tracking)
+
+    def track_from_bag(self)
+        print('Tracking from a previously recorded bag file.')
+        src, type_of_tracking, image, color_ranges, min_radius_object, data_output_folder_path, data_folder, data_output = self.get_settings()
+        #config by opening pipeline from bag)
+        GUI_color_tracking(src, type_of_tracking, image, color_ranges, min_radius_object, data_output_folder_path)
+
 
 
     def toggle_window(self, window):

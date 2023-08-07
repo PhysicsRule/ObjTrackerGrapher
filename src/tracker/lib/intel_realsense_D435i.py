@@ -33,7 +33,7 @@ def find_and_config_device():
     profile = pipeline.start(config)
 
     # Let the camera run for a few seconds so you do not get dark images
-    warm_up_camera(pipeline)
+    
     return pipeline
 
 def find_and_config_device_mult_stream(type_of_tracking) -> Any:
