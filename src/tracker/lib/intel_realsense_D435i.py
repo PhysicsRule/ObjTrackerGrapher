@@ -304,17 +304,17 @@ def read_bag_file_and_config(types_of_streams_saved, data_output_folder_path, fo
         rs.config.enable_device_from_file(config, bag_folder_path, repeat_playback=False)
         pipeline = rs.pipeline()        
         if types_of_streams_saved == 'infrared':
-            config.enable_stream(rs.stream.depth, 848 , 480, rs.format.z16, 90)
-            config.enable_stream(rs.stream.infrared, 1, 848, 480, rs.format.y8, 90)
+            config.enable_stream(rs.stream.depth) ", 848, 480, rs.format.z16, 90)"
+            config.enable_stream(rs.stream.infrared) ", 1, 848, 480, rs.format.y8, 90)"
         elif types_of_streams_saved == 'id300':
-            config.enable_stream(rs.stream.depth, 848 , 100, rs.format.z16, 300)
-            config.enable_stream(rs.stream.infrared, 1, 848, 100, rs.format.y8, 300)
+            config.enable_stream(rs.stream.depth) ", 848, 480, rs.format.z16, 300)"
+            config.enable_stream(rs.stream.infrared) ", 1, 848, 480, rs.format.y8, 300)"
         else:
             ## TODO increase to 60 fps and set S2_OPTION_AUTO_EXPOSURE_PRIORITY to 0 to maintain constant fps when recording
-            config.enable_stream(rs.stream.depth, 848, 480, rs.format.z16, 60)
-            config.enable_stream(rs.stream.color, 848, 480, rs.format.bgr8, 60)
+            config.enable_stream(rs.stream.depth) ", 848, 480, rs.format.z16, 60)"
+            config.enable_stream(rs.stream.color) ", 848, 480, rs.format.bgr8, 60)"
             if types_of_streams_saved == 'all':
-                config.enable_stream(rs.stream.infrared, 1, 848, 480, rs.format.y8, 60)
+                config.enable_stream(rs.stream.infrared) ", 1, 848, 480, rs.format.y8, 60)"
 
         #pipeline.start(config)
         profile = pipeline.start(config)
