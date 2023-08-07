@@ -164,8 +164,8 @@ class MyGUI(QMainWindow):
         self.Button3DGraph.setHidden(False)
         self.Button3DGraph.clicked.connect(self.run_3D_graph)
         
-        #self.video_button.hide()
-        self.video_button.clicked.connect(self.record_video_only)
+        #self.record_bag_button.hide()
+        self.record_bag_button.clicked.connect(self.record_bag)
         # Buttons: Minor
         self.color_button.clicked.connect(self.color_button_pressed)
         self.infrared_button.clicked.connect(self.infrared_button_pressed)
@@ -665,7 +665,7 @@ class MyGUI(QMainWindow):
         GUI_color_tracking(src, type_of_tracking, image, color_ranges, min_radius_object, data_output_folder_path)
         
 
-    def record_video_only(self):
+    def record_bag(self):
         print('recording video')
         src, type_of_tracking, image, color_ranges, min_radius_object, data_output_folder_path = self.get_settings()
         record_bag_file(data_output_folder_path, type_of_tracking)
