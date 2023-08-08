@@ -38,15 +38,18 @@ from tracker.lib.intel_realsense_D435i import record_bag_file, find_and_config_d
 
 from tracker.lib.color import choose_or_create_color_range
 
-class folder:
+## TODO possibly use this instead of passing each individual piece
+class folder_info:
   def __init__(self, types_of_streams_saved, type_of_tracking, input_folder, output_folder, data_output_folder, data_output_folder_path, color_ranges ):
-    self.types_of_streams_saved = types_of_streams_saved
-    self.type_of_tracking = type_of_tracking
-    self.input_folder = input_folder
-    self.output_folder = output_folder
-    self.data_output_folder = data_output_folder 
-    self.data_output_folder_path = data_output_folder_path
-    self.color_ranges = color_ranges
+    self.types_of_streams_saved = types_of_streams_saved    # cd: color, id: infrared or id300
+    self.type_of_tracking = type_of_tracking                # color or infrared
+    self.input_folder = input_folder                        # example: color_i
+    self.output_folder = output_folder                      # example: color_o
+    self.data_output_folder = data_output_folder            # example: drop1
+    self.data_output_folder_path = data_output_folder_path  
+
+    # numpy with objects you are tracking with object name, mass, and radius
+    self.color_ranges = color_ranges                      #(lower,upper, color_name, radius_meters, mass)
 
 class image_option:
     def __init__(self, show_RGB, save_RGB, show_depth, save_depth, show_mask, save_mask, save_video):

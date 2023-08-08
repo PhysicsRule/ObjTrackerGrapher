@@ -897,7 +897,8 @@
      </property>
      <property name="text">
       <string>Infrared
-90 fps</string>
+90 fps
+(Future)</string>
      </property>
     </widget>
     <widget class="QLineEdit" name="folder_name">
@@ -1300,7 +1301,8 @@
      </property>
      <property name="text">
       <string>Infrared
-300 fps (thin)</string>
+300 fps (thin)
+(Future)</string>
      </property>
     </widget>
     <widget class="QPushButton" name="track_from_bag_button">
