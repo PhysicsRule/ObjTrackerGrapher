@@ -9,27 +9,21 @@ import cv2
 import numpy as np
 
 from tracker.lib.setup_files import set_up_color, make_csv_files
-from tracker.lib.intel_realsense_D435i import get_all_frames_color, get_depth_meters, find_and_config_device, select_furthest_distance_color
+from tracker.lib.intel_realsense_D435i import get_all_frames_color, get_depth_meters, find_and_config_device, select_furthest_distance_color, warm_up_camera
 from tracker.lib.color import make_color_hsv, find_object_by_color
 from tracker.lib.general import open_the_video 
 
-def GUI_color_tracking(src, type_of_tracking, image,color_ranges, min_radius_of_object, data_output_folder_path):
+def GUI_color_tracking(pipeline, src, type_of_tracking, image,color_ranges, min_radius_of_object, data_output_folder_path, input_folder, data_output ):
     
     make_csv_files(color_ranges, data_output_folder_path)
     
-    if type_of_tracking == 'color':
-        data_folder = 'color_i'
-        data_output = 'color_o'
-    elif type_of_tracking == 'infrared':
-        data_folder = 'infrared_i'
-        data_output = 'infrared_o'
-
     max_num_point=len(color_ranges)
     ## GUI TODO Have GUI real existing folders and provide an optional name for a new folder name being the last one listed with the number incremented by 1
     
 
     # Configure and setup the cameras
-    pipeline = find_and_config_device()
+    
+    warm_up_camera(pipeline)
     # OpenCV initialization
 
 

@@ -662,10 +662,10 @@
     <widget class="QPushButton" name="tracker_button">
      <property name="geometry">
       <rect>
-       <x>340</x>
+       <x>260</x>
        <y>20</y>
-       <width>231</width>
-       <height>71</height>
+       <width>160</width>
+       <height>70</height>
       </rect>
      </property>
      <property name="font">
@@ -695,13 +695,13 @@
       <string>Graph Data</string>
      </property>
     </widget>
-    <widget class="QPushButton" name="video_button">
+    <widget class="QPushButton" name="record_bag_button">
      <property name="geometry">
       <rect>
-       <x>590</x>
+       <x>430</x>
        <y>20</y>
-       <width>231</width>
-       <height>71</height>
+       <width>160</width>
+       <height>70</height>
       </rect>
      </property>
      <property name="font">
@@ -709,9 +709,11 @@
        <pointsize>12</pointsize>
       </font>
      </property>
+     <property name="toolTipDuration">
+      <number>5</number>
+     </property>
      <property name="text">
-      <string>Record Video Only
-(Future)</string>
+      <string>Record Bag</string>
      </property>
     </widget>
     <widget class="QTableWidget" name="trendlineTableWidget">
@@ -775,6 +777,12 @@
           <height>0</height>
          </size>
         </property>
+        <property name="contextMenuPolicy">
+         <enum>Qt::NoContextMenu</enum>
+        </property>
+        <property name="toolTipDuration">
+         <number>2</number>
+        </property>
         <widget class="PlotWidget" name="DataGraph">
          <property name="geometry">
           <rect>
@@ -794,8 +802,8 @@
       <rect>
        <x>90</x>
        <y>20</y>
-       <width>231</width>
-       <height>71</height>
+       <width>160</width>
+       <height>70</height>
       </rect>
      </property>
      <property name="palette">
@@ -1303,6 +1311,25 @@
      </property>
      <property name="checked">
       <bool>true</bool>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="track_from_bag_button">
+     <property name="geometry">
+      <rect>
+       <x>600</x>
+       <y>20</y>
+       <width>160</width>
+       <height>70</height>
+      </rect>
+     </property>
+     <property name="font">
+      <font>
+       <pointsize>12</pointsize>
+      </font>
+     </property>
+     <property name="text">
+      <string>Track from
+ Bag File</string>
      </property>
     </widget>
    </widget>

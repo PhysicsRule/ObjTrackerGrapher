@@ -54,8 +54,8 @@ show_mask_image = True
 
 #### GUI TODO Variables we will want to set in the GUI
 ## type_of_tracking =  'color' or 'infrared' or ...
-    ## if type_of_tracking =='color': data_folder = 'color_i' ;  data_output = 'color_o'
-    ## if type_of_tracking =='infrared': data_folder = 'color_i' ;  data_output = 'color_o'
+    ## if type_of_tracking =='color': input_folder = 'color_i' ;  data_output = 'color_o'
+    ## if type_of_tracking =='infrared': input_folder = 'color_i' ;  data_output = 'color_o'
 
 ## Default in GUI TODO Create a dialog box that explains what this is. 
 ## See user_input.py -> select_pixel_radius for text to use

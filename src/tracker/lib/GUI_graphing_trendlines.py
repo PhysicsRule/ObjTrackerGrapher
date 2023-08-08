@@ -38,7 +38,7 @@ def plot_style_color():
     print(line_style_array)
     return line_style_array, line_color_array, marker_shape_array, show_legend
 
-#TODO data_folder has the radius and mass of the object so it can be used later for momentum
+#TODO input_folder has the radius and mass of the object so it can be used later for momentum
 def GUI_graph (which_parameter_to_plot, data_output_folder_path, graph_color_ranges, csv_files_array, points_to_smooth ):
 
     # Setup Trendline folder. I

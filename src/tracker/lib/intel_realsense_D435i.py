@@ -33,7 +33,7 @@ def find_and_config_device():
     profile = pipeline.start(config)
 
     # Let the camera run for a few seconds so you do not get dark images
-    warm_up_camera(pipeline)
+    
     return pipeline
 
 def find_and_config_device_mult_stream(type_of_tracking) -> Any:
@@ -87,7 +87,7 @@ def record_bag_file(data_output_folder_path, type_of_tracking):
 # DOESN't Work as it cannot open the bag file for some reason
 # For now, just use the Intel Real Sense View if you installed it
 # https://www.intelrealsense.com/sdk-2/
-    filepath_bag = os.path.abspath(os.path.join(data_output_folder_path, 'bag_file.bag'))
+    filepath_bag = os.path.abspath(os.path.join(data_output_folder_path, 'bag.bag'))
     pipeline, config = find_and_config_device_mult_stream(type_of_tracking)
     config.enable_record_to_file(filepath_bag)
     pipeline.start(config)
@@ -109,7 +109,7 @@ def record_bag_file(data_output_folder_path, type_of_tracking):
         #    print('end')
         #    break
     pipeline.stop()
-    read_bag_file_and_config(type_of_tracking, data_output_folder_path, 'bag_file', filepath_bag)
+    read_bag_file_and_config(type_of_tracking, data_output_folder_path, 'bag', filepath_bag)
     print('done recording')
 
 
@@ -304,17 +304,17 @@ def read_bag_file_and_config(types_of_streams_saved, data_output_folder_path, fo
         rs.config.enable_device_from_file(config, bag_folder_path, repeat_playback=False)
         pipeline = rs.pipeline()        
         if types_of_streams_saved == 'infrared':
-            config.enable_stream(rs.stream.depth, 848 , 480, rs.format.z16, 90)
-            config.enable_stream(rs.stream.infrared, 1, 848, 480, rs.format.y8, 90)
+            config.enable_stream(rs.stream.depth)       #, 848, 480, rs.format.z16, 90)
+            config.enable_stream(rs.stream.infrared)    #, 1, 848, 480, rs.format.y8, 90)
         elif types_of_streams_saved == 'id300':
-            config.enable_stream(rs.stream.depth, 848 , 100, rs.format.z16, 300)
-            config.enable_stream(rs.stream.infrared, 1, 848, 100, rs.format.y8, 300)
+            config.enable_stream(rs.stream.depth)       #, 848, 480, rs.format.z16, 300)
+            config.enable_stream(rs.stream.infrared)    #, 1, 848, 480, rs.format.y8, 300)
         else:
             ## TODO increase to 60 fps and set S2_OPTION_AUTO_EXPOSURE_PRIORITY to 0 to maintain constant fps when recording
-            config.enable_stream(rs.stream.depth, 848, 480, rs.format.z16, 60)
-            config.enable_stream(rs.stream.color, 848, 480, rs.format.bgr8, 60)
+            config.enable_stream(rs.stream.depth)       #, 848, 480, rs.format.z16, 60)
+            config.enable_stream(rs.stream.color)       #, 848, 480, rs.format.bgr8, 60)
             if types_of_streams_saved == 'all':
-                config.enable_stream(rs.stream.infrared, 1, 848, 480, rs.format.y8, 60)
+                config.enable_stream(rs.stream.infrared) #, 1, 848, 480, rs.format.y8, 60)
 
         #pipeline.start(config)
         profile = pipeline.start(config)
