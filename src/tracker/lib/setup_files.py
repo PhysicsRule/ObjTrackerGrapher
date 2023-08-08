@@ -29,14 +29,14 @@ def set_up_color(src):
     # type_of_tracking = 'color'
 
     file_type = '.npy'
-    data_folder = 'color_i'
+    input_folder = 'color_i'
     data_output = 'color_o'
 
 
     print('Welcome to the wonderful world of Color Tracking')
 
     # Shows the user the color files to choose from
-    dir_path_npy= show_files(data_folder, file_type)
+    dir_path_npy= show_files(input_folder, file_type)
 
     # The user either uses a file, creates a new file, uses a default or erases a file 
     what_to_do_with_npy_files = select_what_to_do_with_files()
@@ -58,13 +58,13 @@ def set_up_id():
     # type_of_tracking = 'infrared' or 'id300'
 
     file_type = '.npy'
-    data_folder = 'infrared_i'
+    input_folder = 'infrared_i'
     data_output = 'infrared_o'
 
     print('Welcome to the wonderful world of Background Subtraction Tracking')
 
     # Shows the user the color files to choose from
-    dir_path_npy= show_files(data_folder, file_type)
+    dir_path_npy= show_files(input_folder, file_type)
 
     # The user either uses a file, creates a new file, uses a default or erases a file 
     what_to_do_with_npy_files = select_what_to_do_with_files()

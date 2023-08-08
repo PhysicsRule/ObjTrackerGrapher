@@ -64,16 +64,16 @@ if 'all' in types_of_streams_saved:
     type_of_tracking = input('(c)olor  \n(deep) Learning \n(back)ground subtraction with infrared? \n')
 elif 'cd' in types_of_streams_saved:
     type_of_tracking = input('(c)olor \n(deep) Learning \n ')
-    data_folder = 'color_o'
+    input_folder = 'color_o'
 elif 'infrared' in types_of_streams_saved:
-    data_folder = 'infrared_o'
+    input_folder = 'infrared_o'
     type_of_tracking = input('(obj_tracker) track by shape \n (deep) Learning \n(backd)ground subtraction with depth \n(back)ground subtraction with infrared?')
 elif 'id300' in types_of_streams_saved:
-    data_folder = 'infrared_o'
+    input_folder = 'infrared_o'
     type_of_tracking = input('(tracker) track by shape \n (deep) Learning \n(backd)ground subtraction with depth \n(back)ground subtraction with infrared?')    
 
 # What folders are currently in the output folder'
-dir_path  = show_folders(data_folder)
+dir_path  = show_folders(input_folder)
 
 # What folder is the bag file located?
 while True:

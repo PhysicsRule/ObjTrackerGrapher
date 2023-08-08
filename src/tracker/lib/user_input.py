@@ -16,10 +16,10 @@ from scipy.optimize import least_squares
 from scipy.optimize import curve_fit
 from mpl_toolkits import mplot3d
 
-def temp_GUI_select_multiple_files (data_folder):
+def temp_GUI_select_multiple_files (input_folder):
 # select mulitple files is useful when you want to graph many objects
     
-    dir_path = show_folders(data_folder)
+    dir_path = show_folders(input_folder)
     file_path, folder_name = select_files_to_graph(dir_path)
     
     return file_path
@@ -95,19 +95,19 @@ def select_type_of_tracking():
             print('Make sure you are using .csv files')
     return type_of_tracking, data_input, data_output
 
-def show_folders(data_folder):
+def show_folders(input_folder):
 # Show the user the file options to choose from
     basepath = os.getcwd()
-    dir_path = os.path.abspath(os.path.join(basepath, 'data',data_folder, ''))
+    dir_path = os.path.abspath(os.path.join(basepath, 'data',input_folder, ''))
     print("These are the folders available =\n", dir_path)
     for f in os.listdir(dir_path):
         print(f)
     return dir_path
 
-def show_files(data_folder, file_type):
+def show_files(input_folder, file_type):
 # Show the user the file options to choose from
     basepath = os.getcwd()
-    dir_path = os.path.abspath(os.path.join(basepath, 'data',data_folder, ''))
+    dir_path = os.path.abspath(os.path.join(basepath, 'data',input_folder, ''))
     print("These are the files available =\n", dir_path)
     for f in os.listdir(dir_path):
         if f.endswith(file_type):
@@ -126,11 +126,11 @@ def select_files_to_graph(dir_path):
             print('Name a folder that exists') 
     return file_path, folder_name
 
-def select_multiple_images (type_of_tracking, data_folder, file_type_image):
+def select_multiple_images (type_of_tracking, input_folder, file_type_image):
 # puts images into a string to read from
 # TODO In the future have the user select the files they want instead of having to delete them from the files themselves
 
-    dir_path = show_folders(data_folder)
+    dir_path = show_folders(input_folder)
     filepath, folder_name = select_files_to_graph(dir_path)
     
     first_frame = int(input('What is the first frame you would like to use? \n'))
@@ -151,13 +151,13 @@ def select_multiple_images (type_of_tracking, data_folder, file_type_image):
     image_array = np.asarray(images)
     return first_frame, last_frame, image_array
 
-def select_multiple_files (data_folder, file_type):
+def select_multiple_files (input_folder, file_type):
 # select mulitple files is useful when you want to graph many objects
     num_files = 1
     dt = np.dtype([ ('filepath', np.unicode_, 60), ('filename', np.unicode_, 30)])    
     
     
-    dir_path = show_folders(data_folder)
+    dir_path = show_folders(input_folder)
     filepath, folder_name = select_files_to_graph(dir_path)
     
     for file_name in os.listdir(filepath):

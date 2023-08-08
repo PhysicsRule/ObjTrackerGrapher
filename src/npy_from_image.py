@@ -12,7 +12,7 @@ from tracker.lib.color import choose_or_create_color_range, read_hsv_bounds
    
 file_type = '.npy'
 type_of_tracking = 'color'
-data_folder = 'color_i'
+input_folder = 'color_i'
 data_output = 'color_o'
 
 
@@ -27,7 +27,7 @@ first_frame, last_frame, image_array = select_multiple_images(type_of_tracking, 
 
 
 # Shows the user the color files to choose from
-dir_path_npy= show_files(data_folder, file_type)
+dir_path_npy= show_files(input_folder, file_type)
 
 # The user will make a new(n) *npy file
 what_to_do_with_npy_files = 'n'

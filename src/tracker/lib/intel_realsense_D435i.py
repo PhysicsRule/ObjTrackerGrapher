@@ -109,7 +109,7 @@ def record_bag_file(data_output_folder_path, type_of_tracking):
         #    print('end')
         #    break
     pipeline.stop()
-    read_bag_file_and_config(type_of_tracking, data_output_folder_path, 'bag_file', filepath_bag)
+    read_bag_file_and_config(type_of_tracking, data_output_folder_path, 'bag', filepath_bag)
     print('done recording')
 
 

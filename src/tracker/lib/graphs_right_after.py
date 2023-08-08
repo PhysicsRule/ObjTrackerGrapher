@@ -28,7 +28,7 @@ from mpl_toolkits import mplot3d
 # Setup graph legend
 
 def nine_graphs():
-    #TODO data_folder has the radius and mass of the object so it can be used later for momentum
+    #TODO input_folder has the radius and mass of the object so it can be used later for momentum
     type_of_tracking, _, data_output = select_type_of_tracking() 
     file_type = '.csv'
 
