@@ -153,6 +153,8 @@ class MyGUI(QMainWindow):
         self.folder_name.setHidden(True)    
         self.table_widget_color.setHidden(True)
         self.folder_name_objects.setHidden(True)
+        self.table_widget_color_2.setHidden(True) # For new colors
+        self.lineEdit_define_color_name.setHidden(True)
         self.how_to_enter_folder_label.setHidden(True)
         # Acceleration, Energy, Momentum  Hidden
         self.ame_explanation.setHidden(True)    # text
@@ -167,6 +169,7 @@ class MyGUI(QMainWindow):
         # Color choices hidden (text)
         self.select_default_colors.setHidden(True)
         self.select_your_own_colors.setHidden(True)
+        self.define_colors.setHidden(True)
         self.combo_box_objects.setHidden(True)
         # GUI shows up
         self.show()
@@ -188,6 +191,7 @@ class MyGUI(QMainWindow):
         # Radio Buttons: Color Choice 
         self.select_default_colors.toggled.connect(self.default_colors_shown)
         self.select_your_own_colors.toggled.connect(self.your_own_colors_shown)
+        self.define_colors.toggled.connect(self.define_colors_shown)
         # Radio Button: 3rd variable graphed
         self.select_acceleration.toggled.connect(self.acceleration_chosen)
         self.select_momentum.toggled.connect(self.momentum_chosen)
@@ -199,6 +203,7 @@ class MyGUI(QMainWindow):
         # Putting buttons in color group
         self.color_group.addButton(self.select_default_colors)
         self.color_group.addButton(self.select_your_own_colors)
+        self.color_group.addButton(self.define_colors)
         # Putting buttons in AME group
         self.ame_group.addButton(self.select_acceleration)
         self.ame_group.addButton(self.select_momentum)
@@ -293,6 +298,7 @@ class MyGUI(QMainWindow):
         # Color options are hidden
         self.select_default_colors.setHidden(True)
         self.select_your_own_colors.setHidden(True)
+        
 
         # show other options
         self.folder_list.setHidden(False)
@@ -309,7 +315,7 @@ class MyGUI(QMainWindow):
         self.list_folders(data_output)
         print('Future')
 
-    def load_data(self,type_of_tracking, input_folder):
+    def load_data(self,type_of_tracking, input_folder, title_of_table):
         # load the dictionary
         ## TODO make this a file to read
         objects_to_track = [{
@@ -320,19 +326,20 @@ class MyGUI(QMainWindow):
         {'color' : "yellow" , 'lower' : (20, 36, 4) , 'upper' : (71, 238, 213), 'radius' : 10 , 'mass' : 0.0},
         {'color' : "orange" , 'lower' : (0, 123, 189), 'upper' : (24, 255, 255) , 'radius' : 10 , 'mass' : 0.0}]
         row = 0
-        self.table_widget_color.setRowCount(len(objects_to_track))
+        title_of_table.setRowCount(len(objects_to_track))
         for object in objects_to_track:
             # Checkbox to chose default colors
             item = QTableWidgetItem(''.format(row, 0))
             item.setFlags(Qt.ItemFlag.ItemIsUserCheckable|Qt.ItemFlag.ItemIsEnabled)
             item.setCheckState(Qt.CheckState.Unchecked)
-            self.table_widget_color.setItem(row, 0, item)
+            title_of_table.setItem(row, 0, item)
             # Columns for default colors
-            self.table_widget_color.setItem(row,1, QTableWidgetItem(object[type_of_tracking]))
-            self.table_widget_color.setItem(row,2, QTableWidgetItem(str(object['radius'])))
-            self.table_widget_color.setItem(row,3, QTableWidgetItem(str(object['mass'])))
-            self.table_widget_color.setItem(row,4, QTableWidgetItem(str((object['lower']))))
-            self.table_widget_color.setItem(row,5, QTableWidgetItem(str((object['upper']))))
+            title_of_table.setItem(row,1, QTableWidgetItem(object[type_of_tracking]))
+            title_of_table.setItem(row,2, QTableWidgetItem(str(object['radius'])))
+            title_of_table.setItem(row,3, QTableWidgetItem(str(object['mass'])))
+            title_of_table.setItem(row,4, QTableWidgetItem(str((object['lower']))))
+            title_of_table.setItem(row,5, QTableWidgetItem(str((object['upper']))))
+            
             row +=1
 
     def default_colors_shown(self):
@@ -346,12 +353,15 @@ class MyGUI(QMainWindow):
         self.table_widget_color.setColumnWidth(3,100)
         self.table_widget_color.setColumnWidth(4,0)
         self.table_widget_color.setColumnWidth(5,0)
-        objects_to_track  = self.load_data(type_of_tracking, input_folder) 
+        self.table_widget_color.setColumnWidth(6,0)
+        objects_to_track  = self.load_data(type_of_tracking, input_folder,self.table_widget_color) 
         self.table_widget_color.setHidden(False)
+        self.table_widget_color_2.setHidden(True)
+        self.lineEdit_define_color_name.setHidden(True)
         self.combo_box_objects.setHidden(True)
         # saved colors
         self.folder_name_objects.setHidden(True)
-    
+
     def your_own_colors_shown(self):
         stype_of_tracking ='color'
         input_folder = 'color_i'
@@ -361,15 +371,39 @@ class MyGUI(QMainWindow):
         self.combo_box_objects.setHidden(False)
         # saved colors
         self.folder_name_objects.setHidden(False)
+        self.table_widget_color_2.setHidden(True)
+        self.lineEdit_define_color_name.setHidden(True)
+        
         self.select_object_file(input_folder)
 
+    def define_colors_shown(self):
+        type_of_tracking ='color'
+        input_folder = 'color_i'
+        data_output = 'color_o'
+        # default colors
+        self.table_widget_color.setHidden(True)
+        self.combo_box_objects.setHidden(True)
+        self.folder_name_objects.setHidden(True)
 
-    # Color chosen (vs. infrared)
+        self.table_widget_color_2.setHidden(False)
+        self.lineEdit_define_color_name.setHidden(False)
+
+        self.table_widget_color_2.setColumnWidth(0,30)
+        self.table_widget_color_2.setColumnWidth(1,50)
+        self.table_widget_color_2.setColumnWidth(2,63)
+        self.table_widget_color_2.setColumnWidth(3,52)
+        self.table_widget_color_2.setColumnWidth(4,80)
+        self.table_widget_color_2.setColumnWidth(5,80)
+        objects_to_track  = self.load_data(type_of_tracking, input_folder, self.table_widget_color_2) 
+        self.table_widget_color_2.setColumnWidth(6,56)
+
+
     def color_button_pressed(self):
         data_output = 'color_o'
         # Select the color from a list, use a predefined preset, or create a new one.
         self.select_default_colors.setHidden(False)
         self.select_your_own_colors.setHidden(False)
+        self.define_colors.setHidden(False)
         self.how_to_enter_folder_label.setHidden(False)
 
         self.folder_list.setHidden(False)
@@ -509,27 +543,26 @@ class MyGUI(QMainWindow):
                     self.color_ranges = new_color_ranges
                     self.color_ranges_text = "default_colors"
              
-            elif self.select_your_own_colors.isChecked():
-                if self.folder_name_objects.text()!= '': 
-                    self.user_creating_folder()
-                    self.color_ranges_text = self.folder_name_objects.text()
-
+            elif self.select_your_own_colors.isChecked() or self.define_colors.isChecked():
+                self.color_ranges_text = self.combo_box_objects.currentText()
+                dir_path = os.path.abspath(os.path.join(base_path, 'data', input_folder, ''))
+                dir_path_npy= os.path.abspath(os.path.join(dir_path, self.color_ranges_text,''))
+                if self.select_your_own_colors.isChecked() :
+                    self.color_ranges = np.load(dir_path_npy)
+                    print('color range from previous own colors' , self.color_ranges)
+                elif self.define_colors.isChecked():  
+                    print('lets create a numpy')
+                    
                     # open New Color Window
                     self.toggle_window(self.window_color)
-                   
+                    
                     new_color_ranges, self.color_ranges_text, dir_path_npy = GUI_read_hsv_bounds(src)
                     self.color_ranges = np.array(new_color_ranges)
                     print ('array you just made', self.color_ranges )
                     self.color_ranges = np.load(dir_path_npy)
                     print('loaded array', self.color_ranges)
                     name_of_array = dir_path_npy
-                else:
-                    self.color_ranges_text = self.combo_box_objects.currentText()
-                    dir_path = os.path.abspath(os.path.join(base_path, 'data', input_folder, ''))
-                    dir_path_npy= os.path.abspath(os.path.join(dir_path, self.color_ranges_text,''))
-                    self.color_ranges = np.load(dir_path_npy)
-                    print('color range from previous own colors' , self.color_ranges)
-            
+                
             dir_out_path_npy = os.path.abspath(os.path.join(data_output_folder_path , self.color_ranges_text,'')) 
             np.save(dir_out_path_npy , self.color_ranges)
         ## TODO use a different value if needed to use src
