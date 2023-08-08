@@ -30,7 +30,7 @@ from mpl_toolkits import mplot3d
 from tracker.lib.color import GUI_read_hsv_bounds
 from tracker.lib.general import find_objects_to_graph
 from tracker.lib.user_input import make_new_folder
-from tracker.lib.GUI_color_tracker import GUI_color_tracking
+from tracker.lib.GUI_color_tracker import GUI_color_tracking, find_lower_upper_bounds_on_screen
 from tracker.lib.GUI_real_time_color_tracker import GUI_real_time_color_tracking
 from tracker.lib.GUI_graphing_trendlines import GUI_graph, GUI_graph_trendline, plot_style_color
 from tracker.lib.graphing import GUI_graph_setup, three_D_graphs, plot_graphs, GUI_trim
@@ -156,6 +156,7 @@ class MyGUI(QMainWindow):
         self.table_widget_color_2.setHidden(True) # For new colors
         self.lineEdit_define_color_name.setHidden(True)
         self.how_to_enter_folder_label.setHidden(True)
+        self.find_lower_upper_button.setHidden(True)
         # Acceleration, Energy, Momentum  Hidden
         self.ame_explanation.setHidden(True)    # text
         self.select_acceleration.setHidden(True)
@@ -174,6 +175,7 @@ class MyGUI(QMainWindow):
         # GUI shows up
         self.show()
         # Buttons: Main
+        self.find_lower_upper_button.clicked.connect(self.find_lower_upper_bounds)
         self.real_time_button.clicked.connect(self.run_real_time)
         self.tracker_button.clicked.connect(self.run_tracker)
         self.graph_button.clicked.connect(self.run_graph)
@@ -339,7 +341,10 @@ class MyGUI(QMainWindow):
             title_of_table.setItem(row,3, QTableWidgetItem(str(object['mass'])))
             title_of_table.setItem(row,4, QTableWidgetItem(str((object['lower']))))
             title_of_table.setItem(row,5, QTableWidgetItem(str((object['upper']))))
-            
+            item_on_screen = QTableWidgetItem(''.format(row, 6))
+            item_on_screen.setFlags(Qt.ItemFlag.ItemIsUserCheckable|Qt.ItemFlag.ItemIsEnabled)
+            item_on_screen.setCheckState(Qt.CheckState.Unchecked)
+            title_of_table.setItem(row, 6, item_on_screen )
             row +=1
 
     def default_colors_shown(self):
@@ -361,6 +366,7 @@ class MyGUI(QMainWindow):
         self.combo_box_objects.setHidden(True)
         # saved colors
         self.folder_name_objects.setHidden(True)
+        self.find_lower_upper_button.setHidden(True)
 
     def your_own_colors_shown(self):
         stype_of_tracking ='color'
@@ -373,6 +379,7 @@ class MyGUI(QMainWindow):
         self.folder_name_objects.setHidden(False)
         self.table_widget_color_2.setHidden(True)
         self.lineEdit_define_color_name.setHidden(True)
+        self.find_lower_upper_button.setHidden(True)
         
         self.select_object_file(input_folder)
 
@@ -396,6 +403,7 @@ class MyGUI(QMainWindow):
         self.table_widget_color_2.setColumnWidth(5,80)
         objects_to_track  = self.load_data(type_of_tracking, input_folder, self.table_widget_color_2) 
         self.table_widget_color_2.setColumnWidth(6,56)
+        self.find_lower_upper_button.setHidden(False)
 
 
     def color_button_pressed(self):
@@ -435,6 +443,9 @@ class MyGUI(QMainWindow):
         data_output = 'color_o'
         self.list_folders(data_output)
         
+
+
+
 
 # Presets appear
     def show_presets(self):
@@ -696,7 +707,29 @@ class MyGUI(QMainWindow):
         plt.ioff()    
         plt.show()
         
+    def find_lower_upper_bounds(self):
+        i=0
+        dt = np.dtype([('lower', np.int32, (3,)),('upper', np.int32, (3,)), ('name', np.unicode_, 16), ('radius_meters', np.float32),('mass', np.float32)])
 
+        for row in range(self.table_widget_color_2.rowCount()):
+            if self.table_widget_color_2.item(row,6).checkState() == Qt.CheckState.Checked:
+                item = QTableWidgetItem(''.format(row, 1))
+                color = self.table_widget_color_2.item(row,1).text()
+                lower = self.table_widget_color_2.item(row,4).text()
+                upper = self.table_widget_color_2.item(row,5).text()
+                radius_meters = float(self.table_widget_color_2.item(row,2).text())/100
+                mass = self.table_widget_color_2.item(row,3).text()
+                print('hi', color, mass, radius_meters, lower, upper)
+
+                the_array = np.array([(ast.literal_eval(lower),ast.literal_eval(upper), (color),(radius_meters), (mass) )],dtype=dt)
+                if i==0:
+                    new_color_ranges = the_array
+                else:
+                    new_color_ranges = np.hstack((new_color_ranges,the_array))
+                i += 1
+                self.color_ranges = new_color_ranges
+                self.color_ranges_text = "default_colors"
+        find_lower_upper_bounds_on_screen()
 
     # Run Tracker Button Function
     def run_real_time(self):

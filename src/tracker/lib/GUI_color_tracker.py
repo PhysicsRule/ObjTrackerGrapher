@@ -13,6 +13,12 @@ from tracker.lib.intel_realsense_D435i import get_all_frames_color, get_depth_me
 from tracker.lib.color import make_color_hsv, find_object_by_color
 from tracker.lib.general import open_the_video 
 
+def find_lower_upper_bounds_on_screen():
+    print('selecting colors')
+    pipeline = find_and_config_device()
+    warm_up_camera(pipeline)
+
+
 def GUI_color_tracking(pipeline, src, type_of_tracking, image,color_ranges, min_radius_of_object, data_output_folder_path, input_folder, data_output ):
     
     make_csv_files(color_ranges, data_output_folder_path)
