@@ -463,7 +463,7 @@
      <property name="geometry">
       <rect>
        <x>100</x>
-       <y>620</y>
+       <y>560</y>
        <width>461</width>
        <height>61</height>
       </rect>
@@ -486,8 +486,8 @@
     <widget class="QLabel" name="folder_information">
      <property name="geometry">
       <rect>
-       <x>410</x>
-       <y>460</y>
+       <x>510</x>
+       <y>380</y>
        <width>121</width>
        <height>161</height>
       </rect>
@@ -502,49 +502,11 @@
       <bool>true</bool>
      </property>
     </widget>
-    <widget class="QLabel" name="label_3">
-     <property name="geometry">
-      <rect>
-       <x>130</x>
-       <y>180</y>
-       <width>81</width>
-       <height>16</height>
-      </rect>
-     </property>
-     <property name="styleSheet">
-      <string notr="true">color: rgb(255, 255, 255);</string>
-     </property>
-     <property name="text">
-      <string>Max 60 FPS</string>
-     </property>
-     <property name="alignment">
-      <set>Qt::AlignCenter</set>
-     </property>
-    </widget>
-    <widget class="QLabel" name="label_4">
-     <property name="geometry">
-      <rect>
-       <x>290</x>
-       <y>180</y>
-       <width>71</width>
-       <height>16</height>
-      </rect>
-     </property>
-     <property name="styleSheet">
-      <string notr="true">color: rgb(255, 255, 255);</string>
-     </property>
-     <property name="text">
-      <string>Max 90 FPS</string>
-     </property>
-     <property name="alignment">
-      <set>Qt::AlignCenter</set>
-     </property>
-    </widget>
     <widget class="QTableWidget" name="table_widget_color">
      <property name="geometry">
       <rect>
        <x>100</x>
-       <y>250</y>
+       <y>120</y>
        <width>381</width>
        <height>181</height>
       </rect>
@@ -627,7 +589,7 @@
      <property name="geometry">
       <rect>
        <x>100</x>
-       <y>220</y>
+       <y>90</y>
        <width>101</width>
        <height>20</height>
       </rect>
@@ -640,7 +602,7 @@
      <property name="geometry">
       <rect>
        <x>220</x>
-       <y>220</y>
+       <y>90</y>
        <width>281</width>
        <height>20</height>
       </rect>
@@ -653,7 +615,7 @@
      <property name="geometry">
       <rect>
        <x>100</x>
-       <y>250</y>
+       <y>120</y>
        <width>381</width>
        <height>31</height>
       </rect>
@@ -662,9 +624,9 @@
     <widget class="QPushButton" name="tracker_button">
      <property name="geometry">
       <rect>
-       <x>260</x>
-       <y>20</y>
-       <width>160</width>
+       <x>230</x>
+       <y>490</y>
+       <width>130</width>
        <height>70</height>
       </rect>
      </property>
@@ -674,7 +636,8 @@
       </font>
      </property>
      <property name="text">
-      <string>Run Tracker</string>
+      <string>Run Tracker
+60 fps</string>
      </property>
     </widget>
     <widget class="QPushButton" name="graph_button">
@@ -698,9 +661,9 @@
     <widget class="QPushButton" name="record_bag_button">
      <property name="geometry">
       <rect>
-       <x>430</x>
-       <y>20</y>
-       <width>160</width>
+       <x>360</x>
+       <y>490</y>
+       <width>130</width>
        <height>70</height>
       </rect>
      </property>
@@ -800,9 +763,9 @@
     <widget class="QPushButton" name="real_time_button">
      <property name="geometry">
       <rect>
-       <x>90</x>
-       <y>20</y>
-       <width>160</width>
+       <x>100</x>
+       <y>490</y>
+       <width>130</width>
        <height>70</height>
       </rect>
      </property>
@@ -899,45 +862,49 @@
      </property>
      <property name="font">
       <font>
-       <pointsize>12</pointsize>
+       <pointsize>10</pointsize>
       </font>
      </property>
      <property name="text">
-      <string>Run Real-Time Graph</string>
+      <string>Run Real-Time Graph
+30 fps</string>
      </property>
     </widget>
     <widget class="QPushButton" name="color_button">
      <property name="geometry">
       <rect>
-       <x>110</x>
-       <y>120</y>
-       <width>131</width>
-       <height>51</height>
+       <x>100</x>
+       <y>30</y>
+       <width>130</width>
+       <height>50</height>
       </rect>
      </property>
      <property name="text">
       <string>Color</string>
      </property>
     </widget>
-    <widget class="QPushButton" name="infrared_button">
+    <widget class="QPushButton" name="infrared_90_button">
      <property name="geometry">
       <rect>
-       <x>260</x>
-       <y>120</y>
-       <width>131</width>
-       <height>51</height>
+       <x>240</x>
+       <y>30</y>
+       <width>130</width>
+       <height>50</height>
       </rect>
+     </property>
+     <property name="focusPolicy">
+      <enum>Qt::NoFocus</enum>
      </property>
      <property name="text">
       <string>Infrared
-(Future)</string>
+90 fps</string>
      </property>
     </widget>
     <widget class="QLineEdit" name="folder_name">
      <property name="geometry">
       <rect>
        <x>100</x>
-       <y>480</y>
+       <y>330</y>
        <width>381</width>
        <height>22</height>
       </rect>
@@ -965,8 +932,8 @@
     <widget class="QLineEdit" name="r_height">
      <property name="geometry">
       <rect>
-       <x>360</x>
-       <y>750</y>
+       <x>340</x>
+       <y>670</y>
        <width>71</width>
        <height>22</height>
       </rect>
@@ -984,8 +951,8 @@
      </property>
      <property name="geometry">
       <rect>
-       <x>220</x>
-       <y>750</y>
+       <x>200</x>
+       <y>670</y>
        <width>131</width>
        <height>22</height>
       </rect>
@@ -1014,10 +981,10 @@
     <widget class="QPushButton" name="other_button">
      <property name="geometry">
       <rect>
-       <x>410</x>
-       <y>120</y>
-       <width>121</width>
-       <height>51</height>
+       <x>520</x>
+       <y>30</y>
+       <width>130</width>
+       <height>50</height>
       </rect>
      </property>
      <property name="text">
@@ -1028,8 +995,8 @@
     <widget class="QLineEdit" name="mass_of_object">
      <property name="geometry">
       <rect>
-       <x>220</x>
-       <y>720</y>
+       <x>200</x>
+       <y>640</y>
        <width>113</width>
        <height>22</height>
       </rect>
@@ -1041,8 +1008,8 @@
     <widget class="QPushButton" name="save_height_mass">
      <property name="geometry">
       <rect>
-       <x>440</x>
-       <y>740</y>
+       <x>420</x>
+       <y>660</y>
        <width>51</width>
        <height>31</height>
       </rect>
@@ -1054,8 +1021,8 @@
     <widget class="QCheckBox" name="save_depth_check">
      <property name="geometry">
       <rect>
-       <x>630</x>
-       <y>240</y>
+       <x>510</x>
+       <y>220</y>
        <width>211</width>
        <height>20</height>
       </rect>
@@ -1070,8 +1037,8 @@
     <widget class="QCheckBox" name="save_image_check">
      <property name="geometry">
       <rect>
-       <x>630</x>
-       <y>220</y>
+       <x>510</x>
+       <y>200</y>
        <width>231</width>
        <height>20</height>
       </rect>
@@ -1086,8 +1053,8 @@
     <widget class="QCheckBox" name="show_tracking_mask_check">
      <property name="geometry">
       <rect>
-       <x>630</x>
-       <y>200</y>
+       <x>510</x>
+       <y>180</y>
        <width>191</width>
        <height>20</height>
       </rect>
@@ -1102,8 +1069,8 @@
     <widget class="QLineEdit" name="folder_name_objects">
      <property name="geometry">
       <rect>
-       <x>220</x>
-       <y>690</y>
+       <x>200</x>
+       <y>610</y>
        <width>111</width>
        <height>21</height>
       </rect>
@@ -1118,8 +1085,8 @@
     <widget class="QLabel" name="label_2">
      <property name="geometry">
       <rect>
-       <x>610</x>
-       <y>110</y>
+       <x>490</x>
+       <y>90</y>
        <width>191</width>
        <height>51</height>
       </rect>
@@ -1139,8 +1106,8 @@
     <widget class="QCheckBox" name="show_image_check">
      <property name="geometry">
       <rect>
-       <x>630</x>
-       <y>160</y>
+       <x>510</x>
+       <y>140</y>
        <width>131</width>
        <height>20</height>
       </rect>
@@ -1158,8 +1125,8 @@
     <widget class="QCheckBox" name="show_depth_check">
      <property name="geometry">
       <rect>
-       <x>630</x>
-       <y>180</y>
+       <x>510</x>
+       <y>160</y>
        <width>171</width>
        <height>20</height>
       </rect>
@@ -1175,7 +1142,7 @@
      <property name="geometry">
       <rect>
        <x>100</x>
-       <y>500</y>
+       <y>350</y>
        <width>381</width>
        <height>131</height>
       </rect>
@@ -1190,7 +1157,7 @@
      <property name="geometry">
       <rect>
        <x>100</x>
-       <y>440</y>
+       <y>300</y>
        <width>531</width>
        <height>41</height>
       </rect>
@@ -1244,8 +1211,8 @@
     <widget class="QCheckBox" name="save_tracking_mask_check">
      <property name="geometry">
       <rect>
-       <x>630</x>
-       <y>260</y>
+       <x>510</x>
+       <y>240</y>
        <width>171</width>
        <height>20</height>
       </rect>
@@ -1260,8 +1227,8 @@
     <widget class="QCheckBox" name="save_video">
      <property name="geometry">
       <rect>
-       <x>630</x>
-       <y>280</y>
+       <x>510</x>
+       <y>260</y>
        <width>141</width>
        <height>20</height>
       </rect>
@@ -1313,12 +1280,35 @@
       <bool>true</bool>
      </property>
     </widget>
+    <widget class="QPushButton" name="id300_button">
+     <property name="geometry">
+      <rect>
+       <x>380</x>
+       <y>30</y>
+       <width>130</width>
+       <height>50</height>
+      </rect>
+     </property>
+     <property name="maximumSize">
+      <size>
+       <width>16777215</width>
+       <height>16777212</height>
+      </size>
+     </property>
+     <property name="focusPolicy">
+      <enum>Qt::NoFocus</enum>
+     </property>
+     <property name="text">
+      <string>Infrared
+300 fps (thin)</string>
+     </property>
+    </widget>
     <widget class="QPushButton" name="track_from_bag_button">
      <property name="geometry">
       <rect>
-       <x>600</x>
-       <y>20</y>
-       <width>160</width>
+       <x>490</x>
+       <y>490</y>
+       <width>130</width>
        <height>70</height>
       </rect>
      </property>
@@ -1332,6 +1322,48 @@
  Bag File</string>
      </property>
     </widget>
+    <widget class="QRadioButton" name="select_acceleration">
+     <property name="geometry">
+      <rect>
+       <x>100</x>
+       <y>610</y>
+       <width>95</width>
+       <height>20</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Acceleration</string>
+     </property>
+     <property name="checked">
+      <bool>true</bool>
+     </property>
+    </widget>
+    <widget class="QRadioButton" name="select_energy">
+     <property name="geometry">
+      <rect>
+       <x>100</x>
+       <y>670</y>
+       <width>111</width>
+       <height>20</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Energy(Future)</string>
+     </property>
+    </widget>
+    <widget class="QRadioButton" name="select_momentum">
+     <property name="geometry">
+      <rect>
+       <x>100</x>
+       <y>640</y>
+       <width>95</width>
+       <height>20</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Momentum</string>
+     </property>
+    </widget>
    </widget>
    <widget class="QComboBox" name="combo_test">
     <property name="geometry">
@@ -1341,48 +1373,6 @@
       <width>0</width>
       <height>0</height>
      </rect>
-    </property>
-   </widget>
-   <widget class="QRadioButton" name="select_acceleration">
-    <property name="geometry">
-     <rect>
-      <x>30</x>
-      <y>680</y>
-      <width>95</width>
-      <height>20</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>Acceleration</string>
-    </property>
-    <property name="checked">
-     <bool>true</bool>
-    </property>
-   </widget>
-   <widget class="QRadioButton" name="select_momentum">
-    <property name="geometry">
-     <rect>
-      <x>30</x>
-      <y>710</y>
-      <width>95</width>
-      <height>20</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>Momentum</string>
-    </property>
-   </widget>
-   <widget class="QRadioButton" name="select_energy">
-    <property name="geometry">
-     <rect>
-      <x>30</x>
-      <y>740</y>
-      <width>111</width>
-      <height>20</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>Energy(Future)</string>
     </property>
    </widget>
   </widget>

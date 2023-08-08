@@ -179,7 +179,7 @@ class MyGUI(QMainWindow):
         self.track_from_bag_button.clicked.connect(self.track_from_bag)
         # Buttons: Minor
         self.color_button.clicked.connect(self.color_button_pressed)
-        self.infrared_button.clicked.connect(self.infrared_button_pressed)
+        self.infrared_90_button.clicked.connect(self.infrared_90_button_pressed)
 
         self.save_height_mass.clicked.connect(self.reference_height_save)
         # Radio Buttons: Color Choice 
@@ -282,7 +282,7 @@ class MyGUI(QMainWindow):
         # return data_output_folder, data_output_folder_path
 
     # Infrared chosen (vs. color)
-    def infrared_button_pressed(self):
+    def infrared_90_button_pressed(self):
         # Define the the folders that will be used
         type_of_tracking = 'infrared'
         input_folder = 'infrared_i'
