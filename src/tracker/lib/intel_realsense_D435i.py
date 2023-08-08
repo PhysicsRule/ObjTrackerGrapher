@@ -31,7 +31,7 @@ def find_and_config_device():
     config.enable_stream(rs.stream.depth, 848, 480, rs.format.z16, 60)
     config.enable_stream(rs.stream.color, 848, 480, rs.format.bgr8, 60)
     profile = pipeline.start(config)
-
+    warm_up_camera(pipeline)
     # Let the camera run for a few seconds so you do not get dark images
     
     return pipeline
