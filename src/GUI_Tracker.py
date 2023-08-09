@@ -708,7 +708,7 @@ class MyGUI(QMainWindow):
         plt.show()
         
     def find_lower_upper_bounds(self):
-        i=0
+        
         dt = np.dtype([('lower', np.int32, (3,)),('upper', np.int32, (3,)), ('name', np.unicode_, 16), ('radius_meters', np.float32),('mass', np.float32)])
 
         for row in range(self.table_widget_color_2.rowCount()):
@@ -717,19 +717,17 @@ class MyGUI(QMainWindow):
                 color = self.table_widget_color_2.item(row,1).text()
                 lower = self.table_widget_color_2.item(row,4).text()
                 upper = self.table_widget_color_2.item(row,5).text()
+                print('hi', color, lower, upper)
                 radius_meters = float(self.table_widget_color_2.item(row,2).text())/100
                 mass = self.table_widget_color_2.item(row,3).text()
-                print('hi', color, mass, radius_meters, lower, upper)
-
                 the_array = np.array([(ast.literal_eval(lower),ast.literal_eval(upper), (color),(radius_meters), (mass) )],dtype=dt)
-                if i==0:
-                    new_color_ranges = the_array
-                else:
-                    new_color_ranges = np.hstack((new_color_ranges,the_array))
-                i += 1
-                self.color_ranges = new_color_ranges
-                self.color_ranges_text = "default_colors"
-        find_lower_upper_bounds_on_screen()
+                the_array = find_lower_upper_bounds_on_screen(the_array)
+
+                self.table_widget_color_2.setItem(row,4, QTableWidgetItem(str(lower)))
+                self.table_widget_color_2.setItem(row,5, QTableWidgetItem(str(upper)))
+
+            self.color_ranges_text = self.lineEdit_define_color_name.text
+ 
 
     # Run Tracker Button Function
     def run_real_time(self):

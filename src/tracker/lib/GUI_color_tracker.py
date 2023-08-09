@@ -12,11 +12,18 @@ from tracker.lib.setup_files import set_up_color, make_csv_files
 from tracker.lib.intel_realsense_D435i import get_all_frames_color, get_depth_meters, find_and_config_device, select_furthest_distance_color, warm_up_camera
 from tracker.lib.color import make_color_hsv, find_object_by_color
 from tracker.lib.general import open_the_video 
+from tracker.lib.color import find_hsv_bounds
 
-def find_lower_upper_bounds_on_screen():
+def find_lower_upper_bounds_on_screen(the_array):
     print('selecting colors')
     pipeline = find_and_config_device()
     warm_up_camera(pipeline)
+    (cv_color, rs_color, rs_depth), timestamp = get_all_frames_color(pipeline)
+    [(lower, upper, color_name, radius_meters, mass)] = the_array
+    print(color_name)
+    output = find_hsv_bounds(lower, upper, color_name, radius_meters, mass, cv_color)
+    print(output)
+    return output
 
 
 def GUI_color_tracking(pipeline, src, type_of_tracking, image,color_ranges, min_radius_of_object, data_output_folder_path, input_folder, data_output ):
