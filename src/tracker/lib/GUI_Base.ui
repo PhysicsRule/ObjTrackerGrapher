@@ -506,8 +506,8 @@
      <property name="geometry">
       <rect>
        <x>100</x>
-       <y>120</y>
-       <width>381</width>
+       <y>140</y>
+       <width>371</width>
        <height>181</height>
       </rect>
      </property>
@@ -603,12 +603,12 @@
       <rect>
        <x>220</x>
        <y>90</y>
-       <width>281</width>
+       <width>131</width>
        <height>20</height>
       </rect>
      </property>
      <property name="text">
-      <string>Your predefined colors from separate prgram</string>
+      <string>Your predefined colors</string>
      </property>
     </widget>
     <widget class="QComboBox" name="combo_box_objects">
@@ -616,8 +616,8 @@
       <rect>
        <x>100</x>
        <y>120</y>
-       <width>381</width>
-       <height>31</height>
+       <width>431</width>
+       <height>21</height>
       </rect>
      </property>
     </widget>
@@ -1022,7 +1022,7 @@
     <widget class="QCheckBox" name="save_depth_check">
      <property name="geometry">
       <rect>
-       <x>510</x>
+       <x>560</x>
        <y>220</y>
        <width>211</width>
        <height>20</height>
@@ -1038,7 +1038,7 @@
     <widget class="QCheckBox" name="save_image_check">
      <property name="geometry">
       <rect>
-       <x>510</x>
+       <x>560</x>
        <y>200</y>
        <width>231</width>
        <height>20</height>
@@ -1054,7 +1054,7 @@
     <widget class="QCheckBox" name="show_tracking_mask_check">
      <property name="geometry">
       <rect>
-       <x>510</x>
+       <x>560</x>
        <y>180</y>
        <width>191</width>
        <height>20</height>
@@ -1086,8 +1086,8 @@
     <widget class="QLabel" name="label_2">
      <property name="geometry">
       <rect>
-       <x>490</x>
-       <y>90</y>
+       <x>530</x>
+       <y>110</y>
        <width>191</width>
        <height>51</height>
       </rect>
@@ -1107,7 +1107,7 @@
     <widget class="QCheckBox" name="show_image_check">
      <property name="geometry">
       <rect>
-       <x>510</x>
+       <x>560</x>
        <y>140</y>
        <width>131</width>
        <height>20</height>
@@ -1126,7 +1126,7 @@
     <widget class="QCheckBox" name="show_depth_check">
      <property name="geometry">
       <rect>
-       <x>510</x>
+       <x>560</x>
        <y>160</y>
        <width>171</width>
        <height>20</height>
@@ -1212,7 +1212,7 @@
     <widget class="QCheckBox" name="save_tracking_mask_check">
      <property name="geometry">
       <rect>
-       <x>510</x>
+       <x>560</x>
        <y>240</y>
        <width>171</width>
        <height>20</height>
@@ -1228,7 +1228,7 @@
     <widget class="QCheckBox" name="save_video">
      <property name="geometry">
       <rect>
-       <x>510</x>
+       <x>560</x>
        <y>260</y>
        <width>141</width>
        <height>20</height>
@@ -1364,6 +1364,138 @@
      </property>
      <property name="text">
       <string>Momentum</string>
+     </property>
+    </widget>
+    <widget class="QRadioButton" name="define_colors">
+     <property name="geometry">
+      <rect>
+       <x>370</x>
+       <y>90</y>
+       <width>100</width>
+       <height>17</height>
+      </rect>
+     </property>
+     <property name="inputMethodHints">
+      <set>Qt::ImhLatinOnly</set>
+     </property>
+     <property name="text">
+      <string>Define colors now</string>
+     </property>
+    </widget>
+    <widget class="QTableWidget" name="table_widget_color_2">
+     <property name="geometry">
+      <rect>
+       <x>100</x>
+       <y>140</y>
+       <width>431</width>
+       <height>181</height>
+      </rect>
+     </property>
+     <property name="minimumSize">
+      <size>
+       <width>371</width>
+       <height>181</height>
+      </size>
+     </property>
+     <property name="font">
+      <font>
+       <pointsize>7</pointsize>
+      </font>
+     </property>
+     <property name="editTriggers">
+      <set>QAbstractItemView::AnyKeyPressed|QAbstractItemView::CurrentChanged|QAbstractItemView::DoubleClicked|QAbstractItemView::EditKeyPressed</set>
+     </property>
+     <attribute name="horizontalHeaderMinimumSectionSize">
+      <number>10</number>
+     </attribute>
+     <attribute name="verticalHeaderDefaultSectionSize">
+      <number>20</number>
+     </attribute>
+     <attribute name="verticalHeaderMinimumSectionSize">
+      <number>20</number>
+     </attribute>
+     <column>
+      <property name="text">
+       <string>Use</string>
+      </property>
+      <property name="font">
+       <font>
+        <pointsize>7</pointsize>
+       </font>
+      </property>
+     </column>
+     <column>
+      <property name="text">
+       <string>Name</string>
+      </property>
+      <property name="font">
+       <font>
+        <pointsize>8</pointsize>
+       </font>
+      </property>
+     </column>
+     <column>
+      <property name="text">
+       <string>Radius(cm)</string>
+      </property>
+      <property name="font">
+       <font>
+        <pointsize>8</pointsize>
+       </font>
+      </property>
+     </column>
+     <column>
+      <property name="text">
+       <string>Mass(kg)</string>
+      </property>
+      <property name="font">
+       <font>
+        <pointsize>8</pointsize>
+       </font>
+      </property>
+     </column>
+     <column>
+      <property name="text">
+       <string>lower</string>
+      </property>
+     </column>
+     <column>
+      <property name="text">
+       <string>upper</string>
+      </property>
+     </column>
+     <column>
+      <property name="text">
+       <string>OnScreen</string>
+      </property>
+      <property name="font">
+       <font>
+        <pointsize>8</pointsize>
+       </font>
+      </property>
+     </column>
+    </widget>
+    <widget class="QLineEdit" name="lineEdit_define_color_name">
+     <property name="geometry">
+      <rect>
+       <x>100</x>
+       <y>120</y>
+       <width>201</width>
+       <height>21</height>
+      </rect>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="find_lower_upper_button">
+     <property name="geometry">
+      <rect>
+       <x>300</x>
+       <y>110</y>
+       <width>231</width>
+       <height>23</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Modify Lower and Upper for OnScreen Colors</string>
      </property>
     </widget>
    </widget>

@@ -20,11 +20,14 @@ def nothing(x):
 
 
 
-def find_hsv_bounds(object_name, radius_meters, mass, src) -> Optional[np.ndarray]:
+def find_hsv_bounds(lower, upper, object_name, radius_meters, mass, src) -> Optional[np.ndarray]:
     # Find the color range of each object
 
     real_time = False
     i=0 # frame 
+    if lower is None:
+        lower = (0,0,0)
+        upper = (179, 255, 255)
     # Initializing the webcam feed.
     if type(src) == int:
         cap = cv2.VideoCapture(src)
@@ -32,20 +35,24 @@ def find_hsv_bounds(object_name, radius_meters, mass, src) -> Optional[np.ndarra
         cap.set(4,480)
     else:
         # TODO If the webcam doesn't work have another option to change camera
-        frame = src[i] #The rs_color frame as a numpy array
+        frame = src #The rs_color frame as a numpy array
+
     # Create a window named Press (s) when done.
     cv2.namedWindow("Press (s) when done")
+    cv2.putText(frame, 'bounds that show ' + object_name, (0,20), cv2.FONT_HERSHEY_SIMPLEX, 0.75, (50,170,50), 2)
 
     # Now create 6 Press (s) when done that will control the lower and upper range of 
     # H,S and V channels. The Arguments are like this: Name of trackbar, 
     # window name, range,callback function. For Hue the range is 0-179 and
     # for S,V its 0-255.
-    cv2.createTrackbar("L - H", "Press (s) when done", 0, 179, nothing)
-    cv2.createTrackbar("L - S", "Press (s) when done", 0, 255, nothing)
-    cv2.createTrackbar("L - V", "Press (s) when done", 0, 255, nothing)
-    cv2.createTrackbar("U - H", "Press (s) when done", 179, 179, nothing)
-    cv2.createTrackbar("U - S", "Press (s) when done", 255, 255, nothing)
-    cv2.createTrackbar("U - V", "Press (s) when done", 255, 255, nothing)
+    ([l_h, l_s, l_v]) = lower
+    ([u_h, u_s, u_v]) = upper
+    cv2.createTrackbar("L - H", "Press (s) when done", l_h, 179, nothing)
+    cv2.createTrackbar("L - S", "Press (s) when done", l_s, 255, nothing)
+    cv2.createTrackbar("L - V", "Press (s) when done", l_v, 255, nothing)
+    cv2.createTrackbar("U - H", "Press (s) when done", u_h, 179, nothing)
+    cv2.createTrackbar("U - S", "Press (s) when done", u_s, 255, nothing)
+    cv2.createTrackbar("U - V", "Press (s) when done", u_v, 255, nothing)
 
     output = None
 
@@ -59,7 +66,7 @@ def find_hsv_bounds(object_name, radius_meters, mass, src) -> Optional[np.ndarra
         else:
             try:
                 if isinstance(frame, np.ndarray):
-                    frame = src[i] #The rs_color frame as a numpy array
+                    frame = src #The rs_color frame as a numpy array
             except NameError:
                 break
 
@@ -70,14 +77,12 @@ def find_hsv_bounds(object_name, radius_meters, mass, src) -> Optional[np.ndarra
         hsv = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
         
         # Get the new values of the trackbar in real time as the user changes 
-        # them
         l_h = cv2.getTrackbarPos("L - H", "Press (s) when done")
         l_s = cv2.getTrackbarPos("L - S", "Press (s) when done")
         l_v = cv2.getTrackbarPos("L - V", "Press (s) when done")
         u_h = cv2.getTrackbarPos("U - H", "Press (s) when done")
         u_s = cv2.getTrackbarPos("U - S", "Press (s) when done")
         u_v = cv2.getTrackbarPos("U - V", "Press (s) when done")
- 
         # Set the lower and upper HSV range according to the value selected
         # by the trackbar
         lower_range = np.array([l_h, l_s, l_v])
@@ -86,17 +91,13 @@ def find_hsv_bounds(object_name, radius_meters, mass, src) -> Optional[np.ndarra
         # Filter the image and get the binary mask, where white represents 
         # your target color
         mask = cv2.inRange(hsv, lower_range, upper_range)
- 
         # You can also visualize the real part of the target color (Optional)
         res = cv2.bitwise_and(frame, frame, mask=mask)
-    
         # Converting the binary mask to 3 channel image, this is just so 
         # we can stack it with the others
         mask_3 = cv2.cvtColor(mask, cv2.COLOR_GRAY2BGR)
-    
         # stack the mask, orginal frame and the filtered result
         stacked = np.hstack((mask_3,frame,res))
-    
         # Show this stacked frame at 40% of the size.
         cv2.imshow('Press (s) when done',cv2.resize(stacked,None,fx=0.8,fy=0.8))
     
@@ -109,18 +110,12 @@ def find_hsv_bounds(object_name, radius_meters, mass, src) -> Optional[np.ndarra
             i+=1
         elif key ==ord('<'):
             i-=1
-
         # If the user presses `s` then print this array.
         if key == ord('s'):
-
-            dt = np.dtype([('lower', np.int32, (3,)),('upper', np.int32, (3,)), ('name', np.unicode_, 16), ('radius_meters', np.float32),('mass', np.float32)])
-            
+            dt = np.dtype([('lower', np.int32, (3,)),('upper', np.int32, (3,)), ('name', np.unicode_, 16), ('radius_meters', np.float32),('mass', np.float32)])            
             output = np.array( [((l_h,l_s,l_v),(u_h, u_s, u_v),object_name,(radius_meters),(mass))], dtype=dt)
             print(output,'\n')
-            #output = [[(l_h,l_s,l_v),(u_h, u_s, u_v), object_name]]
-
             break
-
 
     # Release the camera & destroy the windows.
     if real_time:
@@ -128,6 +123,7 @@ def find_hsv_bounds(object_name, radius_meters, mass, src) -> Optional[np.ndarra
     cv2.destroyAllWindows()
 
     return output
+
 def GUI_read_hsv_bounds(src):
 # Determine which objects and how many objects you are going to track.
 # Call a function to find their upper and lower bounds on the color hsv scale
