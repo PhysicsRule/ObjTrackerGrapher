@@ -245,7 +245,7 @@ class MyGUI(QMainWindow):
         self.folder_list.clear()
         base_path = os.getcwd()
         dir_path = os.path.abspath(os.path.join(base_path, 'data', data, ''))
-        print('data file path', dir_path)
+        # print('data file path', dir_path)
         for f in os.listdir(dir_path):
             self.folder_list.addItem(f)
 
@@ -255,7 +255,7 @@ class MyGUI(QMainWindow):
         self.table_widget_color.setHidden(True)
         base_path = os.getcwd()
         dir_path = os.path.abspath(os.path.join(base_path, 'data', data, ''))
-        print('data file path', dir_path)
+        # print('data file path', dir_path)
         list_files = []
         list_files.append('-Select your own color pallet-')
         list_files.append('Create new set of objects')
@@ -285,7 +285,7 @@ class MyGUI(QMainWindow):
                 print("If Tracking, this will OVERWRITE your existing folder. If graphing, just hit graph")
                 break
         if x == 0:
-            print(f'Your folder will be available:\n {data_output_folder_path}')
+            print(f'\nYour folder will be available:\n {data_output_folder_path}')
         else:
             pass
         # return data_output_folder, data_output_folder_path
@@ -322,7 +322,7 @@ class MyGUI(QMainWindow):
         objects_to_track = [{
        'color' : "green" , 'lower' : (29, 67, 6) , 'upper' : (64, 255, 255) , 'radius' : 10 , 'mass' : 0.0},
         {'color' : "red" , 'lower' : (0, 146, 12) , 'upper' : (11, 255, 206) , 'radius' : 10 , 'mass' : 0.0},
-        {'color' : "blue" , 'lower' : (39, 71, 52) , 'upper' : (125, 255, 170) , 'radius' : 10 , 'mass' : 0.0},
+        {'color' : "blue" , 'lower' : (58, 71, 52) , 'upper' : (125, 255, 170) , 'radius' : 10 , 'mass' : 0.0},
         {'color' : "purple" , 'lower' : (139,  68,  78) , 'upper' : (170, 255, 255) , 'radius' : 10 , 'mass' : 0.0},
         {'color' : "yellow" , 'lower' : (20, 36, 4) , 'upper' : (71, 238, 213), 'radius' : 10 , 'mass' : 0.0},
         {'color' : "orange" , 'lower' : (0, 123, 189), 'upper' : (24, 255, 255) , 'radius' : 10 , 'mass' : 0.0}]
@@ -563,7 +563,6 @@ class MyGUI(QMainWindow):
                     self.color_ranges = new_color_ranges
              
                 if self.define_colors.isChecked():
-                    print('lets save the table in a numpy file in the general input folder')
                     self.color_ranges_text = self.lineEdit_define_color_name.text()
                     dir_path = os.path.abspath(os.path.join(base_path, 'data', input_folder, ''))
                     dir_path_npy= os.path.abspath(os.path.join(dir_path, self.color_ranges_text,''))
@@ -718,7 +717,7 @@ class MyGUI(QMainWindow):
         plt.show()
         
     def find_lower_upper_bounds(self):
-        print(self.table_widget_color_2.rowCount())
+        # print(self.table_widget_color_2.rowCount())
         self.table_widget_color_2 = reload_table(self.table_widget_color_2 )
         self.color_ranges_text = self.lineEdit_define_color_name.text
 
@@ -733,7 +732,6 @@ class MyGUI(QMainWindow):
         GUI_real_time_color_tracking(src, type_of_tracking, image ,color_ranges , min_radius_object, data_output_folder_path)
 
     def run_tracker(self):
-        print('tracker, not in realtime')
         src, type_of_tracking, image, color_ranges, min_radius_object, data_output_folder_path, input_folder, data_output = self.get_settings()
         # config by looking at the camera (remove this from tracking program below)
         # find output folder here instead of 

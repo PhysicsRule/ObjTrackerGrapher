@@ -232,7 +232,7 @@ def make_new_folder(data_output):
         else:
             print('instead of overwriting files, please make a new folder')
         
-    print('Your folder will be available:\n', data_output_folder_path)
+    print('\nYour folder will be available:\n', data_output_folder_path)
     return data_output_folder, data_output_folder_path
 
 def make_new_folder_trial(data_output_folder_path):
@@ -252,6 +252,6 @@ def make_new_folder_trial(data_output_folder_path):
         else:
             print('instead of overwriting files, please make a new folder')
         
-    print('Your folder will be available:\n', tracking_run_folder_path)
+    print('\nYour folder will be available:\n', tracking_run_folder_path)
     return tracking_run, tracking_run_folder_path
 

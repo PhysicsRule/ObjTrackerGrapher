@@ -21,7 +21,6 @@ def find_lower_upper_bounds_on_screen(the_array):
     (cv_color, rs_color, rs_depth), timestamp = get_all_frames_color(pipeline)
 
     output = GUI_find_hsv_bounds(the_array, cv_color)
-    print(output)
     return output
 
 

@@ -23,7 +23,7 @@ def nothing(x):
 
 def GUI_find_hsv_bounds(the_array, src) -> Optional[np.ndarray]:
     # Find the color range of each object
-    print('the_array', the_array)
+    # print('the_array', the_array)
     [(lower, upper, color, radius_meters, mass)] = the_array
     real_time = False
     i=0 # frame 
@@ -109,13 +109,11 @@ def GUI_find_hsv_bounds(the_array, src) -> Optional[np.ndarray]:
             i+=1
         elif key ==ord('<'):
             i-=1
-        # If the user presses `s` then print this array.
 
         if key == ord('s'):
             lower_tuple = (l_h, l_s, l_v)
             upper_tuple = (u_h, u_s, u_v)
             output = np.array( [((lower_tuple),(upper_tuple),color,(radius_meters),(mass))])
-            print(output, '\n')
             break
 
     # Release the camera & destroy the windows.
@@ -179,7 +177,7 @@ def choose_or_create_color_range(dir_path, file_new_delete, src):
                 red_1_upper = (20, 255, 230)
                 red_2_lower = (160, 20, 6)
                 red_2_upper = (179, 255, 230)
-                blue_lower = (39, 71, 52)
+                blue_lower = (58, 71, 52)
                 blue_upper = (125, 255, 170)
                 yellow_lower = (17, 24, 171)
                 yellow_upper = (30, 199, 255)
