@@ -110,12 +110,12 @@ def find_hsv_bounds(the_array, src) -> Optional[np.ndarray]:
         elif key ==ord('<'):
             i-=1
         # If the user presses `s` then print this array.
-    
+
         if key == ord('s'):
-            dt = np.dtype([('lower', np.int32, (3,)),('upper', np.int32, (3,)), ('name', np.unicode_, 16), ('radius_meters', np.float32),('mass', np.float32)])            
-            output = np.array( [((l_h,l_s,l_v),(u_h, u_s, u_v),color,(radius_meters),(mass))], dtype=dt)
-  
-            print(output,'\n')
+            lower_tuple = (l_h, l_s, l_v)
+            upper_tuple = (u_h, u_s, u_v)
+            output = np.array( [((lower_tuple),(upper_tuple),color,(radius_meters),(mass))])
+            print(output, '\n')
             break
 
     # Release the camera & destroy the windows.

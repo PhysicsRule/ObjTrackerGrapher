@@ -24,7 +24,7 @@ def reload_table (title_of_table):
             mass = title_of_table.item(row,3).text()
             the_array = np.array([(ast.literal_eval(lower),ast.literal_eval(upper), (color),(radius_meters), (mass) )],dtype=dt)
             the_array = find_lower_upper_bounds_on_screen(the_array)
-
+            print('lower after update', lower, '\n', the_array)
             [(lower, upper, color, radius_meters, mass)] = the_array
             title_of_table.setItem(row,4, QTableWidgetItem(str(lower)))
             title_of_table.setItem(row,5, QTableWidgetItem(str(upper)))
