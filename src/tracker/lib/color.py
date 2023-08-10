@@ -5,6 +5,7 @@
 # Started with Pyimagesearch code initially
 
 import os
+import ast
 import cv2
 import numpy as np
 import pyrealsense2 as rs
@@ -20,14 +21,12 @@ def nothing(x):
 
 
 
-def find_hsv_bounds(lower, upper, object_name, radius_meters, mass, src) -> Optional[np.ndarray]:
+def GUI_find_hsv_bounds(the_array, src) -> Optional[np.ndarray]:
     # Find the color range of each object
-
+    print('the_array', the_array)
+    [(lower, upper, color, radius_meters, mass)] = the_array
     real_time = False
     i=0 # frame 
-    if lower is None:
-        lower = (0,0,0)
-        upper = (179, 255, 255)
     # Initializing the webcam feed.
     if type(src) == int:
         cap = cv2.VideoCapture(src)
@@ -39,7 +38,7 @@ def find_hsv_bounds(lower, upper, object_name, radius_meters, mass, src) -> Opti
 
     # Create a window named Press (s) when done.
     cv2.namedWindow("Press (s) when done")
-    cv2.putText(frame, 'bounds that show ' + object_name, (0,20), cv2.FONT_HERSHEY_SIMPLEX, 0.75, (50,170,50), 2)
+    cv2.putText(frame, 'bounds that show ' + color, (0,20), cv2.FONT_HERSHEY_SIMPLEX, 0.75, (50,170,50), 2)
 
     # Now create 6 Press (s) when done that will control the lower and upper range of 
     # H,S and V channels. The Arguments are like this: Name of trackbar, 
@@ -111,58 +110,22 @@ def find_hsv_bounds(lower, upper, object_name, radius_meters, mass, src) -> Opti
         elif key ==ord('<'):
             i-=1
         # If the user presses `s` then print this array.
+
         if key == ord('s'):
-            dt = np.dtype([('lower', np.int32, (3,)),('upper', np.int32, (3,)), ('name', np.unicode_, 16), ('radius_meters', np.float32),('mass', np.float32)])            
-            output = np.array( [((l_h,l_s,l_v),(u_h, u_s, u_v),object_name,(radius_meters),(mass))], dtype=dt)
-            print(output,'\n')
+            lower_tuple = (l_h, l_s, l_v)
+            upper_tuple = (u_h, u_s, u_v)
+            output = np.array( [((lower_tuple),(upper_tuple),color,(radius_meters),(mass))])
+            print(output, '\n')
             break
 
     # Release the camera & destroy the windows.
     if real_time:
         cap.release()
     cv2.destroyAllWindows()
-
+    print('output', output)
     return output
 
-def GUI_read_hsv_bounds(src):
-# Determine which objects and how many objects you are going to track.
-# Call a function to find their upper and lower bounds on the color hsv scale
-    print('\nTO SELECT A single object \n \b')
-    print('-Move the L-H (lower bounds for Hue) skidder until your object just starts to disappear.')
-    print('-This is essentially the color')
-    print('-then move the U-H (upper bounds for Hue) the other way. The mask on the right is very helpful')
-    print('-Repeat this for the saturation of corlor and the brightness of color')
 
-    num_objects = int(input('How many objects do you want to enter?'))
-    for i in range(num_objects):
-        object_name = input('what do you want to call the object? Examples:  yellowTennisBall , greenball ')
-        
-        print ("Realize the depth camera will measure the object from the front of the object then in the amount you put for the radius in meters. /n")
-        radius_meters = input("What is the radius in meters of the object? enter 0.0 if the object is flat and parallel to camera,")
-
-        mass = input("What is the mass of the object? enter 0.0 if you don't care \n")
-        
-        thearray = find_hsv_bounds(object_name, radius_meters, mass, src)
-        if i==0:
-            new_color_ranges = thearray
-        else:
-            new_color_ranges = np.hstack((new_color_ranges,thearray))          
-            
-        print(new_color_ranges,' \n')
-    
-    # Save array for later
-    print ('What do you want to call the scene (name of file) that has each object information? For example LoriDining4Balls.')
-    name_of_array = input('Just hit enter if you want it to be called, testscene.')
-    
-    if name_of_array == '':
-        name_of_array = 'testscene'
-
-    basepath = os.getcwd()
-    npy_file = os.path.abspath(os.path.join(basepath, 'data/color_i/' + name_of_array))
-    np.save(npy_file, new_color_ranges)
-    
-  
-    return new_color_ranges, name_of_array, npy_file
 
 def read_hsv_bounds(src):
 # Determine which objects and how many objects you are going to track.

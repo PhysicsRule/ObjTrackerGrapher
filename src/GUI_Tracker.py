@@ -27,7 +27,6 @@ from matplotlib.figure import Figure
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg, NavigationToolbar2QT 
 from mpl_toolkits import mplot3d
 
-from tracker.lib.color import GUI_read_hsv_bounds
 from tracker.lib.general import find_objects_to_graph
 from tracker.lib.user_input import make_new_folder
 from tracker.lib.GUI_color_tracker import GUI_color_tracking, find_lower_upper_bounds_on_screen
@@ -35,7 +34,7 @@ from tracker.lib.GUI_real_time_color_tracker import GUI_real_time_color_tracking
 from tracker.lib.GUI_graphing_trendlines import GUI_graph, GUI_graph_trendline, plot_style_color
 from tracker.lib.graphing import GUI_graph_setup, three_D_graphs, plot_graphs, GUI_trim
 from tracker.lib.intel_realsense_D435i import record_bag_file, find_and_config_device, read_bag_file_and_config
-
+from tracker.lib.GUI_library import reload_table
 from tracker.lib.color import choose_or_create_color_range
 
 ## TODO possibly use this instead of passing each individual piece
@@ -533,17 +532,27 @@ class MyGUI(QMainWindow):
         i = 0
         new_color_ranges =[]
         if type_of_tracking == 'color':
-            if self.select_default_colors.isChecked():
+            if self.select_default_colors.isChecked() or self.define_colors.isChecked():
+                if self.select_default_colors.isChecked():
+                # Just use the default colors and adjust the mass and radius
+                    title_of_table = self.table_widget_color
+                    self.color_ranges_text = "default_colors"
+                elif self.define_colors.isChecked():
+                # You have modified your own colors and color names to suit your situation. 
+                # They will be saved and you can name them
+                    title_of_table = self.table_widget_color_2
+                
+                # Read the colors from one of the 2 tables above
                 name_of_array = ''
-                for row in range(self.table_widget_color.rowCount()):
-                    if self.table_widget_color.item(row,0).checkState() == Qt.CheckState.Checked:
+                for row in range(title_of_table.rowCount()):
+                    if title_of_table.item(row,0).checkState() == Qt.CheckState.Checked:
                         item = QTableWidgetItem(''.format(row, 1))
-                        color = self.table_widget_color.item(row,1).text()
+                        color = title_of_table.item(row,1).text()
                         print('color', color)
-                        lower = self.table_widget_color.item(row,4).text()
-                        upper = self.table_widget_color.item(row,5).text()
-                        radius_meters = float(self.table_widget_color.item(row,2).text())/100
-                        mass = self.table_widget_color.item(row,3).text()
+                        lower = title_of_table.item(row,4).text()
+                        upper = title_of_table.item(row,5).text()
+                        radius_meters = float(title_of_table.item(row,2).text())/100
+                        mass = title_of_table.item(row,3).text()
 
                         the_array = np.array([(ast.literal_eval(lower),ast.literal_eval(upper), (color),(radius_meters), (mass) )],dtype=dt)
                         if i==0:
@@ -552,30 +561,31 @@ class MyGUI(QMainWindow):
                             new_color_ranges = np.hstack((new_color_ranges,the_array))
                         i += 1
                     self.color_ranges = new_color_ranges
-                    self.color_ranges_text = "default_colors"
              
-            elif self.select_your_own_colors.isChecked() or self.define_colors.isChecked():
+                if self.define_colors.isChecked():
+                    print('lets save the table in a numpy file in the general input folder')
+                    self.color_ranges_text = self.lineEdit_define_color_name.text()
+                    dir_path = os.path.abspath(os.path.join(base_path, 'data', input_folder, ''))
+                    dir_path_npy= os.path.abspath(os.path.join(dir_path, self.color_ranges_text,''))
+                    np.save(dir_path_npy, new_color_ranges)
+
+            elif self.select_your_own_colors.isChecked():
+            # You have previously defined the colors
                 self.color_ranges_text = self.combo_box_objects.currentText()
                 dir_path = os.path.abspath(os.path.join(base_path, 'data', input_folder, ''))
                 dir_path_npy= os.path.abspath(os.path.join(dir_path, self.color_ranges_text,''))
                 if self.select_your_own_colors.isChecked() :
                     self.color_ranges = np.load(dir_path_npy)
-                    print('color range from previous own colors' , self.color_ranges)
-                elif self.define_colors.isChecked():  
-                    print('lets create a numpy')
-                    
-                    # open New Color Window
-                    self.toggle_window(self.window_color)
-                    
-                    new_color_ranges, self.color_ranges_text, dir_path_npy = GUI_read_hsv_bounds(src)
-                    self.color_ranges = np.array(new_color_ranges)
-                    print ('array you just made', self.color_ranges )
-                    self.color_ranges = np.load(dir_path_npy)
-                    print('loaded array', self.color_ranges)
-                    name_of_array = dir_path_npy
-                
+                    print('color range from previous own colors' , self.color_ranges)                 
+            
+            # Save the np file in the output folder so you know which one was used
             dir_out_path_npy = os.path.abspath(os.path.join(data_output_folder_path , self.color_ranges_text,'')) 
             np.save(dir_out_path_npy , self.color_ranges)
+            ##TODO save the numpy as a text file as well so it is easy to read
+            #txt_npy_name = str(self.color_ranges_text + '.txt')
+            #dir_out_path_txt_npy = os.path.abspath(os.path.join(data_output_folder_path , txt_npy_name )) 
+            #np.savetxt(dir_out_path_txt_npy, np.array(self.color_ranges))
+            
         ## TODO use a different value if needed to use src
         src=4
 
@@ -708,26 +718,11 @@ class MyGUI(QMainWindow):
         plt.show()
         
     def find_lower_upper_bounds(self):
-        
-        dt = np.dtype([('lower', np.int32, (3,)),('upper', np.int32, (3,)), ('name', np.unicode_, 16), ('radius_meters', np.float32),('mass', np.float32)])
+        print(self.table_widget_color_2.rowCount())
+        self.table_widget_color_2 = reload_table(self.table_widget_color_2 )
+        self.color_ranges_text = self.lineEdit_define_color_name.text
 
-        for row in range(self.table_widget_color_2.rowCount()):
-            if self.table_widget_color_2.item(row,6).checkState() == Qt.CheckState.Checked:
-                item = QTableWidgetItem(''.format(row, 1))
-                color = self.table_widget_color_2.item(row,1).text()
-                lower = self.table_widget_color_2.item(row,4).text()
-                upper = self.table_widget_color_2.item(row,5).text()
-                print('hi', color, lower, upper)
-                radius_meters = float(self.table_widget_color_2.item(row,2).text())/100
-                mass = self.table_widget_color_2.item(row,3).text()
-                the_array = np.array([(ast.literal_eval(lower),ast.literal_eval(upper), (color),(radius_meters), (mass) )],dtype=dt)
-                the_array = find_lower_upper_bounds_on_screen(the_array)
 
-                self.table_widget_color_2.setItem(row,4, QTableWidgetItem(str(lower)))
-                self.table_widget_color_2.setItem(row,5, QTableWidgetItem(str(upper)))
-
-            self.color_ranges_text = self.lineEdit_define_color_name.text
- 
 
     # Run Tracker Button Function
     def run_real_time(self):
