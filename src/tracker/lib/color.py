@@ -5,6 +5,7 @@
 # Started with Pyimagesearch code initially
 
 import os
+import ast
 import cv2
 import numpy as np
 import pyrealsense2 as rs
@@ -20,14 +21,12 @@ def nothing(x):
 
 
 
-def find_hsv_bounds(lower, upper, object_name, radius_meters, mass, src) -> Optional[np.ndarray]:
+def find_hsv_bounds(the_array, src) -> Optional[np.ndarray]:
     # Find the color range of each object
-
+    print('the_array', the_array)
+    [(lower, upper, color, radius_meters, mass)] = the_array
     real_time = False
     i=0 # frame 
-    if lower is None:
-        lower = (0,0,0)
-        upper = (179, 255, 255)
     # Initializing the webcam feed.
     if type(src) == int:
         cap = cv2.VideoCapture(src)
@@ -39,7 +38,7 @@ def find_hsv_bounds(lower, upper, object_name, radius_meters, mass, src) -> Opti
 
     # Create a window named Press (s) when done.
     cv2.namedWindow("Press (s) when done")
-    cv2.putText(frame, 'bounds that show ' + object_name, (0,20), cv2.FONT_HERSHEY_SIMPLEX, 0.75, (50,170,50), 2)
+    cv2.putText(frame, 'bounds that show ' + color, (0,20), cv2.FONT_HERSHEY_SIMPLEX, 0.75, (50,170,50), 2)
 
     # Now create 6 Press (s) when done that will control the lower and upper range of 
     # H,S and V channels. The Arguments are like this: Name of trackbar, 
@@ -111,9 +110,11 @@ def find_hsv_bounds(lower, upper, object_name, radius_meters, mass, src) -> Opti
         elif key ==ord('<'):
             i-=1
         # If the user presses `s` then print this array.
+    
         if key == ord('s'):
             dt = np.dtype([('lower', np.int32, (3,)),('upper', np.int32, (3,)), ('name', np.unicode_, 16), ('radius_meters', np.float32),('mass', np.float32)])            
-            output = np.array( [((l_h,l_s,l_v),(u_h, u_s, u_v),object_name,(radius_meters),(mass))], dtype=dt)
+            output = np.array( [((l_h,l_s,l_v),(u_h, u_s, u_v),color,(radius_meters),(mass))], dtype=dt)
+  
             print(output,'\n')
             break
 
@@ -121,7 +122,7 @@ def find_hsv_bounds(lower, upper, object_name, radius_meters, mass, src) -> Opti
     if real_time:
         cap.release()
     cv2.destroyAllWindows()
-
+    print('output', output)
     return output
 
 def GUI_read_hsv_bounds(src):

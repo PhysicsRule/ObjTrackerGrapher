@@ -35,7 +35,7 @@ from tracker.lib.GUI_real_time_color_tracker import GUI_real_time_color_tracking
 from tracker.lib.GUI_graphing_trendlines import GUI_graph, GUI_graph_trendline, plot_style_color
 from tracker.lib.graphing import GUI_graph_setup, three_D_graphs, plot_graphs, GUI_trim
 from tracker.lib.intel_realsense_D435i import record_bag_file, find_and_config_device, read_bag_file_and_config
-
+from tracker.lib.GUI_library import reload_table
 from tracker.lib.color import choose_or_create_color_range
 
 ## TODO possibly use this instead of passing each individual piece
@@ -708,8 +708,11 @@ class MyGUI(QMainWindow):
         plt.show()
         
     def find_lower_upper_bounds(self):
-        
-        dt = np.dtype([('lower', np.int32, (3,)),('upper', np.int32, (3,)), ('name', np.unicode_, 16), ('radius_meters', np.float32),('mass', np.float32)])
+        print(self.table_widget_color_2.rowCount())
+        self.table_widget_color_2 = reload_table(self.table_widget_color_2 )
+        self.color_ranges_text = self.lineEdit_define_color_name.text
+
+        '''dt = np.dtype([('lower', np.int32, (3,)),('upper', np.int32, (3,)), ('name', np.unicode_, 16), ('radius_meters', np.float32),('mass', np.float32)])
 
         for row in range(self.table_widget_color_2.rowCount()):
             if self.table_widget_color_2.item(row,6).checkState() == Qt.CheckState.Checked:
@@ -723,11 +726,12 @@ class MyGUI(QMainWindow):
                 the_array = np.array([(ast.literal_eval(lower),ast.literal_eval(upper), (color),(radius_meters), (mass) )],dtype=dt)
                 the_array = find_lower_upper_bounds_on_screen(the_array)
 
+                [(lower, upper, color_name, radius_meters, mass)] = the_array
                 self.table_widget_color_2.setItem(row,4, QTableWidgetItem(str(lower)))
                 self.table_widget_color_2.setItem(row,5, QTableWidgetItem(str(upper)))
 
             self.color_ranges_text = self.lineEdit_define_color_name.text
- 
+ '''
 
     # Run Tracker Button Function
     def run_real_time(self):

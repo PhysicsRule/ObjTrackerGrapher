@@ -19,9 +19,7 @@ def find_lower_upper_bounds_on_screen(the_array):
     pipeline = find_and_config_device()
     warm_up_camera(pipeline)
     (cv_color, rs_color, rs_depth), timestamp = get_all_frames_color(pipeline)
-    [(lower, upper, color_name, radius_meters, mass)] = the_array
-    print(color_name)
-    output = find_hsv_bounds(lower, upper, color_name, radius_meters, mass, cv_color)
+    output = find_hsv_bounds(the_array, cv_color)
     print(output)
     return output
 
