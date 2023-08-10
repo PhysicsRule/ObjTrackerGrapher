@@ -146,9 +146,9 @@ def select_clipping_distance(frame, rs_depth) -> Tuple[Any, float, float]:
 # This selects both the background and the TODO  Origin
      # Find distance (depth) to wall & store as clipping distance
     # Note that it is reduced slightly to allow some room for error (*0.95)
-    print('The image is in a new window. Select a box at a distance further than points will be collected.')
+    print('Select a box at a distance further than points will be collected.')
     print('Any colored object beyond that point will not be tracked, but may slow down the data collection')
-    wall = cv2.selectROI('Select a clipping distance. Is will be the upper left of box', frame, False)
+    wall = cv2.selectROI('Select an object/wall behind the movement to remove unwanted data. Then ENTER. Then SPACEBAR', frame, False)
     depth = round(rs_depth.get_distance(wall[0], wall[1]), 4)
     clipping_distance =  depth  * 0.99
     return wall, depth, clipping_distance

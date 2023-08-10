@@ -103,7 +103,7 @@ def GUI_graph (which_parameter_to_plot, data_output_folder_path, graph_color_ran
         smooth_data_to_graph = data_frame.set_index('Time')
 
         smooth_data_to_graph.to_csv(file_name_dataframe_path) 
-        print('Your folder will be available:\n', file_name_dataframe_path)    
+        print('\nYour folder will be available:\n', file_name_dataframe_path)    
         smooth_data_to_graph = pd.read_csv(file_name_dataframe_path, header=0)
 
         # Using weighted differences find the velocity and acceleration graphs

@@ -26,7 +26,7 @@ def make_default_folder(data_input, data_output, color):
         os.makedirs(data_output_folder_path)
 
        
-    print('Your folder will be available:\n', data_output_folder_path)
+    print('\nYour folder will be available:\n', data_output_folder_path)
     return data_output_folder, data_output_folder_path
 
 def GUI_creates_an_array_of_csv_files (data_output_folder_path):

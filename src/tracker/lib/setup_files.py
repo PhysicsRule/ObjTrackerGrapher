@@ -82,30 +82,30 @@ def set_up_id():
 
 
 def make_csv_files(object_ranges, data_output_folder_path):
-    print('The data for each object will be stored in this location:\n')
+    print('The data for each object will be stored in this location:')
     if not os.path.exists(data_output_folder_path):
         os.makedirs(data_output_folder_path)
     for (_,_,color_name,_,_) in object_ranges:
         csv_file_path = os.path.abspath(os.path.join(data_output_folder_path + '/'+ color_name + '.csv'))
         create_data_file(csv_file_path)
-        print(csv_file_path)
+        print(csv_file_path, '\n')
         
 
 def make_csv_files_no_color(monochrome_ranges, data_output_folder_path):
-    print('The data for each object will be stored in this location:\n')
+    print('The data for each object will be stored in this location:')
     for (object_name,_,_) in monochrome_ranges:
         csv_file_path = os.path.abspath(os.path.join(data_output_folder_path + '/'+ object_name + '.csv'))
         create_data_file(csv_file_path)
-        print(csv_file_path)
+        print(csv_file_path,'\n')
 
 def clone_csv_files(color_ranges, data_output_folder_path, tracking_run):
-    print('The data for each object will be stored in this location:\n')
+    print('The data for each object will be stored in this location:')
     general_spreadsheet = os.path.abspath(os.path.join(data_output_folder_path + '/spreadsheet.csv')) 
     new_file_path = os.path.abspath(os.path.join(data_output_folder_path + '/'+ tracking_run + '/' ))
     for (_,_,color_name,_,_) in color_ranges:
         csv_file_path = os.path.abspath(os.path.join(new_file_path + '/'+ color_name + '.csv'))
         copyfile(general_spreadsheet, csv_file_path)
-        print(csv_file_path)
+        print(csv_file_path, '\n')
 
 def create_new_folder (file_path, new_sheet_folder):
     trim_trial = 0

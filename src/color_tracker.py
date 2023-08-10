@@ -121,7 +121,7 @@ while True:
         csv_file_path = os.path.abspath(os.path.join(data_output_folder_path, color_name + '.csv'))   
         with open(csv_file_path, 'a') as data_to_file:
             data_to_file.write(f'{relative_timestamp},{x_coord},{y_coord},{z_coord}\n')      
-
+        
         cv2.putText(cv_color, 'Time: ' + str(relative_timestamp), (0,20), cv2.FONT_HERSHEY_SIMPLEX, 0.75, (50,170,50), 2)
         cv2.putText(cv_color, 'X coordinate: ' + str(x_coord), (0,40), cv2.FONT_HERSHEY_SIMPLEX, 0.75, (50,170,50), 2)
         cv2.putText(cv_color, 'Y coordinate: ' + str(y_coord), (0,60), cv2.FONT_HERSHEY_SIMPLEX, 0.75, (50,170,50), 2)
