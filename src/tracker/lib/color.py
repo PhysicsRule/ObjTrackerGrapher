@@ -21,7 +21,7 @@ def nothing(x):
 
 
 
-def find_hsv_bounds(the_array, src) -> Optional[np.ndarray]:
+def GUI_find_hsv_bounds(the_array, src) -> Optional[np.ndarray]:
     # Find the color range of each object
     print('the_array', the_array)
     [(lower, upper, color, radius_meters, mass)] = the_array
@@ -125,45 +125,7 @@ def find_hsv_bounds(the_array, src) -> Optional[np.ndarray]:
     print('output', output)
     return output
 
-def GUI_read_hsv_bounds(src):
-# Determine which objects and how many objects you are going to track.
-# Call a function to find their upper and lower bounds on the color hsv scale
-    print('\nTO SELECT A single object \n \b')
-    print('-Move the L-H (lower bounds for Hue) skidder until your object just starts to disappear.')
-    print('-This is essentially the color')
-    print('-then move the U-H (upper bounds for Hue) the other way. The mask on the right is very helpful')
-    print('-Repeat this for the saturation of corlor and the brightness of color')
 
-    num_objects = int(input('How many objects do you want to enter?'))
-    for i in range(num_objects):
-        object_name = input('what do you want to call the object? Examples:  yellowTennisBall , greenball ')
-        
-        print ("Realize the depth camera will measure the object from the front of the object then in the amount you put for the radius in meters. /n")
-        radius_meters = input("What is the radius in meters of the object? enter 0.0 if the object is flat and parallel to camera,")
-
-        mass = input("What is the mass of the object? enter 0.0 if you don't care \n")
-        
-        thearray = find_hsv_bounds(object_name, radius_meters, mass, src)
-        if i==0:
-            new_color_ranges = thearray
-        else:
-            new_color_ranges = np.hstack((new_color_ranges,thearray))          
-            
-        print(new_color_ranges,' \n')
-    
-    # Save array for later
-    print ('What do you want to call the scene (name of file) that has each object information? For example LoriDining4Balls.')
-    name_of_array = input('Just hit enter if you want it to be called, testscene.')
-    
-    if name_of_array == '':
-        name_of_array = 'testscene'
-
-    basepath = os.getcwd()
-    npy_file = os.path.abspath(os.path.join(basepath, 'data/color_i/' + name_of_array))
-    np.save(npy_file, new_color_ranges)
-    
-  
-    return new_color_ranges, name_of_array, npy_file
 
 def read_hsv_bounds(src):
 # Determine which objects and how many objects you are going to track.
