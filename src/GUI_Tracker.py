@@ -187,6 +187,7 @@ class MyGUI(QMainWindow):
         # Buttons: Minor
         self.color_button.clicked.connect(self.color_button_pressed)
         self.infrared_90_button.clicked.connect(self.infrared_90_button_pressed)
+        self.skeletal_tracker_button.connect(self.skeletal_tracker_pressed)
 
         self.save_height_mass.clicked.connect(self.reference_height_save)
         # Radio Buttons: Color Choice 
@@ -299,6 +300,8 @@ class MyGUI(QMainWindow):
         # Color options are hidden
         self.select_default_colors.setHidden(True)
         self.select_your_own_colors.setHidden(True)
+        
+    def skeletal_tracker_pressed(self):
         
 
         # show other options
