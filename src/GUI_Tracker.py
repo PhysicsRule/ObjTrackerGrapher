@@ -12,7 +12,7 @@ from pyqtgraph.Qt import QtGui, QtCore
 import pyqtgraph as pg          # In the future we should have the pyqtgraph locally stored. see discord redources
 from pyqtgraph.ptime import time
 
-
+import webbrowser
 import ast
 import os
 import sys
@@ -154,7 +154,6 @@ class MyGUI(QMainWindow):
         self.folder_name_objects.setHidden(True)
         self.table_widget_color_2.setHidden(True) # For new colors
         self.lineEdit_define_color_name.setHidden(True)
-        self.how_to_enter_folder_label.setHidden(True)
         self.find_lower_upper_button.setHidden(True)
         # Acceleration, Energy, Momentum  Hidden
         self.ame_explanation.setHidden(True)    # text
@@ -187,7 +186,7 @@ class MyGUI(QMainWindow):
         # Buttons: Minor
         self.color_button.clicked.connect(self.color_button_pressed)
         self.infrared_90_button.clicked.connect(self.infrared_90_button_pressed)
-        self.skeletal_tracker_button.connect(self.skeletal_tracker_pressed)
+        self.skeletal_button.clicked.connect(self.skeletal_tracker_pressed)
 
         self.save_height_mass.clicked.connect(self.reference_height_save)
         # Radio Buttons: Color Choice 
@@ -300,10 +299,6 @@ class MyGUI(QMainWindow):
         # Color options are hidden
         self.select_default_colors.setHidden(True)
         self.select_your_own_colors.setHidden(True)
-        
-    def skeletal_tracker_pressed(self):
-        
-
         # show other options
         self.folder_list.setHidden(False)
         self.folder_name.setHidden(False)
@@ -318,7 +313,29 @@ class MyGUI(QMainWindow):
         # Folder List Showing Folders
         self.list_folders(data_output)
         print('Future')
+        
+    def skeletal_tracker_pressed(self):
+        type_of_tracking = 'other'
+        input_folder = 'other_i'
+        data_output = 'other_o'
 
+        # Select the color from a list, use a predefined preset, or create a new one.
+        self.select_default_colors.setHidden(True)
+        self.select_your_own_colors.setHidden(True)
+        self.define_colors.setHidden(True)
+
+        self.folder_list.setHidden(False)
+        self.folder_name.setHidden(False)
+        self.ame_explanation.setHidden(False)
+        self.select_energy.setHidden(True)
+        self.select_momentum.setHidden(True)
+
+        self.select_acceleration.setHidden(False)
+        self.select_acceleration.isChecked()
+        print('skeletal')
+        webbrowser.open('https://physicsrule.github.io/SkeletalTracking.github.io/')
+        #webbrowser.get("google-chrome").open('https://physicsrule.github.io/SkeletalTracking.github.io/')
+    
     def load_data(self,type_of_tracking, input_folder, title_of_table):
         # load the dictionary
         ## TODO make this a file to read
@@ -414,7 +431,6 @@ class MyGUI(QMainWindow):
         self.select_default_colors.setHidden(False)
         self.select_your_own_colors.setHidden(False)
         self.define_colors.setHidden(False)
-        self.how_to_enter_folder_label.setHidden(False)
 
         self.folder_list.setHidden(False)
         self.folder_name.setHidden(False)

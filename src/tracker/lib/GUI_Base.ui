@@ -453,6 +453,9 @@
       </disabled>
      </palette>
     </property>
+    <property name="toolTipDuration">
+     <number>-2</number>
+    </property>
     <property name="autoFillBackground">
      <bool>true</bool>
     </property>
@@ -1508,7 +1511,7 @@
       <enum>Qt::LeftToRight</enum>
      </property>
      <property name="autoFillBackground">
-      <bool>true</bool>
+      <bool>false</bool>
      </property>
      <property name="text">
       <string>Data came from another source
@@ -1516,23 +1519,26 @@ Saved as a .csv file
 Time, x,y, z</string>
      </property>
     </widget>
-    <widget class="QPushButton" name="skeletal_tracker_button">
+    <widget class="QPushButton" name="skeletal_button">
      <property name="geometry">
       <rect>
        <x>520</x>
        <y>30</y>
-       <width>131</width>
-       <height>51</height>
+       <width>130</width>
+       <height>50</height>
       </rect>
      </property>
      <property name="font">
       <font>
-       <pointsize>10</pointsize>
-       <italic>false</italic>
+       <pointsize>9</pointsize>
       </font>
      </property>
+     <property name="focusPolicy">
+      <enum>Qt::NoFocus</enum>
+     </property>
      <property name="text">
-      <string>Skeletal Tracker</string>
+      <string>Link to
+Skeletal Tracker</string>
      </property>
     </widget>
    </widget>
