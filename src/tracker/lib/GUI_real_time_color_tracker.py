@@ -89,6 +89,8 @@ def GUI_real_time_color_tracking(src, type_of_tracking, image ,color_ranges , mi
             self._stop_event = threading.Event()
             self.pipeline=pipeline
             self.frame_queue=queue.Queue()
+            self.start_time = None
+            self.last_timestamp = None
 
         def stop(self):
             self._stop_event.set()
@@ -103,7 +105,8 @@ def GUI_real_time_color_tracking(src, type_of_tracking, image ,color_ranges , mi
                 if not frame_result:
                     print("didn't find pipeline frame")
                     continue
-                            
+                
+                self.last_timestamp = frame_result[1]
                 self.frame_queue.put(frame_result)
 
         def get_frame(self):
@@ -128,6 +131,7 @@ def GUI_real_time_color_tracking(src, type_of_tracking, image ,color_ranges , mi
         ## Setup the color tracker
         def __init__(self, color, callback):
             super().__init__()
+            self._stop_event = threading.Event()
             make_csv_files(color_ranges, data_output_folder_path)
             # Configure and setup the cameras
             self.pipeline = find_and_config_device()
@@ -136,7 +140,6 @@ def GUI_real_time_color_tracking(src, type_of_tracking, image ,color_ranges , mi
             # Find the furthest distance and in the future find a different origin TODO
             self.zeroed_x, self.zeroed_y, self.zeroed_z, self.z = select_furthest_distance_color(self.pipeline)
             self.camera_thread = CameraThread(self.pipeline)
-            self.camera_thread.start()
 
             ## self.video_stream = VideoStream(src=0)
             self.start_time = None
@@ -149,8 +152,15 @@ def GUI_real_time_color_tracking(src, type_of_tracking, image ,color_ranges , mi
             #self.current_colormap = self.HSV_COLORMAP[color]
             self.max_num_point=len(color_ranges)
             self.new_data.connect(callback)
+        
+        def stop(self):
+            self._stop_event.set()
+
+        def is_stopped(self) -> bool:
+            return self._stop_event.is_set()
 
         def run(self):
+            self.camera_thread.start()
             image_file_path = os.path.abspath(os.path.join(data_output_folder_path + '/video/'))  
 
             first_time_check = True
@@ -163,7 +173,7 @@ def GUI_real_time_color_tracking(src, type_of_tracking, image ,color_ranges , mi
             # about ~1.2-1.6 seconds. Not sure the impact of that difference
 
             # Collect data   
-            while True:
+            while not self.is_stopped():
 
                 # Get frames if valid
                 frame_result = self.camera_thread.get_frame()
@@ -171,7 +181,20 @@ def GUI_real_time_color_tracking(src, type_of_tracking, image ,color_ranges , mi
                     continue
             
                 (cv_color, rs_color, rs_depth), timestamp = frame_result
-                            
+                
+                # Start the timer
+                if first_time_check:
+                    start_time = timestamp
+                    # we might want this later and compare with start that has milliseconds
+                    first_time_check = False
+
+                # Converts time from milliseconds to seconds
+                relative_timestamp = (timestamp - start_time) / 1000
+
+                ## FIXME: PUT BACK IN
+                #if self.camera_thread.last_timestamp - timestamp > 0.3:
+                #    continue
+
                 # Create a colormap from the depth data TODO add if desired
                 #depth_image = np.asanyarray(rs_depth.get_data())
                 #depth_colormap = cv2.applyColorMap(cv2.convertScaleAbs(depth_image, alpha=0.10), cv2.COLORMAP_HSV)
@@ -186,25 +209,11 @@ def GUI_real_time_color_tracking(src, type_of_tracking, image ,color_ranges , mi
                 x_coord, y_coord, z_coord = get_depth_meters(x_pixel, y_pixel, self.radius_meters, rs_depth, rs_color, self.zeroed_x, self.zeroed_y, self.zeroed_z, self.z)
                 if x_coord is None:
                     continue
-                    
-                # Start the timer
-                if first_time_check:
-                    start_time = timestamp
-                    # we might want this later and compare with start that has milliseconds
-                    first_time_check = False
-
-                    # Converts time from milliseconds to seconds
-                relative_timestamp = (timestamp - start_time) / 1000
                 
                 csv_file_path = os.path.abspath(os.path.join(data_output_folder_path, self.color + '.csv'))   
                 with open(csv_file_path, 'a') as data_to_file:
                     data_to_file.write(f'{relative_timestamp},{x_coord},{y_coord},{z_coord}\n')      
 
-                cv2.putText(cv_color, 'Time: ' + str(relative_timestamp), (0,20), cv2.FONT_HERSHEY_SIMPLEX, 0.75, (50,170,50), 2)
-                cv2.putText(cv_color, 'X coordinate: ' + str(x_coord), (0,40), cv2.FONT_HERSHEY_SIMPLEX, 0.75, (50,170,50), 2)
-                cv2.putText(cv_color, 'Y coordinate: ' + str(y_coord), (0,60), cv2.FONT_HERSHEY_SIMPLEX, 0.75, (50,170,50), 2)
-                cv2.putText(cv_color, 'Z coordinate: ' + str(z_coord), (0,80), cv2.FONT_HERSHEY_SIMPLEX, 0.75, (50,170,50), 2)
-                cv2.circle(cv_color, (int(x_pixel), int(y_pixel)), int(radius), (255, 255, 255), 2)
                 # Create a colormap from the depth data
                 if image.show_depth:
                     depth_image = np.asanyarray(rs_depth.get_data())
@@ -215,6 +224,11 @@ def GUI_real_time_color_tracking(src, type_of_tracking, image ,color_ranges , mi
                     cv2.moveWindow('depth',850,0)
 
                 if image.show_RGB:
+                    cv2.putText(cv_color, 'Time: ' + str(relative_timestamp), (0,20), cv2.FONT_HERSHEY_SIMPLEX, 0.75, (50,170,50), 2)
+                    cv2.putText(cv_color, 'X coordinate: ' + str(x_coord), (0,40), cv2.FONT_HERSHEY_SIMPLEX, 0.75, (50,170,50), 2)
+                    cv2.putText(cv_color, 'Y coordinate: ' + str(y_coord), (0,60), cv2.FONT_HERSHEY_SIMPLEX, 0.75, (50,170,50), 2)
+                    cv2.putText(cv_color, 'Z coordinate: ' + str(z_coord), (0,80), cv2.FONT_HERSHEY_SIMPLEX, 0.75, (50,170,50), 2)
+                    cv2.circle(cv_color, (int(x_pixel), int(y_pixel)), int(radius), (255, 255, 255), 2)
                     cv2.imshow('Tracking', cv_color)
                     cv2.moveWindow('Tracking',0,0)
                 
@@ -242,18 +256,20 @@ def GUI_real_time_color_tracking(src, type_of_tracking, image ,color_ranges , mi
                 self.new_data.emit((x_coord, y_coord, z_coord, relative_timestamp))
                 
                 # exit if spacebar or esc is pressed
+                ## FIXME: Move this out of tight loop
                 k = cv2.waitKey(1) & 0xff
                 if k == 27 or k == 32:
-                    print('end')
-                    self.camera_thread.stop()
-                    # Close all OpenCV windows
-                    if image.save_video:
-                        out = cv2.VideoWriter(image_file_path +'.mp4',cv2.VideoWriter_fourcc(*'mp4v'), 15, size)
-                        for i in range(len(video_img_array)):
-                            out.write(video_img_array[i])
-                        out.release()
-                    cv2.destroyAllWindows()
                     break
+
+            print('end')
+            self.camera_thread.stop()
+            # Close all OpenCV windows
+            if image.save_video:
+                out = cv2.VideoWriter(image_file_path +'.mp4',cv2.VideoWriter_fourcc(*'mp4v'), 15, size)
+                for i in range(len(video_img_array)):
+                    out.write(video_img_array[i])
+                out.release()
+            cv2.destroyAllWindows()
 
 
             
