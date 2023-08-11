@@ -1200,6 +1200,9 @@
        <pointsize>10</pointsize>
       </font>
      </property>
+     <property name="contextMenuPolicy">
+      <enum>Qt::NoContextMenu</enum>
+     </property>
      <property name="text">
       <string>Type in the folder you want to track to or graph from. Then hit ENTER.</string>
      </property>
@@ -1493,7 +1496,7 @@
       <string>Modify Lower and Upper for OnScreen Colors</string>
      </property>
     </widget>
-    <widget class="QCheckBox" name="checkBox">
+    <widget class="QCheckBox" name="data_in_other">
      <property name="geometry">
       <rect>
        <x>900</x>
@@ -1516,13 +1519,13 @@
      <property name="text">
       <string>Data came from another source
 Saved as a .csv file
-Time, x,y, z</string>
+Time, x,y, z (Skeletal Tracker)</string>
      </property>
     </widget>
     <widget class="QPushButton" name="skeletal_button">
      <property name="geometry">
       <rect>
-       <x>520</x>
+       <x>650</x>
        <y>30</y>
        <width>130</width>
        <height>50</height>
@@ -1539,6 +1542,20 @@ Time, x,y, z</string>
      <property name="text">
       <string>Link to
 Skeletal Tracker</string>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="other_folder">
+     <property name="geometry">
+      <rect>
+       <x>520</x>
+       <y>30</y>
+       <width>120</width>
+       <height>50</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Use other_o folder
+for output</string>
      </property>
     </widget>
    </widget>
