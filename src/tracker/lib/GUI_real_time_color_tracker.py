@@ -86,13 +86,19 @@ def GUI_real_time_color_tracking(src, type_of_tracking, image ,color_ranges , mi
     class CameraThread(threading.Thread):
         def __init__(self,pipeline):
             super(CameraThread, self).__init__()
-
+            self._stop_event = threading.Event()
             self.pipeline=pipeline
             self.frame_queue=queue.Queue()
 
+        def stop(self):
+            self._stop_event.set()
+
+        def is_stopped(self) -> bool:
+            return self._stop_event.is_set()
+
         def run(self):
             self.start_time = datetime.datetime.now()
-            while True:
+            while not self.is_stopped():
                 frame_result = get_all_frames_color(self.pipeline)
                 if not frame_result:
                     print("didn't find pipeline frame")
@@ -239,6 +245,7 @@ def GUI_real_time_color_tracking(src, type_of_tracking, image ,color_ranges , mi
                 k = cv2.waitKey(1) & 0xff
                 if k == 27 or k == 32:
                     print('end')
+                    self.camera_thread.stop()
                     # Close all OpenCV windows
                     if image.save_video:
                         out = cv2.VideoWriter(image_file_path +'.mp4',cv2.VideoWriter_fourcc(*'mp4v'), 15, size)
@@ -267,7 +274,6 @@ def GUI_real_time_color_tracking(src, type_of_tracking, image ,color_ranges , mi
     #timer.start(1000)
 
     if __name__ == "__main__":
-        pg.mkQApp().exec_()   
-        # nine_graphs()         
+        pg.mkQApp().exec_()
+        # nine_graphs()
 
-                    
