@@ -112,7 +112,6 @@ def record_bag_file(data_output_folder_path, type_of_tracking):
     read_bag_file_and_config(type_of_tracking, data_output_folder_path, 'bag', filepath_bag)
     print('done recording')
 
-
 def get_all_frames_color(rs_pipeline) -> Optional[Tuple[Tuple[Any, Any, Any], Any]]:
     '''
     Returns a tuple containing the OpenCV color and (aligned) RealSense
