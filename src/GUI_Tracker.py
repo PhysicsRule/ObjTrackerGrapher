@@ -149,7 +149,8 @@ class MyGUI(QMainWindow):
         
         # Folder Options Hidden
         self.folder_list.setHidden(True)        # List of folders to put the data into
-        self.folder_name.setHidden(True)    
+        self.folder_name.setHidden(True)  
+        self.how_to_enter_folder_label.setHidden(False)  
         self.table_widget_color.setHidden(True)
         self.folder_name_objects.setHidden(True)
         self.table_widget_color_2.setHidden(True) # For new colors
@@ -186,6 +187,7 @@ class MyGUI(QMainWindow):
         # Buttons: Minor
         self.color_button.clicked.connect(self.color_button_pressed)
         self.infrared_90_button.clicked.connect(self.infrared_90_button_pressed)
+        self.other_folder.clicked.connect(self.set_folder_to_other)
         self.skeletal_button.clicked.connect(self.skeletal_tracker_pressed)
 
         self.save_height_mass.clicked.connect(self.reference_height_save)
@@ -314,15 +316,15 @@ class MyGUI(QMainWindow):
         self.list_folders(data_output)
         print('Future')
         
-    def skeletal_tracker_pressed(self):
+    def set_folder_to_other(self):
         type_of_tracking = 'other'
         input_folder = 'other_i'
-        data_output = 'other_o'
-
+        data_output = 'other_o' 
         # Select the color from a list, use a predefined preset, or create a new one.
         self.select_default_colors.setHidden(True)
         self.select_your_own_colors.setHidden(True)
         self.define_colors.setHidden(True)
+        
 
         self.folder_list.setHidden(False)
         self.folder_name.setHidden(False)
@@ -332,6 +334,13 @@ class MyGUI(QMainWindow):
 
         self.select_acceleration.setHidden(False)
         self.select_acceleration.isChecked()
+
+    def skeletal_tracker_pressed(self):
+        self.set_folder_to_other()
+        type_of_tracking = 'other'
+        input_folder = 'other_i'
+        data_output = 'other_o' 
+        
         print('skeletal')
         webbrowser.open('https://physicsrule.github.io/SkeletalTracking.github.io/')
         #webbrowser.get("google-chrome").open('https://physicsrule.github.io/SkeletalTracking.github.io/')
@@ -614,18 +623,27 @@ class MyGUI(QMainWindow):
         self.graph_widget = mlpcanvas()
         # The folder that will be graphed
         print('graph')
-        base_path = os.getcwd()
-        data_output = 'color_o'
-        data_output_folder_path = self.get_output_folder_path(base_path, data_output)
-        
-        # The array of the colors to be tracked
-        graph_color_ranges, csv_files_array = find_objects_to_graph (data_output_folder_path)
-        
         # What variable is to be graphed for the 3rd graph. It always graphs position and velocity
         if self.select_momentum.isChecked(): which_parameter_to_plot = 'p'
         elif self.select_energy.isChecked(): which_parameter_to_plot = 'e'
         # acceleration is default
         else : which_parameter_to_plot = 'a'
+
+        if self.data_in_other.isChecked(): 
+            data_output = 'color_o'
+            self.select_momentum.isHidden(True)
+            self.select_energy.isHidden(True)
+            which_parameter_to_plot = 'a'
+        else:
+            data_output = 'color_o'
+        base_path = os.getcwd()
+
+        data_output_folder_path = self.get_output_folder_path(base_path, data_output)
+        
+        # The array of the colors to be tracked
+        graph_color_ranges, csv_files_array = find_objects_to_graph (data_output_folder_path)
+        
+
 
         # Define each canvas the 2 graphs will be located
         self.grid_layout.addWidget(self.graph_widget,0,0,alignment=Qt.Alignment())        
