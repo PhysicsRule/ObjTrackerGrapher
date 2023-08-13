@@ -688,7 +688,7 @@
       <string>Record Bag</string>
      </property>
     </widget>
-    <widget class="QTableWidget" name="trendlineTableWidget">
+    <widget class="QTableWidget" name="trendline_table_widget">
      <property name="geometry">
       <rect>
        <x>920</x>
@@ -699,7 +699,7 @@
      </property>
      <column>
       <property name="text">
-       <string>Trendline (Future)</string>
+       <string>Trendline</string>
       </property>
      </column>
      <column>
@@ -758,9 +758,9 @@
         <widget class="PlotWidget" name="DataGraph">
          <property name="geometry">
           <rect>
-           <x>280</x>
+           <x>380</x>
            <y>10</y>
-           <width>551</width>
+           <width>451</width>
            <height>431</height>
           </rect>
          </property>
@@ -1527,7 +1527,7 @@ Time, x,y, z (Skeletal Tracker)</string>
       <rect>
        <x>650</x>
        <y>30</y>
-       <width>130</width>
+       <width>120</width>
        <height>50</height>
       </rect>
      </property>
@@ -1556,6 +1556,24 @@ Skeletal Tracker</string>
      <property name="text">
       <string>Use other_o folder
 for output</string>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="find_trendlines_button">
+     <property name="geometry">
+      <rect>
+       <x>1310</x>
+       <y>200</y>
+       <width>120</width>
+       <height>50</height>
+      </rect>
+     </property>
+     <property name="font">
+      <font>
+       <pointsize>10</pointsize>
+      </font>
+     </property>
+     <property name="text">
+      <string>Find Trendlines</string>
      </property>
     </widget>
    </widget>

@@ -180,6 +180,9 @@ class MyGUI(QMainWindow):
         self.graph_button.clicked.connect(self.run_graph)
         self.Button3DGraph.setHidden(False)
         self.Button3DGraph.clicked.connect(self.run_3D_graph)
+        # Trendlines
+        self.trendline_table_widget.setHidden(True)
+        self.find_trendlines_button.setHidden(True)
         
         
         self.record_bag_button.clicked.connect(self.record_bag)
@@ -470,6 +473,10 @@ class MyGUI(QMainWindow):
         data_output = 'color_o'
         self.list_folders(data_output)
         
+    def find_trendlines(self):
+        self.trendline_table_widget.setHidden(False)
+        self.find_trendlines_button.setHidden(False)
+
 
 
 
@@ -634,6 +641,8 @@ class MyGUI(QMainWindow):
 
     def run_graph(self, data_output_folder_path):
         self.graph_widget = mlpcanvas()
+        self.trendline_table_widget.setHidden(False)
+        self.find_trendlines_button.setHidden(False)
         # The folder that will be graphed
         print('graph')
         # What variable is to be graphed for the 3rd graph. It always graphs position and velocity
@@ -715,6 +724,8 @@ class MyGUI(QMainWindow):
         #plt.tight_layout()
 
     def run_3D_graph(self, data_output_folder_path):
+        self.trendline_table_widget.setHidden(False)
+        self.find_trendlines_button.setHidden(False)
         self.xmin, self.xmax = self.graph_widget.axes[0,0].get_xlim()
         fig_3D = plt.figure()
         axes_3D = plt.axes(projection='3d')
