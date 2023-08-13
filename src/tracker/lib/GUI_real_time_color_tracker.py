@@ -11,6 +11,7 @@ import cv2
 import numpy as np
 import datetime
 import pyrealsense2 as rs
+import keyboard
 
 from PyQt5.QtWidgets import *
 from PyQt5 import uic, QtGui
@@ -117,17 +118,6 @@ def GUI_real_time_color_tracking(src, type_of_tracking, image ,color_ranges , mi
 
     class DataThread(QtCore.QThread):
         new_data = QtCore.pyqtSignal(tuple)
-        '''HSV_COLORMAP = {
-            'green': ((29, 86, 6), (64, 255, 255)),
-            'red': ((0,146,12), (11,255,206)),
-            'frisbee': (( 0, 106,  87), (  7, 255, 255)),
-            'double_red': ((0, 20, 6), (20, 255, 230), (160, 20, 6), (179, 255, 230)),
-            'blue': ((95, 100, 80), (125, 255, 170)),
-            'purple':((139,  68,  78), (170, 255, 255)),
-            'yellow': ((20, 36, 4), (71, 238, 213)),
-            'orange': ((0, 123, 189), (24, 255, 255)),
-        }'''
-
         ## Setup the color tracker
         def __init__(self, color, callback):
             super().__init__()
@@ -153,6 +143,12 @@ def GUI_real_time_color_tracking(src, type_of_tracking, image ,color_ranges , mi
             self.max_num_point=len(color_ranges)
             self.new_data.connect(callback)
         
+        def is_keypress(self):
+            if keyboard.is_pressed("q"):
+                return True
+            else: 
+                return False
+
         def stop(self):
             self._stop_event.set()
 
@@ -191,9 +187,11 @@ def GUI_real_time_color_tracking(src, type_of_tracking, image ,color_ranges , mi
                 # Converts time from milliseconds to seconds
                 relative_timestamp = (timestamp - start_time) / 1000
 
-                ## FIXME: PUT BACK IN
-                #if self.camera_thread.last_timestamp - timestamp > 0.3:
-                #    continue
+                ## TODO: for a higher framerate remove this. It halves the framerate, 
+                ## Reduces the lag by only collecting half the frames
+                if (i % 2) == 0:
+                    i +=1
+                    continue
 
                 # Create a colormap from the depth data TODO add if desired
                 #depth_image = np.asanyarray(rs_depth.get_data())
@@ -229,8 +227,8 @@ def GUI_real_time_color_tracking(src, type_of_tracking, image ,color_ranges , mi
                     cv2.putText(cv_color, 'Y coordinate: ' + str(y_coord), (0,60), cv2.FONT_HERSHEY_SIMPLEX, 0.75, (50,170,50), 2)
                     cv2.putText(cv_color, 'Z coordinate: ' + str(z_coord), (0,80), cv2.FONT_HERSHEY_SIMPLEX, 0.75, (50,170,50), 2)
                     cv2.circle(cv_color, (int(x_pixel), int(y_pixel)), int(radius), (255, 255, 255), 2)
-                    cv2.imshow('Tracking', cv_color)
-                    cv2.moveWindow('Tracking',0,0)
+                    cv2.imshow('Tracking (q) to quit', cv_color)
+                    cv2.moveWindow('Tracking (q) to quit',0,0)
                 
                 if image.show_mask and mask is not None:
                     cv2.imshow('mask', mask)
@@ -256,9 +254,13 @@ def GUI_real_time_color_tracking(src, type_of_tracking, image ,color_ranges , mi
                 self.new_data.emit((x_coord, y_coord, z_coord, relative_timestamp))
                 
                 # exit if spacebar or esc is pressed
-                ## FIXME: Move this out of tight loop
-                k = cv2.waitKey(1) & 0xff
-                if k == 27 or k == 32:
+                ## old method
+                # k = cv2.waitKey(1) & 0xff
+                # if k == 27 or k == 32:
+                #     break
+                # If q is pressed
+                if self.is_keypress():
+                    print('done')
                     break
 
             print('end')
