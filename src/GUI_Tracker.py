@@ -533,6 +533,19 @@ class MyGUI(QMainWindow):
                 # Select video feed camera
         base_path = os.getcwd()
         
+        # Set this to True if you are testing
+        if False:
+            src = 4
+            type_of_tracking = 'color'
+            self.image = image_option(True,False,False,False,False,False,False)
+            # This is the green color range
+            self.color_ranges=np.array([([32, 70, 68], [ 64, 194, 227], 'green', 0.1, 0.)],dtype=np.dtype([('lower', np.int32, (3,)), ('upper', np.int32, (3,)), ('name', np.unicode_, 16), ('radius_meters', np.float32), ('mass', np.float32)]))
+            min_radius_object=5
+            data_output_folder_path=self.get_output_folder_path(base_path, str(time.time()))
+            input_folder='color_i'
+            data_output ='color_o'
+            return src, type_of_tracking, self.image, self.color_ranges, min_radius_object, data_output_folder_path, input_folder, data_output
+
         #  self.image = get_settings_to_pass(self)
         self.image = image_option(self.show_image_check.isChecked(), self.save_image_check.isChecked(), self.show_depth_check.isChecked(), self.save_depth_check.isChecked(), self.show_tracking_mask_check.isChecked(),self.save_tracking_mask_check.isChecked(), self.save_video.isChecked())
         
@@ -763,7 +776,6 @@ class MyGUI(QMainWindow):
     # Run Tracker Button Function
     def run_real_time(self):
         print('running real-time')
-        #TODO embed graph in widget later
         self.DataGraph.setHidden(True)
         src, type_of_tracking, image, color_ranges, min_radius_object, data_output_folder_path, input_folder, data_output = self.get_settings()
         GUI_real_time_color_tracking(src, type_of_tracking, image ,color_ranges , min_radius_object, data_output_folder_path)
