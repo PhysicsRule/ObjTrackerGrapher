@@ -144,7 +144,7 @@ def GUI_real_time_color_tracking(src, type_of_tracking, image ,color_ranges , mi
             self.new_data.connect(callback)
         
         def is_keypress(self):
-            if keyboard.is_pressed("q"):
+            if keyboard.is_pressed('space'):
                 return True
             else: 
                 return False
@@ -227,8 +227,8 @@ def GUI_real_time_color_tracking(src, type_of_tracking, image ,color_ranges , mi
                     cv2.putText(cv_color, 'Y coordinate: ' + str(y_coord), (0,60), cv2.FONT_HERSHEY_SIMPLEX, 0.75, (50,170,50), 2)
                     cv2.putText(cv_color, 'Z coordinate: ' + str(z_coord), (0,80), cv2.FONT_HERSHEY_SIMPLEX, 0.75, (50,170,50), 2)
                     cv2.circle(cv_color, (int(x_pixel), int(y_pixel)), int(radius), (255, 255, 255), 2)
-                    cv2.imshow('Tracking (q) to quit', cv_color)
-                    cv2.moveWindow('Tracking (q) to quit',0,0)
+                    cv2.imshow('Tracking', cv_color)
+                    cv2.moveWindow('Tracking',0,0)
                 
                 if image.show_mask and mask is not None:
                     cv2.imshow('mask', mask)
