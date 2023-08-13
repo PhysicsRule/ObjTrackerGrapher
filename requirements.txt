@@ -13,6 +13,7 @@ imageio==2.23.0
 importlib-metadata==1.7.0
 imutils==0.5.3
 kiwisolver==1.2.0
+keyboard==0.13.5
 math3==1.0
 matplotlib==3.3.0
 more-itertools==8.4.0
