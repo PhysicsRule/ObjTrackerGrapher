@@ -199,6 +199,12 @@ class MyGUI(QMainWindow):
         self.select_acceleration.toggled.connect(self.acceleration_chosen)
         self.select_momentum.toggled.connect(self.momentum_chosen)
         self.select_energy.toggled.connect(self.energy_chosen)
+        # Graph info
+        self.graph_widget = mlpcanvas()
+        self.grid_layout.addWidget(self.graph_widget,0,0,alignment=Qt.Alignment())        
+        # self.graph_widget_3D = mlpcanvas_3D()
+        self.addToolBar(NavigationToolbar2QT( self.graph_widget , self ))
+
 
         # Creating Radio Button Groups so only one of each can be selected
         self.color_group = QButtonGroup()
@@ -633,7 +639,7 @@ class MyGUI(QMainWindow):
         return src, type_of_tracking, self.image, self.color_ranges, min_radius_object, data_output_folder_path, input_folder, data_output
 
     def run_graph(self, data_output_folder_path):
-        self.graph_widget = mlpcanvas()
+        
         # The folder that will be graphed
         print('graph')
         # What variable is to be graphed for the 3rd graph. It always graphs position and velocity
@@ -657,13 +663,6 @@ class MyGUI(QMainWindow):
         graph_color_ranges, csv_files_array = find_objects_to_graph (data_output_folder_path)
         
 
-
-        # Define each canvas the 2 graphs will be located
-        self.grid_layout.addWidget(self.graph_widget,0,0,alignment=Qt.Alignment())        
-        # self.graph_widget_3D = mlpcanvas_3D()
-        if not self.toolbar:
-            self.addToolBar(NavigationToolbar2QT( self.graph_widget , self ))
-            self.toolbar = True
 
 
         # self.grid_layout.addWidget(self.graph_widget_3D, 0, 1, alignment=Qt.Alignment())
@@ -709,7 +708,7 @@ class MyGUI(QMainWindow):
         if show_legend == "y":
             self.graph_widget.axes[0, 0].legend(loc="upper right", shadow=True, fancybox=True, fontsize=8)
 
-        self.graph_widget.show()
+        self.graph_widget.draw()
         self.Button3DGraph.setHidden(False)
 
         #plt.tight_layout()
