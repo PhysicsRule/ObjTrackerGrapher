@@ -764,6 +764,7 @@ class MyGUI(QMainWindow):
             i_object +=1
         plt.ioff()    
         plt.show()
+        self.graph_widget.draw()
         
     def find_lower_upper_bounds(self):
         # print(self.table_widget_color_2.rowCount())
