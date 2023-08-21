@@ -62,11 +62,16 @@ class image_option:
 
 class mlpcanvas(FigureCanvasQTAgg):
 
-    def __init__(self):
-        fig, self.axes = plt.subplots(nrows=3, ncols=3, figsize=(6,6), sharex=True)
-        plt.subplots_adjust(left=0.2, bottom=None, right=None, top=None, wspace=0.7, hspace=0.7)
-        super(mlpcanvas, self).__init__(fig)
+    fig: Figure
+    axes: np.ndarray
 
+    def __init__(self):
+        self.fig, self.axes = plt.subplots(nrows=3, ncols=3, figsize=(6,6), sharex=True)
+        plt.subplots_adjust(left=0.2, bottom=None, right=None, top=None, wspace=0.7, hspace=0.7)
+        super(mlpcanvas, self).__init__(self.fig)
+
+    def clear(self):
+        self.axes = self.fig.subplots(nrows=3, ncols=3, sharex=True)
 
 '''class mlpcanvas_3D(FigureCanvasQTAgg):
     def __init__(self):
@@ -668,6 +673,7 @@ class MyGUI(QMainWindow):
         # self.grid_layout.addWidget(self.graph_widget_3D, 0, 1, alignment=Qt.Alignment())
 
         line_style_array, line_color_array, marker_shape_array, show_legend = plot_style_color()
+        self.graph_widget.clear()
         self.graph_widget, points_to_smooth = GUI_graph_setup(self.graph_widget, which_parameter_to_plot)
         trendline_folder_path, smooth_data_to_graph = GUI_graph (which_parameter_to_plot, data_output_folder_path, graph_color_ranges, csv_files_array, points_to_smooth )
 
