@@ -159,16 +159,15 @@ class MyGUI(QMainWindow):
         # Folder Options Hidden
         self.folder_list.setHidden(True)        # List of folders to put the data into
         self.folder_name.setHidden(True)  
-        self.how_to_enter_folder_label.setHidden(False)  
         self.table_widget_color.setHidden(True)
         self.folder_name_objects.setHidden(True)
         self.table_widget_color_2.setHidden(True) # For new colors
         self.lineEdit_define_color_name.setHidden(True)
         self.find_lower_upper_button.setHidden(True)
         # Acceleration, Energy, Momentum  Hidden
-        self.ame_explanation.setHidden(True)    # text
-        self.select_acceleration.setHidden(True)
-        self.select_momentum.setHidden(True)
+        self.select_acceleration.setHidden(False)
+        self.select_momentum.setHidden(False)
+        ## TODO have energy as well
         self.select_energy.setHidden(True)
         # Momentum/Energy Options Hidden
         self.mass_of_object.setHidden(True)
@@ -321,7 +320,6 @@ class MyGUI(QMainWindow):
         # show other options
         self.folder_list.setHidden(False)
         self.folder_name.setHidden(False)
-        self.ame_explanation.setHidden(False)
         self.select_acceleration.setHidden(False)
         self.select_momentum.setHidden(False)
         '''
@@ -345,7 +343,6 @@ class MyGUI(QMainWindow):
 
         self.folder_list.setHidden(False)
         self.folder_name.setHidden(False)
-        self.ame_explanation.setHidden(False)
         self.select_energy.setHidden(True)
         self.select_momentum.setHidden(True)
 
@@ -460,7 +457,6 @@ class MyGUI(QMainWindow):
 
         self.folder_list.setHidden(False)
         self.folder_name.setHidden(False)
-        self.ame_explanation.setHidden(False)
         self.select_acceleration.setHidden(False)
         self.select_momentum.setHidden(False)
         self.select_energy.setHidden(True)
@@ -476,7 +472,6 @@ class MyGUI(QMainWindow):
         # Define the the folders that will be used      
         self.folder_list.setHidden(False)
         self.folder_name.setHidden(False)
-        self.ame_explanation.setHidden(False)
         self.select_acceleration.setHidden(False)
         self.select_momentum.setHidden(False)
         '''

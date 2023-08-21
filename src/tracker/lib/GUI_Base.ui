@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>1637</width>
-    <height>829</height>
+    <height>861</height>
    </rect>
   </property>
   <property name="maximumSize">
@@ -1035,7 +1035,7 @@ Select the additional variables you would like graphed</string>
       </rect>
      </property>
      <property name="styleSheet">
-      <string notr="true">color: rgb(255, 255, 255);</string>
+      <string notr="true">color: rgb(20,0,0);</string>
      </property>
      <property name="text">
       <string>Save Depth</string>
@@ -1051,7 +1051,7 @@ Select the additional variables you would like graphed</string>
       </rect>
      </property>
      <property name="styleSheet">
-      <string notr="true">color: rgb(255, 255, 255);</string>
+      <string notr="true">color: rgb(20,0,0);</string>
      </property>
      <property name="text">
       <string>Save Image</string>
@@ -1067,7 +1067,7 @@ Select the additional variables you would like graphed</string>
       </rect>
      </property>
      <property name="styleSheet">
-      <string notr="true">color: rgb(255, 255, 255);</string>
+      <string notr="true">color: rgb(20,0,0);</string>
      </property>
      <property name="text">
       <string>Show Tracking Mask</string>
@@ -1099,7 +1099,7 @@ Select the additional variables you would like graphed</string>
       </rect>
      </property>
      <property name="styleSheet">
-      <string notr="true">color: rgb(255, 255, 255);</string>
+      <string notr="true">color: rgb(20,0,0);</string>
      </property>
      <property name="text">
       <string>Show Image</string>
@@ -1118,7 +1118,7 @@ Select the additional variables you would like graphed</string>
       </rect>
      </property>
      <property name="styleSheet">
-      <string notr="true">color: rgb(255, 255, 255);</string>
+      <string notr="true">color: rgb(20,0,0);</string>
      </property>
      <property name="text">
       <string>Show Depth</string>
@@ -1149,7 +1149,7 @@ Select the additional variables you would like graphed</string>
       </rect>
      </property>
      <property name="styleSheet">
-      <string notr="true">color: rgb(255, 255, 255);</string>
+      <string notr="true">color: rgb(20,0,0);</string>
      </property>
      <property name="text">
       <string>Save Tracking Mask</string>
@@ -1170,9 +1170,27 @@ Select the additional variables you would like graphed</string>
         <colorrole role="WindowText">
          <brush brushstyle="SolidPattern">
           <color alpha="255">
-           <red>255</red>
-           <green>255</green>
-           <blue>255</blue>
+           <red>20</red>
+           <green>0</green>
+           <blue>0</blue>
+          </color>
+         </brush>
+        </colorrole>
+        <colorrole role="Text">
+         <brush brushstyle="SolidPattern">
+          <color alpha="255">
+           <red>20</red>
+           <green>0</green>
+           <blue>0</blue>
+          </color>
+         </brush>
+        </colorrole>
+        <colorrole role="ButtonText">
+         <brush brushstyle="SolidPattern">
+          <color alpha="255">
+           <red>20</red>
+           <green>0</green>
+           <blue>0</blue>
           </color>
          </brush>
         </colorrole>
@@ -1181,9 +1199,27 @@ Select the additional variables you would like graphed</string>
         <colorrole role="WindowText">
          <brush brushstyle="SolidPattern">
           <color alpha="255">
-           <red>255</red>
-           <green>255</green>
-           <blue>255</blue>
+           <red>20</red>
+           <green>0</green>
+           <blue>0</blue>
+          </color>
+         </brush>
+        </colorrole>
+        <colorrole role="Text">
+         <brush brushstyle="SolidPattern">
+          <color alpha="255">
+           <red>20</red>
+           <green>0</green>
+           <blue>0</blue>
+          </color>
+         </brush>
+        </colorrole>
+        <colorrole role="ButtonText">
+         <brush brushstyle="SolidPattern">
+          <color alpha="255">
+           <red>20</red>
+           <green>0</green>
+           <blue>0</blue>
           </color>
          </brush>
         </colorrole>
@@ -1192,7 +1228,25 @@ Select the additional variables you would like graphed</string>
         <colorrole role="WindowText">
          <brush brushstyle="SolidPattern">
           <color alpha="255">
-           <red>85</red>
+           <red>20</red>
+           <green>0</green>
+           <blue>0</blue>
+          </color>
+         </brush>
+        </colorrole>
+        <colorrole role="Text">
+         <brush brushstyle="SolidPattern">
+          <color alpha="255">
+           <red>20</red>
+           <green>0</green>
+           <blue>0</blue>
+          </color>
+         </brush>
+        </colorrole>
+        <colorrole role="ButtonText">
+         <brush brushstyle="SolidPattern">
+          <color alpha="255">
+           <red>20</red>
            <green>0</green>
            <blue>0</blue>
           </color>
@@ -1203,6 +1257,9 @@ Select the additional variables you would like graphed</string>
      </property>
      <property name="layoutDirection">
       <enum>Qt::LeftToRight</enum>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">color: rgb(20,0,0);</string>
      </property>
      <property name="text">
       <string>Save Video *.mp4</string>
@@ -1554,8 +1611,11 @@ for output</string>
      <property name="styleSheet">
       <string notr="true">color: rgb(255, 255, 255);</string>
      </property>
+     <property name="frameShape">
+      <enum>QFrame::StyledPanel</enum>
+     </property>
      <property name="text">
-      <string>Step 2: If using color tracker choose how you want to determine colors to track.</string>
+      <string>Step 2: If using color tracker... choose how you want to determine colors to track.</string>
      </property>
      <property name="textFormat">
       <enum>Qt::PlainText</enum>
@@ -1619,7 +1679,7 @@ for output</string>
       <enum>QFrame::Sunken</enum>
      </property>
      <property name="text">
-      <string>Step 4: Choose frames to display/save. 
+      <string>Step 4: If tracking...choose frames to display/save. 
 They all slow down the process except for saving video</string>
      </property>
      <property name="textFormat">
@@ -1635,6 +1695,12 @@ They all slow down the process except for saving video</string>
        <height>41</height>
       </rect>
      </property>
+     <property name="maximumSize">
+      <size>
+       <width>16777215</width>
+       <height>16777210</height>
+      </size>
+     </property>
      <property name="font">
       <font>
        <pointsize>10</pointsize>
@@ -1648,8 +1714,11 @@ They all slow down the process except for saving video</string>
      <property name="styleSheet">
       <string notr="true">color: rgb(255, 255, 255);</string>
      </property>
+     <property name="lineWidth">
+      <number>-5</number>
+     </property>
      <property name="text">
-      <string>Step 5: Choose type of tracking. 
+      <string>Step 5: If tracking with 3D camera...Choose the type of tracking. 
 (Recording bag file, then tracking from it is most precise, but not necessary.</string>
      </property>
      <property name="textFormat">
