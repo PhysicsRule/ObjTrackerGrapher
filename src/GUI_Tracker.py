@@ -501,8 +501,6 @@ class MyGUI(QMainWindow):
             function_type_combo_box.addItems(['linear', 'quadratic', 'future',])
             title_of_table.setCellWidget(row, 3, function_type_combo_box)
             function_type_combo_box.SelectedValue = "linear"
-    
-
 
 # Presets appear
     def show_presets(self):
