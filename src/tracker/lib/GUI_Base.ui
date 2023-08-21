@@ -758,9 +758,9 @@
         <widget class="PlotWidget" name="DataGraph">
          <property name="geometry">
           <rect>
-           <x>280</x>
+           <x>10</x>
            <y>10</y>
-           <width>551</width>
+           <width>821</width>
            <height>431</height>
           </rect>
          </property>

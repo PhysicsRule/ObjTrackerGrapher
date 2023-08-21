@@ -62,11 +62,20 @@ class image_option:
 
 class mlpcanvas(FigureCanvasQTAgg):
 
-    def __init__(self):
-        fig, self.axes = plt.subplots(nrows=3, ncols=3, figsize=(6,6), sharex=True)
-        plt.subplots_adjust(left=0.2, bottom=None, right=None, top=None, wspace=0.7, hspace=0.7)
-        super(mlpcanvas, self).__init__(fig)
+    fig: Figure
+    axes: np.ndarray
 
+    def __init__(self):
+        self.fig, self.axes = plt.subplots(nrows=3, ncols=3, figsize=(6,6), sharex=True)
+        plt.subplots_adjust(left=0.2, bottom=None, right=None, top=None, wspace=0.7, hspace=0.7)
+        super(mlpcanvas, self).__init__(self.fig)
+
+    def clear(self):
+        del self.axes
+        self.fig.clear()
+        self.axes = self.fig.subplots(nrows=3, ncols=3, sharex=True, sharey=False,
+                       squeeze=True, subplot_kw=None,
+                       gridspec_kw=None)
 
 '''class mlpcanvas_3D(FigureCanvasQTAgg):
     def __init__(self):
@@ -199,6 +208,12 @@ class MyGUI(QMainWindow):
         self.select_acceleration.toggled.connect(self.acceleration_chosen)
         self.select_momentum.toggled.connect(self.momentum_chosen)
         self.select_energy.toggled.connect(self.energy_chosen)
+        # Graph info
+        self.graph_widget = mlpcanvas()
+        self.grid_layout.addWidget(self.graph_widget,0,0,alignment=Qt.Alignment())        
+        # self.graph_widget_3D = mlpcanvas_3D()
+        self.addToolBar(NavigationToolbar2QT( self.graph_widget , self ))
+
 
         # Creating Radio Button Groups so only one of each can be selected
         self.color_group = QButtonGroup()
@@ -633,7 +648,7 @@ class MyGUI(QMainWindow):
         return src, type_of_tracking, self.image, self.color_ranges, min_radius_object, data_output_folder_path, input_folder, data_output
 
     def run_graph(self, data_output_folder_path):
-        self.graph_widget = mlpcanvas()
+        
         # The folder that will be graphed
         print('graph')
         # What variable is to be graphed for the 3rd graph. It always graphs position and velocity
@@ -658,17 +673,11 @@ class MyGUI(QMainWindow):
         
 
 
-        # Define each canvas the 2 graphs will be located
-        self.grid_layout.addWidget(self.graph_widget,0,0,alignment=Qt.Alignment())        
-        # self.graph_widget_3D = mlpcanvas_3D()
-        if not self.toolbar:
-            self.addToolBar(NavigationToolbar2QT( self.graph_widget , self ))
-            self.toolbar = True
-
 
         # self.grid_layout.addWidget(self.graph_widget_3D, 0, 1, alignment=Qt.Alignment())
 
         line_style_array, line_color_array, marker_shape_array, show_legend = plot_style_color()
+        self.graph_widget.clear()
         self.graph_widget, points_to_smooth = GUI_graph_setup(self.graph_widget, which_parameter_to_plot)
         trendline_folder_path, smooth_data_to_graph = GUI_graph (which_parameter_to_plot, data_output_folder_path, graph_color_ranges, csv_files_array, points_to_smooth )
 
@@ -709,7 +718,7 @@ class MyGUI(QMainWindow):
         if show_legend == "y":
             self.graph_widget.axes[0, 0].legend(loc="upper right", shadow=True, fancybox=True, fontsize=8)
 
-        self.graph_widget.show()
+        self.graph_widget.draw()
         self.Button3DGraph.setHidden(False)
 
         #plt.tight_layout()
@@ -765,6 +774,7 @@ class MyGUI(QMainWindow):
             i_object +=1
         plt.ioff()    
         plt.show()
+        self.graph_widget.draw()
         
     def find_lower_upper_bounds(self):
         # print(self.table_widget_color_2.rowCount())
