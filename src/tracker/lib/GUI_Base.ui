@@ -685,39 +685,80 @@ Select the additional variables you would like graphed</string>
        <height>271</height>
       </rect>
      </property>
+     <property name="maximumSize">
+      <size>
+       <width>16777215</width>
+       <height>16777215</height>
+      </size>
+     </property>
      <property name="textElideMode">
       <enum>Qt::ElideLeft</enum>
      </property>
-     <column>
+     <row>
       <property name="text">
-       <string>Axis</string>
+       <string>Object</string>
       </property>
-     </column>
-     <column>
+     </row>
+     <row>
       <property name="text">
-       <string>Min_Time</string>
+       <string>mass (kg)</string>
       </property>
-     </column>
-     <column>
+     </row>
+     <row>
       <property name="text">
-       <string>Max_Time</string>
+       <string>Minimum</string>
       </property>
-     </column>
-     <column>
+     </row>
+     <row>
       <property name="text">
-       <string>Function Type</string>
+       <string>Maximum</string>
       </property>
-     </column>
-     <column>
+     </row>
+     <row>
       <property name="text">
-       <string>Function</string>
+       <string>x-function type</string>
       </property>
-     </column>
-     <column>
+     </row>
+     <row>
       <property name="text">
-       <string>R Squared</string>
+       <string>y-function type</string>
       </property>
-     </column>
+     </row>
+     <row>
+      <property name="text">
+       <string>z-function type</string>
+      </property>
+     </row>
+     <row>
+      <property name="text">
+       <string>x-function</string>
+      </property>
+     </row>
+     <row>
+      <property name="text">
+       <string>x-R^2</string>
+      </property>
+     </row>
+     <row>
+      <property name="text">
+       <string>y-function</string>
+      </property>
+     </row>
+     <row>
+      <property name="text">
+       <string>y-R^2</string>
+      </property>
+     </row>
+     <row>
+      <property name="text">
+       <string>z-function</string>
+      </property>
+     </row>
+     <row>
+      <property name="text">
+       <string>z-R^2</string>
+      </property>
+     </row>
     </widget>
     <widget class="QWidget" name="gridLayoutWidget">
      <property name="geometry">
@@ -769,6 +810,9 @@ Select the additional variables you would like graphed</string>
            <width>951</width>
            <height>441</height>
           </rect>
+         </property>
+         <property name="focusPolicy">
+          <enum>Qt::NoFocus</enum>
          </property>
         </widget>
        </widget>
