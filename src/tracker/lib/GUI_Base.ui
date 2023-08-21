@@ -758,10 +758,10 @@
         <widget class="PlotWidget" name="DataGraph">
          <property name="geometry">
           <rect>
-           <x>10</x>
-           <y>10</y>
-           <width>821</width>
-           <height>431</height>
+           <x>0</x>
+           <y>0</y>
+           <width>951</width>
+           <height>441</height>
           </rect>
          </property>
         </widget>
@@ -931,12 +931,17 @@
       <rect>
        <x>920</x>
        <y>100</y>
-       <width>381</width>
+       <width>191</width>
        <height>21</height>
       </rect>
      </property>
+     <property name="font">
+      <font>
+       <pointsize>10</pointsize>
+      </font>
+     </property>
      <property name="text">
-      <string>3D Graph or To zoom on 2nd data set</string>
+      <string>3D Graph</string>
      </property>
     </widget>
     <widget class="QLineEdit" name="r_height">

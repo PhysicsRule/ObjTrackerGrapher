@@ -66,8 +66,8 @@ class mlpcanvas(FigureCanvasQTAgg):
     axes: np.ndarray
 
     def __init__(self):
-        self.fig, self.axes = plt.subplots(nrows=3, ncols=3, figsize=(6,6), sharex=True)
-        plt.subplots_adjust(left=0.2, bottom=None, right=None, top=None, wspace=0.7, hspace=0.7)
+        self.fig, self.axes = plt.subplots(nrows=3, ncols=3, figsize=(10,4.5), sharex=True)
+        plt.subplots_adjust(left=0.1, bottom=None, right=None, top=None, wspace=0.7, hspace=0.7)
         super(mlpcanvas, self).__init__(self.fig)
 
     def clear(self):
