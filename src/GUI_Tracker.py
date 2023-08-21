@@ -487,8 +487,21 @@ class MyGUI(QMainWindow):
         data_output = 'color_o'
         self.list_folders(data_output)
         
+    def setup_trendline_table(self, title_of_table):
+        self.trendline_table_widget.setHidden(False)
+        self.find_trendlines_button.setHidden(False)
+        title_of_table.setRowCount(6)
+        for row in range(6):    
+            if row == 0 or row == 3:    axes_ = "x"
+            elif row == 1 or row == 4:  axes_  = "y"
+            elif row == 2 or row == 5:  axes_  = "z"
+            title_of_table.setItem(row,0, QTableWidgetItem(axes_))
 
-
+            function_type_combo_box = QComboBox()
+            function_type_combo_box.addItems(['linear', 'quadratic', 'future',])
+            title_of_table.setCellWidget(row, 3, function_type_combo_box)
+            function_type_combo_box.SelectedValue = "linear"
+    
 
 
 # Presets appear
@@ -722,8 +735,8 @@ class MyGUI(QMainWindow):
 
         self.graph_widget.draw()
         self.Button3DGraph.setHidden(False)
-        self.trendline_table_widget.setHidden(False)
-        self.find_trendlines_button.setHidden(False)
+        self.setup_trendline_table(self.trendline_table_widget)
+        
 
         #plt.tight_layout()
 
