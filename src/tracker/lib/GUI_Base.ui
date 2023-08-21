@@ -688,18 +688,21 @@
       <string>Record Bag</string>
      </property>
     </widget>
-    <widget class="QTableWidget" name="trendlineTableWidget">
+    <widget class="QTableWidget" name="trendline_table_widget">
      <property name="geometry">
       <rect>
-       <x>920</x>
+       <x>720</x>
        <y>131</y>
-       <width>381</width>
+       <width>601</width>
        <height>181</height>
       </rect>
      </property>
+     <property name="textElideMode">
+      <enum>Qt::ElideLeft</enum>
+     </property>
      <column>
       <property name="text">
-       <string>Trendline (Future)</string>
+       <string>Axis</string>
       </property>
      </column>
      <column>
@@ -710,6 +713,21 @@
      <column>
       <property name="text">
        <string>Max_Time</string>
+      </property>
+     </column>
+     <column>
+      <property name="text">
+       <string>Function Type</string>
+      </property>
+     </column>
+     <column>
+      <property name="text">
+       <string>Function</string>
+      </property>
+     </column>
+     <column>
+      <property name="text">
+       <string>R Squared</string>
       </property>
      </column>
     </widget>
@@ -1561,6 +1579,19 @@ Skeletal Tracker</string>
      <property name="text">
       <string>Use other_o folder
 for output</string>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="find_trendlines_button">
+     <property name="geometry">
+      <rect>
+       <x>1120</x>
+       <y>100</y>
+       <width>181</width>
+       <height>21</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Find Trendlines</string>
      </property>
     </widget>
    </widget>

@@ -187,8 +187,10 @@ class MyGUI(QMainWindow):
         self.real_time_button.clicked.connect(self.run_real_time)
         self.tracker_button.clicked.connect(self.run_tracker)
         self.graph_button.clicked.connect(self.run_graph)
-        self.Button3DGraph.setHidden(False)
+        self.Button3DGraph.setHidden(True)
         self.Button3DGraph.clicked.connect(self.run_3D_graph)
+        self.trendline_table_widget.setHidden(True)
+        self.find_trendlines_button.setHidden(True)
         
         
         self.record_bag_button.clicked.connect(self.record_bag)
@@ -720,6 +722,8 @@ class MyGUI(QMainWindow):
 
         self.graph_widget.draw()
         self.Button3DGraph.setHidden(False)
+        self.trendline_table_widget.setHidden(False)
+        self.find_trendlines_button.setHidden(False)
 
         #plt.tight_layout()
 
