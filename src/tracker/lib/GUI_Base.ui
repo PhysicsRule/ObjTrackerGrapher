@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>1637</width>
-    <height>829</height>
+    <height>861</height>
    </rect>
   </property>
   <property name="maximumSize">
@@ -468,44 +468,31 @@
     <property name="frameShadow">
      <enum>QFrame::Raised</enum>
     </property>
-    <widget class="QLabel" name="ame_explanation">
+    <widget class="QLabel" name="step6_label_6">
      <property name="geometry">
       <rect>
-       <x>100</x>
-       <y>560</y>
+       <x>670</x>
+       <y>86</y>
        <width>461</width>
        <height>61</height>
       </rect>
      </property>
      <property name="font">
       <font>
-       <pointsize>12</pointsize>
+       <pointsize>10</pointsize>
+       <weight>75</weight>
+       <bold>true</bold>
       </font>
      </property>
-     <property name="styleSheet">
-      <string notr="true">color: rgb(255, 255, 255);</string>
-     </property>
-     <property name="text">
-      <string>Position and Velocity will be graphed for you. Select the additional item you would like graphed</string>
-     </property>
-     <property name="wordWrap">
-      <bool>true</bool>
-     </property>
-    </widget>
-    <widget class="QLabel" name="folder_information">
-     <property name="geometry">
-      <rect>
-       <x>510</x>
-       <y>380</y>
-       <width>121</width>
-       <height>161</height>
-      </rect>
+     <property name="toolTipDuration">
+      <number>4</number>
      </property>
      <property name="styleSheet">
       <string notr="true">color: rgb(255, 255, 255);</string>
      </property>
      <property name="text">
-      <string/>
+      <string>Step 6: Position and Velocity will be graphed for you. 
+Select the additional variables you would like graphed</string>
      </property>
      <property name="wordWrap">
       <bool>true</bool>
@@ -515,7 +502,7 @@
      <property name="geometry">
       <rect>
        <x>100</x>
-       <y>140</y>
+       <y>180</y>
        <width>371</width>
        <height>181</height>
       </rect>
@@ -598,7 +585,7 @@
      <property name="geometry">
       <rect>
        <x>100</x>
-       <y>90</y>
+       <y>130</y>
        <width>101</width>
        <height>20</height>
       </rect>
@@ -611,7 +598,7 @@
      <property name="geometry">
       <rect>
        <x>220</x>
-       <y>90</y>
+       <y>130</y>
        <width>131</width>
        <height>20</height>
       </rect>
@@ -624,7 +611,7 @@
      <property name="geometry">
       <rect>
        <x>100</x>
-       <y>120</y>
+       <y>160</y>
        <width>431</width>
        <height>21</height>
       </rect>
@@ -634,9 +621,9 @@
      <property name="geometry">
       <rect>
        <x>230</x>
-       <y>490</y>
+       <y>720</y>
        <width>130</width>
-       <height>70</height>
+       <height>50</height>
       </rect>
      </property>
      <property name="font">
@@ -652,10 +639,10 @@
     <widget class="QPushButton" name="graph_button">
      <property name="geometry">
       <rect>
-       <x>1120</x>
-       <y>20</y>
+       <x>680</x>
+       <y>270</y>
        <width>180</width>
-       <height>70</height>
+       <height>50</height>
       </rect>
      </property>
      <property name="font">
@@ -671,9 +658,9 @@
      <property name="geometry">
       <rect>
        <x>360</x>
-       <y>490</y>
+       <y>720</y>
        <width>130</width>
-       <height>70</height>
+       <height>50</height>
       </rect>
      </property>
      <property name="font">
@@ -685,33 +672,93 @@
       <number>5</number>
      </property>
      <property name="text">
-      <string>Record Bag</string>
+      <string>Record Bag
+60 fps</string>
      </property>
     </widget>
-    <widget class="QTableWidget" name="trendlineTableWidget">
+    <widget class="QTableWidget" name="trendline_table_widget">
      <property name="geometry">
       <rect>
-       <x>920</x>
-       <y>131</y>
-       <width>381</width>
-       <height>181</height>
+       <x>1080</x>
+       <y>20</y>
+       <width>601</width>
+       <height>271</height>
       </rect>
      </property>
-     <column>
+     <property name="maximumSize">
+      <size>
+       <width>16777215</width>
+       <height>16777215</height>
+      </size>
+     </property>
+     <property name="textElideMode">
+      <enum>Qt::ElideLeft</enum>
+     </property>
+     <row>
       <property name="text">
-       <string>Trendline (Future)</string>
+       <string>Object</string>
       </property>
-     </column>
-     <column>
+     </row>
+     <row>
       <property name="text">
-       <string>Min_Time</string>
+       <string>mass (kg)</string>
       </property>
-     </column>
-     <column>
+     </row>
+     <row>
       <property name="text">
-       <string>Max_Time</string>
+       <string>Minimum</string>
       </property>
-     </column>
+     </row>
+     <row>
+      <property name="text">
+       <string>Maximum</string>
+      </property>
+     </row>
+     <row>
+      <property name="text">
+       <string>x-function type</string>
+      </property>
+     </row>
+     <row>
+      <property name="text">
+       <string>y-function type</string>
+      </property>
+     </row>
+     <row>
+      <property name="text">
+       <string>z-function type</string>
+      </property>
+     </row>
+     <row>
+      <property name="text">
+       <string>x-function</string>
+      </property>
+     </row>
+     <row>
+      <property name="text">
+       <string>x-R^2</string>
+      </property>
+     </row>
+     <row>
+      <property name="text">
+       <string>y-function</string>
+      </property>
+     </row>
+     <row>
+      <property name="text">
+       <string>y-R^2</string>
+      </property>
+     </row>
+     <row>
+      <property name="text">
+       <string>z-function</string>
+      </property>
+     </row>
+     <row>
+      <property name="text">
+       <string>z-R^2</string>
+      </property>
+     </row>
     </widget>
     <widget class="QWidget" name="gridLayoutWidget">
      <property name="geometry">
@@ -764,6 +811,9 @@
            <height>441</height>
           </rect>
          </property>
+         <property name="focusPolicy">
+          <enum>Qt::NoFocus</enum>
+         </property>
         </widget>
        </widget>
       </item>
@@ -773,9 +823,9 @@
      <property name="geometry">
       <rect>
        <x>100</x>
-       <y>490</y>
+       <y>720</y>
        <width>130</width>
-       <height>70</height>
+       <height>50</height>
       </rect>
      </property>
      <property name="palette">
@@ -883,7 +933,7 @@
      <property name="geometry">
       <rect>
        <x>100</x>
-       <y>30</y>
+       <y>40</y>
        <width>130</width>
        <height>50</height>
       </rect>
@@ -896,7 +946,7 @@
      <property name="geometry">
       <rect>
        <x>240</x>
-       <y>30</y>
+       <y>40</y>
        <width>130</width>
        <height>50</height>
       </rect>
@@ -914,7 +964,7 @@
      <property name="geometry">
       <rect>
        <x>100</x>
-       <y>330</y>
+       <y>400</y>
        <width>381</width>
        <height>22</height>
       </rect>
@@ -929,9 +979,9 @@
     <widget class="QPushButton" name="Button3DGraph">
      <property name="geometry">
       <rect>
-       <x>920</x>
-       <y>100</y>
-       <width>191</width>
+       <x>860</x>
+       <y>290</y>
+       <width>181</width>
        <height>21</height>
       </rect>
      </property>
@@ -947,8 +997,8 @@
     <widget class="QLineEdit" name="r_height">
      <property name="geometry">
       <rect>
-       <x>340</x>
-       <y>670</y>
+       <x>920</x>
+       <y>200</y>
        <width>71</width>
        <height>22</height>
       </rect>
@@ -966,8 +1016,8 @@
      </property>
      <property name="geometry">
       <rect>
-       <x>200</x>
-       <y>670</y>
+       <x>780</x>
+       <y>200</y>
        <width>131</width>
        <height>22</height>
       </rect>
@@ -996,8 +1046,8 @@
     <widget class="QLineEdit" name="mass_of_object">
      <property name="geometry">
       <rect>
-       <x>200</x>
-       <y>640</y>
+       <x>780</x>
+       <y>170</y>
        <width>113</width>
        <height>22</height>
       </rect>
@@ -1009,8 +1059,8 @@
     <widget class="QPushButton" name="save_height_mass">
      <property name="geometry">
       <rect>
-       <x>420</x>
-       <y>660</y>
+       <x>1000</x>
+       <y>190</y>
        <width>51</width>
        <height>31</height>
       </rect>
@@ -1022,14 +1072,14 @@
     <widget class="QCheckBox" name="save_depth_check">
      <property name="geometry">
       <rect>
-       <x>560</x>
-       <y>220</y>
+       <x>270</x>
+       <y>630</y>
        <width>211</width>
        <height>20</height>
       </rect>
      </property>
      <property name="styleSheet">
-      <string notr="true">color: rgb(255, 255, 255);</string>
+      <string notr="true">color: rgb(20,0,0);</string>
      </property>
      <property name="text">
       <string>Save Depth</string>
@@ -1038,14 +1088,14 @@
     <widget class="QCheckBox" name="save_image_check">
      <property name="geometry">
       <rect>
-       <x>560</x>
-       <y>200</y>
+       <x>270</x>
+       <y>650</y>
        <width>231</width>
        <height>20</height>
       </rect>
      </property>
      <property name="styleSheet">
-      <string notr="true">color: rgb(255, 255, 255);</string>
+      <string notr="true">color: rgb(20,0,0);</string>
      </property>
      <property name="text">
       <string>Save Image</string>
@@ -1054,14 +1104,14 @@
     <widget class="QCheckBox" name="show_tracking_mask_check">
      <property name="geometry">
       <rect>
-       <x>560</x>
-       <y>180</y>
+       <x>120</x>
+       <y>650</y>
        <width>191</width>
        <height>20</height>
       </rect>
      </property>
      <property name="styleSheet">
-      <string notr="true">color: rgb(255, 255, 255);</string>
+      <string notr="true">color: rgb(20,0,0);</string>
      </property>
      <property name="text">
       <string>Show Tracking Mask</string>
@@ -1070,8 +1120,8 @@
     <widget class="QLineEdit" name="folder_name_objects">
      <property name="geometry">
       <rect>
-       <x>200</x>
-       <y>610</y>
+       <x>780</x>
+       <y>140</y>
        <width>111</width>
        <height>21</height>
       </rect>
@@ -1083,38 +1133,17 @@
       <string>Colored Objects' Name</string>
      </property>
     </widget>
-    <widget class="QLabel" name="label_2">
-     <property name="geometry">
-      <rect>
-       <x>530</x>
-       <y>110</y>
-       <width>191</width>
-       <height>51</height>
-      </rect>
-     </property>
-     <property name="font">
-      <font>
-       <pointsize>16</pointsize>
-      </font>
-     </property>
-     <property name="text">
-      <string>Image Options</string>
-     </property>
-     <property name="alignment">
-      <set>Qt::AlignCenter</set>
-     </property>
-    </widget>
     <widget class="QCheckBox" name="show_image_check">
      <property name="geometry">
       <rect>
-       <x>560</x>
-       <y>140</y>
+       <x>120</x>
+       <y>610</y>
        <width>131</width>
        <height>20</height>
       </rect>
      </property>
      <property name="styleSheet">
-      <string notr="true">color: rgb(255, 255, 255);</string>
+      <string notr="true">color: rgb(20,0,0);</string>
      </property>
      <property name="text">
       <string>Show Image</string>
@@ -1126,14 +1155,14 @@
     <widget class="QCheckBox" name="show_depth_check">
      <property name="geometry">
       <rect>
-       <x>560</x>
-       <y>160</y>
+       <x>120</x>
+       <y>630</y>
        <width>171</width>
        <height>20</height>
       </rect>
      </property>
      <property name="styleSheet">
-      <string notr="true">color: rgb(255, 255, 255);</string>
+      <string notr="true">color: rgb(20,0,0);</string>
      </property>
      <property name="text">
       <string>Show Depth</string>
@@ -1143,7 +1172,7 @@
      <property name="geometry">
       <rect>
        <x>100</x>
-       <y>350</y>
+       <y>430</y>
        <width>381</width>
        <height>131</height>
       </rect>
@@ -1154,75 +1183,17 @@
       </property>
      </item>
     </widget>
-    <widget class="QLabel" name="how_to_enter_folder_label">
-     <property name="geometry">
-      <rect>
-       <x>100</x>
-       <y>300</y>
-       <width>531</width>
-       <height>41</height>
-      </rect>
-     </property>
-     <property name="palette">
-      <palette>
-       <active>
-        <colorrole role="Text">
-         <brush brushstyle="SolidPattern">
-          <color alpha="255">
-           <red>255</red>
-           <green>255</green>
-           <blue>255</blue>
-          </color>
-         </brush>
-        </colorrole>
-       </active>
-       <inactive>
-        <colorrole role="Text">
-         <brush brushstyle="SolidPattern">
-          <color alpha="255">
-           <red>255</red>
-           <green>255</green>
-           <blue>255</blue>
-          </color>
-         </brush>
-        </colorrole>
-       </inactive>
-       <disabled>
-        <colorrole role="Text">
-         <brush brushstyle="SolidPattern">
-          <color alpha="255">
-           <red>85</red>
-           <green>0</green>
-           <blue>0</blue>
-          </color>
-         </brush>
-        </colorrole>
-       </disabled>
-      </palette>
-     </property>
-     <property name="font">
-      <font>
-       <pointsize>10</pointsize>
-      </font>
-     </property>
-     <property name="contextMenuPolicy">
-      <enum>Qt::NoContextMenu</enum>
-     </property>
-     <property name="text">
-      <string>Type in the folder you want to track to or graph from. Then hit ENTER.</string>
-     </property>
-    </widget>
     <widget class="QCheckBox" name="save_tracking_mask_check">
      <property name="geometry">
       <rect>
-       <x>560</x>
-       <y>240</y>
+       <x>270</x>
+       <y>610</y>
        <width>171</width>
        <height>20</height>
       </rect>
      </property>
      <property name="styleSheet">
-      <string notr="true">color: rgb(255, 255, 255);</string>
+      <string notr="true">color: rgb(20,0,0);</string>
      </property>
      <property name="text">
       <string>Save Tracking Mask</string>
@@ -1231,8 +1202,8 @@
     <widget class="QCheckBox" name="save_video">
      <property name="geometry">
       <rect>
-       <x>560</x>
-       <y>260</y>
+       <x>430</x>
+       <y>610</y>
        <width>141</width>
        <height>20</height>
       </rect>
@@ -1243,9 +1214,27 @@
         <colorrole role="WindowText">
          <brush brushstyle="SolidPattern">
           <color alpha="255">
-           <red>255</red>
-           <green>255</green>
-           <blue>255</blue>
+           <red>20</red>
+           <green>0</green>
+           <blue>0</blue>
+          </color>
+         </brush>
+        </colorrole>
+        <colorrole role="Text">
+         <brush brushstyle="SolidPattern">
+          <color alpha="255">
+           <red>20</red>
+           <green>0</green>
+           <blue>0</blue>
+          </color>
+         </brush>
+        </colorrole>
+        <colorrole role="ButtonText">
+         <brush brushstyle="SolidPattern">
+          <color alpha="255">
+           <red>20</red>
+           <green>0</green>
+           <blue>0</blue>
           </color>
          </brush>
         </colorrole>
@@ -1254,9 +1243,27 @@
         <colorrole role="WindowText">
          <brush brushstyle="SolidPattern">
           <color alpha="255">
-           <red>255</red>
-           <green>255</green>
-           <blue>255</blue>
+           <red>20</red>
+           <green>0</green>
+           <blue>0</blue>
+          </color>
+         </brush>
+        </colorrole>
+        <colorrole role="Text">
+         <brush brushstyle="SolidPattern">
+          <color alpha="255">
+           <red>20</red>
+           <green>0</green>
+           <blue>0</blue>
+          </color>
+         </brush>
+        </colorrole>
+        <colorrole role="ButtonText">
+         <brush brushstyle="SolidPattern">
+          <color alpha="255">
+           <red>20</red>
+           <green>0</green>
+           <blue>0</blue>
           </color>
          </brush>
         </colorrole>
@@ -1265,7 +1272,25 @@
         <colorrole role="WindowText">
          <brush brushstyle="SolidPattern">
           <color alpha="255">
-           <red>85</red>
+           <red>20</red>
+           <green>0</green>
+           <blue>0</blue>
+          </color>
+         </brush>
+        </colorrole>
+        <colorrole role="Text">
+         <brush brushstyle="SolidPattern">
+          <color alpha="255">
+           <red>20</red>
+           <green>0</green>
+           <blue>0</blue>
+          </color>
+         </brush>
+        </colorrole>
+        <colorrole role="ButtonText">
+         <brush brushstyle="SolidPattern">
+          <color alpha="255">
+           <red>20</red>
            <green>0</green>
            <blue>0</blue>
           </color>
@@ -1276,6 +1301,9 @@
      </property>
      <property name="layoutDirection">
       <enum>Qt::LeftToRight</enum>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">color: rgb(20,0,0);</string>
      </property>
      <property name="text">
       <string>Save Video *.mp4</string>
@@ -1288,7 +1316,7 @@
      <property name="geometry">
       <rect>
        <x>380</x>
-       <y>30</y>
+       <y>40</y>
        <width>130</width>
        <height>50</height>
       </rect>
@@ -1312,9 +1340,9 @@
      <property name="geometry">
       <rect>
        <x>490</x>
-       <y>490</y>
+       <y>720</y>
        <width>130</width>
-       <height>70</height>
+       <height>50</height>
       </rect>
      </property>
      <property name="font">
@@ -1330,8 +1358,8 @@
     <widget class="QRadioButton" name="select_acceleration">
      <property name="geometry">
       <rect>
-       <x>100</x>
-       <y>610</y>
+       <x>680</x>
+       <y>140</y>
        <width>95</width>
        <height>20</height>
       </rect>
@@ -1346,8 +1374,8 @@
     <widget class="QRadioButton" name="select_energy">
      <property name="geometry">
       <rect>
-       <x>100</x>
-       <y>670</y>
+       <x>680</x>
+       <y>200</y>
        <width>111</width>
        <height>20</height>
       </rect>
@@ -1359,8 +1387,8 @@
     <widget class="QRadioButton" name="select_momentum">
      <property name="geometry">
       <rect>
-       <x>100</x>
-       <y>640</y>
+       <x>680</x>
+       <y>170</y>
        <width>95</width>
        <height>20</height>
       </rect>
@@ -1373,7 +1401,7 @@
      <property name="geometry">
       <rect>
        <x>370</x>
-       <y>90</y>
+       <y>130</y>
        <width>100</width>
        <height>17</height>
       </rect>
@@ -1389,7 +1417,7 @@
      <property name="geometry">
       <rect>
        <x>100</x>
-       <y>140</y>
+       <y>180</y>
        <width>431</width>
        <height>181</height>
       </rect>
@@ -1482,7 +1510,7 @@
      <property name="geometry">
       <rect>
        <x>100</x>
-       <y>120</y>
+       <y>160</y>
        <width>201</width>
        <height>21</height>
       </rect>
@@ -1492,7 +1520,7 @@
      <property name="geometry">
       <rect>
        <x>300</x>
-       <y>110</y>
+       <y>160</y>
        <width>231</width>
        <height>23</height>
       </rect>
@@ -1504,8 +1532,8 @@
     <widget class="QCheckBox" name="data_in_other">
      <property name="geometry">
       <rect>
-       <x>900</x>
-       <y>30</y>
+       <x>790</x>
+       <y>40</y>
        <width>200</width>
        <height>50</height>
       </rect>
@@ -1531,7 +1559,7 @@ Time, x,y, z (Skeletal Tracker)</string>
      <property name="geometry">
       <rect>
        <x>650</x>
-       <y>30</y>
+       <y>40</y>
        <width>130</width>
        <height>50</height>
       </rect>
@@ -1553,7 +1581,7 @@ Skeletal Tracker</string>
      <property name="geometry">
       <rect>
        <x>520</x>
-       <y>30</y>
+       <y>40</y>
        <width>120</width>
        <height>50</height>
       </rect>
@@ -1561,6 +1589,214 @@ Skeletal Tracker</string>
      <property name="text">
       <string>Use other_o folder
 for output</string>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="find_trendlines_button">
+     <property name="geometry">
+      <rect>
+       <x>1300</x>
+       <y>290</y>
+       <width>181</width>
+       <height>21</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Find Trendlines</string>
+     </property>
+    </widget>
+    <widget class="QLabel" name="step1_label">
+     <property name="geometry">
+      <rect>
+       <x>100</x>
+       <y>15</y>
+       <width>641</width>
+       <height>21</height>
+      </rect>
+     </property>
+     <property name="font">
+      <font>
+       <pointsize>10</pointsize>
+       <weight>75</weight>
+       <bold>true</bold>
+      </font>
+     </property>
+     <property name="accessibleDescription">
+      <string/>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">color: rgb(255, 255, 255);</string>
+     </property>
+     <property name="text">
+      <string>Step 1: Choose Location/Type of Data to Track (location for color is in data/color_o for example)</string>
+     </property>
+     <property name="textFormat">
+      <enum>Qt::PlainText</enum>
+     </property>
+    </widget>
+    <widget class="QLabel" name="step2_label_2">
+     <property name="geometry">
+      <rect>
+       <x>100</x>
+       <y>100</y>
+       <width>571</width>
+       <height>21</height>
+      </rect>
+     </property>
+     <property name="font">
+      <font>
+       <pointsize>10</pointsize>
+       <weight>75</weight>
+       <bold>true</bold>
+      </font>
+     </property>
+     <property name="accessibleDescription">
+      <string/>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">color: rgb(255, 255, 255);</string>
+     </property>
+     <property name="frameShape">
+      <enum>QFrame::StyledPanel</enum>
+     </property>
+     <property name="text">
+      <string>Step 2: If using color tracker... choose how you want to determine colors to track.</string>
+     </property>
+     <property name="textFormat">
+      <enum>Qt::PlainText</enum>
+     </property>
+    </widget>
+    <widget class="QLabel" name="step3_label_3">
+     <property name="geometry">
+      <rect>
+       <x>100</x>
+       <y>370</y>
+       <width>571</width>
+       <height>21</height>
+      </rect>
+     </property>
+     <property name="font">
+      <font>
+       <pointsize>10</pointsize>
+       <weight>75</weight>
+       <bold>true</bold>
+      </font>
+     </property>
+     <property name="accessibleDescription">
+      <string/>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">color: rgb(255, 255, 255);</string>
+     </property>
+     <property name="text">
+      <string>Step 3: Type in the folder you want to track to or graph from. Then hit ENTER.</string>
+     </property>
+     <property name="textFormat">
+      <enum>Qt::PlainText</enum>
+     </property>
+    </widget>
+    <widget class="QLabel" name="step4_label_4">
+     <property name="geometry">
+      <rect>
+       <x>100</x>
+       <y>570</y>
+       <width>571</width>
+       <height>41</height>
+      </rect>
+     </property>
+     <property name="font">
+      <font>
+       <pointsize>10</pointsize>
+       <weight>75</weight>
+       <bold>true</bold>
+      </font>
+     </property>
+     <property name="accessibleDescription">
+      <string/>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">color: rgb(255, 255, 255);</string>
+     </property>
+     <property name="frameShape">
+      <enum>QFrame::StyledPanel</enum>
+     </property>
+     <property name="frameShadow">
+      <enum>QFrame::Sunken</enum>
+     </property>
+     <property name="text">
+      <string>Step 4: If tracking...choose frames to display/save. 
+They all slow down the process except for saving video</string>
+     </property>
+     <property name="textFormat">
+      <enum>Qt::PlainText</enum>
+     </property>
+    </widget>
+    <widget class="QLabel" name="step5_label_5">
+     <property name="geometry">
+      <rect>
+       <x>100</x>
+       <y>670</y>
+       <width>571</width>
+       <height>41</height>
+      </rect>
+     </property>
+     <property name="maximumSize">
+      <size>
+       <width>16777215</width>
+       <height>16777210</height>
+      </size>
+     </property>
+     <property name="font">
+      <font>
+       <pointsize>10</pointsize>
+       <weight>75</weight>
+       <bold>true</bold>
+      </font>
+     </property>
+     <property name="accessibleDescription">
+      <string/>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">color: rgb(255, 255, 255);</string>
+     </property>
+     <property name="lineWidth">
+      <number>-5</number>
+     </property>
+     <property name="text">
+      <string>Step 5: If tracking with 3D camera...Choose the type of tracking. 
+(Recording bag file, then tracking from it is most precise, but not necessary.</string>
+     </property>
+     <property name="textFormat">
+      <enum>Qt::PlainText</enum>
+     </property>
+    </widget>
+    <widget class="QLabel" name="step7_label_7">
+     <property name="geometry">
+      <rect>
+       <x>680</x>
+       <y>220</y>
+       <width>461</width>
+       <height>61</height>
+      </rect>
+     </property>
+     <property name="font">
+      <font>
+       <pointsize>10</pointsize>
+       <weight>75</weight>
+       <bold>true</bold>
+      </font>
+     </property>
+     <property name="toolTipDuration">
+      <number>4</number>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">color: rgb(255, 255, 255);</string>
+     </property>
+     <property name="text">
+      <string>Step 7: Once you have graphed the data, zoom in,
+then see it in 3D or find trendlines</string>
+     </property>
+     <property name="wordWrap">
+      <bool>true</bool>
      </property>
     </widget>
    </widget>

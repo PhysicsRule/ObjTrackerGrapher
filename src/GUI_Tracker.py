@@ -159,16 +159,15 @@ class MyGUI(QMainWindow):
         # Folder Options Hidden
         self.folder_list.setHidden(True)        # List of folders to put the data into
         self.folder_name.setHidden(True)  
-        self.how_to_enter_folder_label.setHidden(False)  
         self.table_widget_color.setHidden(True)
         self.folder_name_objects.setHidden(True)
         self.table_widget_color_2.setHidden(True) # For new colors
         self.lineEdit_define_color_name.setHidden(True)
         self.find_lower_upper_button.setHidden(True)
         # Acceleration, Energy, Momentum  Hidden
-        self.ame_explanation.setHidden(True)    # text
-        self.select_acceleration.setHidden(True)
-        self.select_momentum.setHidden(True)
+        self.select_acceleration.setHidden(False)
+        self.select_momentum.setHidden(False)
+        ## TODO have energy as well
         self.select_energy.setHidden(True)
         # Momentum/Energy Options Hidden
         self.mass_of_object.setHidden(True)
@@ -187,8 +186,10 @@ class MyGUI(QMainWindow):
         self.real_time_button.clicked.connect(self.run_real_time)
         self.tracker_button.clicked.connect(self.run_tracker)
         self.graph_button.clicked.connect(self.run_graph)
-        self.Button3DGraph.setHidden(False)
+        self.Button3DGraph.setHidden(True)
         self.Button3DGraph.clicked.connect(self.run_3D_graph)
+        self.trendline_table_widget.setHidden(True)
+        self.find_trendlines_button.setHidden(True)
         
         
         self.record_bag_button.clicked.connect(self.record_bag)
@@ -319,7 +320,6 @@ class MyGUI(QMainWindow):
         # show other options
         self.folder_list.setHidden(False)
         self.folder_name.setHidden(False)
-        self.ame_explanation.setHidden(False)
         self.select_acceleration.setHidden(False)
         self.select_momentum.setHidden(False)
         '''
@@ -343,7 +343,6 @@ class MyGUI(QMainWindow):
 
         self.folder_list.setHidden(False)
         self.folder_name.setHidden(False)
-        self.ame_explanation.setHidden(False)
         self.select_energy.setHidden(True)
         self.select_momentum.setHidden(True)
 
@@ -458,7 +457,6 @@ class MyGUI(QMainWindow):
 
         self.folder_list.setHidden(False)
         self.folder_name.setHidden(False)
-        self.ame_explanation.setHidden(False)
         self.select_acceleration.setHidden(False)
         self.select_momentum.setHidden(False)
         self.select_energy.setHidden(True)
@@ -474,7 +472,6 @@ class MyGUI(QMainWindow):
         # Define the the folders that will be used      
         self.folder_list.setHidden(False)
         self.folder_name.setHidden(False)
-        self.ame_explanation.setHidden(False)
         self.select_acceleration.setHidden(False)
         self.select_momentum.setHidden(False)
         '''
@@ -485,9 +482,33 @@ class MyGUI(QMainWindow):
         data_output = 'color_o'
         self.list_folders(data_output)
         
+    def setup_trendline_table(self, title_of_table,csv_files_array ):
+        self.trendline_table_widget.setHidden(False)
+        self.find_trendlines_button.setHidden(False)
+        title_of_table.setColumnCount(len(csv_files_array))
+        title_of_table.setRowHeight(0,8)
+        column = 0
+        for (__, file_name, mass) in csv_files_array:
+            title_of_table.setItem(0,column, QTableWidgetItem(file_name))
+            title_of_table.setItem(1,column, QTableWidgetItem(str(mass)))
+            
+            for i,var in enumerate(['x','y','z']):
+                function_type_combo_box = QComboBox()
+                function_type_combo_box.addItems(['linear', 'quadratic', 'future',])
+                row = i+4
+                title_of_table.setCellWidget(row, column, function_type_combo_box)
+                #function_type_combo_box.SelectedValue = "linear"
 
+        
 
+        '''for row in range(6):    
+            if row == 0 or row == 3:    axes_ = "x"
+            elif row == 1 or row == 4:  axes_  = "y"
+            elif row == 2 or row == 5:  axes_  = "z"
+            title_of_table.setItem(row,0, QTableWidgetItem(axes_))
 
+            
+            '''
 
 # Presets appear
     def show_presets(self):
@@ -556,7 +577,10 @@ class MyGUI(QMainWindow):
             # This is the green color range
             self.color_ranges=np.array([([32, 70, 68], [ 64, 194, 227], 'green', 0.1, 0.)],dtype=np.dtype([('lower', np.int32, (3,)), ('upper', np.int32, (3,)), ('name', np.unicode_, 16), ('radius_meters', np.float32), ('mass', np.float32)]))
             min_radius_object=5
-            data_output_folder_path=self.get_output_folder_path(base_path, str(time.time()))
+            data_output_folder_path=self.get_output_folder_path(base_path, '169')
+
+            # when tracking
+            # data_output_folder_path=self.get_output_folder_path(base_path, str(time.time()))
             input_folder='color_i'
             data_output ='color_o'
             return src, type_of_tracking, self.image, self.color_ranges, min_radius_object, data_output_folder_path, input_folder, data_output
@@ -720,6 +744,8 @@ class MyGUI(QMainWindow):
 
         self.graph_widget.draw()
         self.Button3DGraph.setHidden(False)
+        self.setup_trendline_table(self.trendline_table_widget, csv_files_array)
+        
 
         #plt.tight_layout()
 
