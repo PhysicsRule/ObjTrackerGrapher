@@ -71,7 +71,11 @@ class mlpcanvas(FigureCanvasQTAgg):
         super(mlpcanvas, self).__init__(self.fig)
 
     def clear(self):
-        self.axes = self.fig.subplots(nrows=3, ncols=3, sharex=True)
+        del self.axes
+        self.fig.clear()
+        self.axes = self.fig.subplots(nrows=3, ncols=3, sharex=True, sharey=False,
+                       squeeze=True, subplot_kw=None,
+                       gridspec_kw=None)
 
 '''class mlpcanvas_3D(FigureCanvasQTAgg):
     def __init__(self):
