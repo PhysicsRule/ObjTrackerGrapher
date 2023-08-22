@@ -700,11 +700,17 @@ Select the additional variables you would like graphed</string>
      <property name="columnCount">
       <number>3</number>
      </property>
+     <attribute name="horizontalHeaderVisible">
+      <bool>false</bool>
+     </attribute>
      <attribute name="horizontalHeaderDefaultSectionSize">
       <number>150</number>
      </attribute>
      <attribute name="horizontalHeaderMinimumSectionSize">
       <number>50</number>
+     </attribute>
+     <attribute name="verticalHeaderVisible">
+      <bool>true</bool>
      </attribute>
      <attribute name="verticalHeaderDefaultSectionSize">
       <number>20</number>
@@ -714,7 +720,7 @@ Select the additional variables you would like graphed</string>
      </attribute>
      <row>
       <property name="text">
-       <string>Object</string>
+       <string>Objectold</string>
       </property>
      </row>
      <row>

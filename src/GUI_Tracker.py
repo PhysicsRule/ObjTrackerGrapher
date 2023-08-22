@@ -63,9 +63,9 @@ class image_option:
 class parameter_to_plot:
     def __init__(self, acceleration, momentum, energy):
         if acceleration:
-            self.which_parameter_to_plot =  'a'
+            self.which_parameter_to_plot =  'A'
         elif momentum:
-            self.which_parameter_to_plot =  'p'
+            self.which_parameter_to_plot =  'P'
         elif energy:
             self.which_parameter_to_plot =  'E'
 
@@ -667,24 +667,46 @@ class MyGUI(QMainWindow):
         # data_output_folder, data_output_folder_path = make_new_folder(data_output)
         return src, type_of_tracking, self.image, self.color_ranges, min_radius_object, data_output_folder_path, input_folder, data_output
 
+
     def setup_trendline_table(self, title_of_table,csv_files_array, data_output, folder_name, data_output_folder_path):
         parameters = parameter_to_plot(self.select_acceleration.isChecked(), self.select_momentum.isChecked(), self.select_energy.isChecked())
         self.trendline_table_widget.setHidden(False)
         self.find_trendlines_button.setHidden(False)
         title_of_table.setColumnCount(len(csv_files_array)+1)
-
+        title_of_table.setRowCount(25)
+        
+        title_of_table.setVerticalHeaderItem(0, QTableWidgetItem('object name'))
+        title_of_table.setVerticalHeaderItem(1, QTableWidgetItem('mass (kg)'))
+        title_of_table.setVerticalHeaderItem(2, QTableWidgetItem('Minimum time'))
+        title_of_table.setVerticalHeaderItem(3, QTableWidgetItem('Maximum time'))
+        row = 4
+        for i,var in enumerate(['x','y','z']):
+            var_of_t = str(str(var)+'(t)') 
+            v_var_of_t = str('V'+ str(var)+'(t)') 
+            if parameters.which_parameter_to_plot =='E':
+                if i == 0:      third_var_of_t = 'PE(t)'
+                elif i == 1:    third_var_of_t = 'KE(t)'
+                else:           third_var_of_t = 'Total(t)'
+            else:
+                third_var_of_t = str(parameters.which_parameter_to_plot + str(var_of_t)) # Example Ax or Py
+            print(i)
+            title_of_table.setVerticalHeaderItem(row + i*4, QTableWidgetItem(var_of_t))
+            title_of_table.setVerticalHeaderItem(row + i*4 + 1, QTableWidgetItem(v_var_of_t))
+            title_of_table.setVerticalHeaderItem(row + i*4 + 2, QTableWidgetItem(third_var_of_t))
+            title_of_table.setVerticalHeaderItem(row + i*4 + 3, QTableWidgetItem(str('R^2 for ' + var_of_t)))
         column = 0
+        
         # pass information to the trendline procedure in the table so user can see too
-        title_of_table.setItem(20,column,QTableWidgetItem('data_output'))
-        title_of_table.setItem(20,column+1,QTableWidgetItem(str(data_output)))
-        title_of_table.setItem(21,column,QTableWidgetItem('folder_name'))
-        title_of_table.setItem(21,column+1,QTableWidgetItem(str(folder_name)))
-        title_of_table.setItem(22,column,QTableWidgetItem('data_output_folder_path'))
-        title_of_table.setItem(22,column+1,QTableWidgetItem(str(data_output_folder_path)))
-        title_of_table.setItem(23,column,QTableWidgetItem('csv_files_array'))
-        title_of_table.setItem(23,column+1,QTableWidgetItem(str(csv_files_array)))
-        title_of_table.setItem(24,column,QTableWidgetItem('parameter_to_plot'))    
-        title_of_table.setItem(24,column+1,QTableWidgetItem(parameters.which_parameter_to_plot))
+        title_of_table.setVerticalHeaderItem(20,QTableWidgetItem( 'data_output' ))
+        title_of_table.setItem(20,column,QTableWidgetItem( str(data_output) ))
+        title_of_table.setVerticalHeaderItem(21,QTableWidgetItem( 'folder_name' ))
+        title_of_table.setItem(21,column,QTableWidgetItem( str(folder_name) ))
+        title_of_table.setVerticalHeaderItem(22,QTableWidgetItem( 'data_output_folder_path' ))
+        title_of_table.setItem(22,column,QTableWidgetItem( str(data_output_folder_path) ))
+        title_of_table.setVerticalHeaderItem(23,QTableWidgetItem( 'csv_files_array' ))
+        title_of_table.setItem(23,column,QTableWidgetItem( str(csv_files_array) ))
+        title_of_table.setVerticalHeaderItem(24,QTableWidgetItem( 'parameter_to_plot' ))    
+        title_of_table.setItem(24,column,QTableWidgetItem( parameters.which_parameter_to_plot ))
 
         for (__, file_name, mass) in csv_files_array:
             title_of_table.setItem(0,column, QTableWidgetItem(file_name))
@@ -697,14 +719,7 @@ class MyGUI(QMainWindow):
                 title_of_table.setCellWidget(row, column, function_type_combo_box)
                 # set default value for combo_box
                 # function_type_combo_box.SelectedValue = "linear"
-                ##v_var = str('V'+ str(var)) 
-                second_var = str(parameters.which_parameter_to_plot + str(var)) # Example Vx or Vz
-                if parameters.which_parameter_to_plot =='E':
-                    if i == 0:      third_var = 'PE'
-                    elif i == 1:    third_var = 'KE'
-                    else:           third_var = 'Total'
-                else:
-                    third_var = str(parameters.which_parameter_to_plot + str(var)) # Example Ax or Py
+
 
 
     def run_graph(self, data_output_folder_path):
