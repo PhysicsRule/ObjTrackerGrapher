@@ -68,6 +68,10 @@ def GUI_graph_setup(graph_widget, which_parameter_to_plot):
 
     return graph_widget, PointsToSmooth
 
+def set_up_graph_for_trendlines ():
+    line_color_array = ("red", "blue", "green", "cyan", "magenta", "orange", "purple", "brown", "cyan", "olive" )
+    line_style_array = ("solid", "dashed", "dotted", "dashdot")
+    
 
 
 

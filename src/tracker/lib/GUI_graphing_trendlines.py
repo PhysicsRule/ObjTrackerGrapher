@@ -139,6 +139,18 @@ def GUI_graph (which_parameter_to_plot, data_output_folder_path, graph_color_ran
     sum_mass = 0
     return trendline_folder_path, smooth_data_to_graph
 
+def GUI_graph_trendline_real(title_of_table, csv_files_array):
+    column = 0
+    for (file_path, file_name, mass) in csv_files_array:
+        item = QTableWidgetItem(''.format(0, column))
+        mass_str = float(title_of_table.item(1,column).text())
+        xmin_str = title_of_table.item(2,column).text()
+        xmax_str = title_of_table.item(3,column).text()
+        if (xmin_str =='' or (xmax_str=='')):
+            continue
+        xmin = float(xmin_str)
+        xmax = float(xmax_str)
+        print(mass, xmin, xmax)
 
 def GUI_graph_trendline (fig, axes, line_style_array, line_color_array, which_parameter_to_plot, showlegend, trendline_folder_path, graph_color_ranges, csv_files_array ):
 ## TODO The values for the trendlines times will be modified through the GUI in the future

@@ -679,7 +679,7 @@ Select the additional variables you would like graphed</string>
     <widget class="QTableWidget" name="trendline_table_widget">
      <property name="geometry">
       <rect>
-       <x>1080</x>
+       <x>1079</x>
        <y>20</y>
        <width>601</width>
        <height>271</height>
@@ -694,71 +694,45 @@ Select the additional variables you would like graphed</string>
      <property name="textElideMode">
       <enum>Qt::ElideLeft</enum>
      </property>
-     <row>
-      <property name="text">
-       <string>Object</string>
-      </property>
-     </row>
-     <row>
-      <property name="text">
-       <string>mass (kg)</string>
-      </property>
-     </row>
-     <row>
-      <property name="text">
-       <string>Minimum</string>
-      </property>
-     </row>
-     <row>
-      <property name="text">
-       <string>Maximum</string>
-      </property>
-     </row>
-     <row>
-      <property name="text">
-       <string>x-function type</string>
-      </property>
-     </row>
-     <row>
-      <property name="text">
-       <string>y-function type</string>
-      </property>
-     </row>
-     <row>
-      <property name="text">
-       <string>z-function type</string>
-      </property>
-     </row>
-     <row>
-      <property name="text">
-       <string>x-function</string>
-      </property>
-     </row>
-     <row>
-      <property name="text">
-       <string>x-R^2</string>
-      </property>
-     </row>
-     <row>
-      <property name="text">
-       <string>y-function</string>
-      </property>
-     </row>
-     <row>
-      <property name="text">
-       <string>y-R^2</string>
-      </property>
-     </row>
-     <row>
-      <property name="text">
-       <string>z-function</string>
-      </property>
-     </row>
-     <row>
-      <property name="text">
-       <string>z-R^2</string>
-      </property>
-     </row>
+     <property name="rowCount">
+      <number>12</number>
+     </property>
+     <property name="columnCount">
+      <number>3</number>
+     </property>
+     <attribute name="horizontalHeaderVisible">
+      <bool>false</bool>
+     </attribute>
+     <attribute name="horizontalHeaderDefaultSectionSize">
+      <number>150</number>
+     </attribute>
+     <attribute name="horizontalHeaderMinimumSectionSize">
+      <number>50</number>
+     </attribute>
+     <attribute name="verticalHeaderVisible">
+      <bool>true</bool>
+     </attribute>
+     <attribute name="verticalHeaderDefaultSectionSize">
+      <number>20</number>
+     </attribute>
+     <attribute name="verticalHeaderMinimumSectionSize">
+      <number>10</number>
+     </attribute>
+     <row/>
+     <row/>
+     <row/>
+     <row/>
+     <row/>
+     <row/>
+     <row/>
+     <row/>
+     <row/>
+     <row/>
+     <row/>
+     <row/>
+     <column/>
+     <column/>
+     <column/>
     </widget>
     <widget class="QWidget" name="gridLayoutWidget">
      <property name="geometry">

@@ -31,7 +31,7 @@ from tracker.lib.general import find_objects_to_graph
 from tracker.lib.user_input import make_new_folder
 from tracker.lib.GUI_color_tracker import GUI_color_tracking, find_lower_upper_bounds_on_screen
 from tracker.lib.GUI_real_time_color_tracker import GUI_real_time_color_tracking
-from tracker.lib.GUI_graphing_trendlines import GUI_graph, GUI_graph_trendline, plot_style_color
+from tracker.lib.GUI_graphing_trendlines import GUI_graph, GUI_graph_trendline, plot_style_color, GUI_graph_trendline_real
 from tracker.lib.graphing import GUI_graph_setup, three_D_graphs, plot_graphs, GUI_trim
 from tracker.lib.intel_realsense_D435i import record_bag_file, find_and_config_device, read_bag_file_and_config
 from tracker.lib.GUI_library import reload_table
@@ -59,6 +59,15 @@ class image_option:
         self.show_mask = show_mask
         self.save_mask = save_mask
         self.save_video = save_video
+
+class parameter_to_plot:
+    def __init__(self, acceleration, momentum, energy):
+        if acceleration:
+            self.which_parameter_to_plot =  'A'
+        elif momentum:
+            self.which_parameter_to_plot =  'P'
+        elif energy:
+            self.which_parameter_to_plot =  'E'
 
 class mlpcanvas(FigureCanvasQTAgg):
 
@@ -190,6 +199,7 @@ class MyGUI(QMainWindow):
         self.Button3DGraph.clicked.connect(self.run_3D_graph)
         self.trendline_table_widget.setHidden(True)
         self.find_trendlines_button.setHidden(True)
+        self.find_trendlines_button.clicked.connect(self.find_trendlines)
         
         
         self.record_bag_button.clicked.connect(self.record_bag)
@@ -449,7 +459,7 @@ class MyGUI(QMainWindow):
 
 
     def color_button_pressed(self):
-        data_output = 'color_o'
+        self.data_output = 'color_o'
         # Select the color from a list, use a predefined preset, or create a new one.
         self.select_default_colors.setHidden(False)
         self.select_your_own_colors.setHidden(False)
@@ -465,7 +475,7 @@ class MyGUI(QMainWindow):
         '''
 
         # Folder List Showing Folders
-        self.list_folders(data_output)
+        self.list_folders(self.data_output)
 
     # Color Selected
     def color_selected(self):
@@ -482,33 +492,19 @@ class MyGUI(QMainWindow):
         data_output = 'color_o'
         self.list_folders(data_output)
         
-    def setup_trendline_table(self, title_of_table,csv_files_array ):
-        self.trendline_table_widget.setHidden(False)
-        self.find_trendlines_button.setHidden(False)
-        title_of_table.setColumnCount(len(csv_files_array))
-        title_of_table.setRowHeight(0,8)
-        column = 0
-        for (__, file_name, mass) in csv_files_array:
-            title_of_table.setItem(0,column, QTableWidgetItem(file_name))
-            title_of_table.setItem(1,column, QTableWidgetItem(str(mass)))
-            
-            for i,var in enumerate(['x','y','z']):
-                function_type_combo_box = QComboBox()
-                function_type_combo_box.addItems(['linear', 'quadratic', 'future',])
-                row = i+4
-                title_of_table.setCellWidget(row, column, function_type_combo_box)
-                #function_type_combo_box.SelectedValue = "linear"
+    
 
+    def find_trendlines(self):
+        base_path = os.getcwd()
+
+        data_output_folder_path = self.get_output_folder_path(base_path, self.data_output)
+        graph_color_ranges, csv_files_array = find_objects_to_graph (data_output_folder_path)
+        GUI_graph_trendline_real(self.trendline_table_widget, csv_files_array)
         
-
-        '''for row in range(6):    
-            if row == 0 or row == 3:    axes_ = "x"
-            elif row == 1 or row == 4:  axes_  = "y"
-            elif row == 2 or row == 5:  axes_  = "z"
-            title_of_table.setItem(row,0, QTableWidgetItem(axes_))
-
             
-            '''
+        
+           
+            
 
 # Presets appear
     def show_presets(self):
@@ -536,6 +532,13 @@ class MyGUI(QMainWindow):
 
     # Choice of Acceleration, Momentum, or Energy
     # Hides the variables that momentum does not need so it cleans up the visual if used energy etc.
+
+    def acceleration_chosen(self):
+        self.up_axis.setHidden(True)
+        self.r_height.setHidden(True)
+        self.save_height_mass.setHidden(True)
+        self.mass_of_object.setHidden(True)
+
     def momentum_chosen(self):
         self.up_axis.setHidden(True)
         self.r_height.setHidden(True)
@@ -549,13 +552,6 @@ class MyGUI(QMainWindow):
         self.r_height.setHidden(False)
         self.save_height_mass.setHidden(False)
         self.mass_of_object.setHidden(False)
-
-
-    def acceleration_chosen(self):
-        self.up_axis.setHidden(True)
-        self.r_height.setHidden(True)
-        self.save_height_mass.setHidden(True)
-        self.mass_of_object.setHidden(True)
 
     def reference_height_save(self):
         try:
@@ -671,10 +667,66 @@ class MyGUI(QMainWindow):
         # data_output_folder, data_output_folder_path = make_new_folder(data_output)
         return src, type_of_tracking, self.image, self.color_ranges, min_radius_object, data_output_folder_path, input_folder, data_output
 
+
+    def setup_trendline_table(self, title_of_table,csv_files_array, data_output, folder_name, data_output_folder_path):
+        parameters = parameter_to_plot(self.select_acceleration.isChecked(), self.select_momentum.isChecked(), self.select_energy.isChecked())
+        self.trendline_table_widget.setHidden(False)
+        self.find_trendlines_button.setHidden(False)
+        title_of_table.setColumnCount(len(csv_files_array)+1)
+        title_of_table.setRowCount(25)
+        
+        title_of_table.setVerticalHeaderItem(0, QTableWidgetItem('object name'))
+        title_of_table.setVerticalHeaderItem(1, QTableWidgetItem('mass (kg)'))
+        title_of_table.setVerticalHeaderItem(2, QTableWidgetItem('Minimum time'))
+        title_of_table.setVerticalHeaderItem(3, QTableWidgetItem('Maximum time'))
+        row = 4
+        for i,var in enumerate(['x','y','z']):
+            var_of_t = str(str(var)+'(t)') 
+            v_var_of_t = str('V'+ str(var)+'(t)') 
+            if parameters.which_parameter_to_plot =='E':
+                if i == 0:      third_var_of_t = 'PE(t)'
+                elif i == 1:    third_var_of_t = 'KE(t)'
+                else:           third_var_of_t = 'Total(t)'
+            else:
+                third_var_of_t = str(parameters.which_parameter_to_plot + str(var_of_t)) # Example Ax or Py
+            print(i)
+            title_of_table.setVerticalHeaderItem(row + i*4, QTableWidgetItem(var_of_t))
+            title_of_table.setVerticalHeaderItem(row + i*4 + 1, QTableWidgetItem(v_var_of_t))
+            title_of_table.setVerticalHeaderItem(row + i*4 + 2, QTableWidgetItem(third_var_of_t))
+            title_of_table.setVerticalHeaderItem(row + i*4 + 3, QTableWidgetItem(str('R^2 for ' + var_of_t)))
+        
+        column = 0
+        # pass information to the trendline procedure in the table so user can see too
+        title_of_table.setVerticalHeaderItem(20,QTableWidgetItem( 'data_output' ))
+        title_of_table.setItem(20,column,QTableWidgetItem( str(data_output) ))
+        title_of_table.setVerticalHeaderItem(21,QTableWidgetItem( 'folder_name' ))
+        title_of_table.setItem(21,column,QTableWidgetItem( str(folder_name) ))
+        title_of_table.setVerticalHeaderItem(22,QTableWidgetItem( 'data_output_folder_path' ))
+        title_of_table.setItem(22,column,QTableWidgetItem( str(data_output_folder_path) ))
+        title_of_table.setVerticalHeaderItem(23,QTableWidgetItem( 'csv_files_array' ))
+        title_of_table.setItem(23,column,QTableWidgetItem( str(csv_files_array) ))
+        title_of_table.setVerticalHeaderItem(24,QTableWidgetItem( 'parameter_to_plot' ))    
+        title_of_table.setItem(24,column,QTableWidgetItem( parameters.which_parameter_to_plot ))
+
+        for (__, file_name, mass) in csv_files_array:
+            title_of_table.setItem(0,column, QTableWidgetItem(file_name))
+            title_of_table.setItem(1,column, QTableWidgetItem(str(mass)))
+            
+            for i,var in enumerate(['x','y','z']):
+                function_type_combo_box = QComboBox()
+                function_type_combo_box.addItems(['linear', 'quadratic', 'future',])
+                row = i + 4 
+                title_of_table.setCellWidget(row, column, function_type_combo_box)
+                # set default value for combo_box
+                # function_type_combo_box.SelectedValue = "linear"
+            # Next object
+            column += 1 
+
+
     def run_graph(self, data_output_folder_path):
         
         # The folder that will be graphed
-        print('graph')
+        print('graphing')
         # What variable is to be graphed for the 3rd graph. It always graphs position and velocity
         if self.select_momentum.isChecked(): which_parameter_to_plot = 'p'
         elif self.select_energy.isChecked(): which_parameter_to_plot = 'e'
@@ -694,9 +746,6 @@ class MyGUI(QMainWindow):
         
         # The array of the colors to be tracked
         graph_color_ranges, csv_files_array = find_objects_to_graph (data_output_folder_path)
-        
-
-
 
         # self.grid_layout.addWidget(self.graph_widget_3D, 0, 1, alignment=Qt.Alignment())
 
@@ -744,7 +793,7 @@ class MyGUI(QMainWindow):
 
         self.graph_widget.draw()
         self.Button3DGraph.setHidden(False)
-        self.setup_trendline_table(self.trendline_table_widget, csv_files_array)
+        self.setup_trendline_table(self.trendline_table_widget, csv_files_array, data_output, self.folder_name.text(), data_output_folder_path)
         
 
         #plt.tight_layout()
