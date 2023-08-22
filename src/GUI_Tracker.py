@@ -31,7 +31,7 @@ from tracker.lib.general import find_objects_to_graph
 from tracker.lib.user_input import make_new_folder
 from tracker.lib.GUI_color_tracker import GUI_color_tracking, find_lower_upper_bounds_on_screen
 from tracker.lib.GUI_real_time_color_tracker import GUI_real_time_color_tracking
-from tracker.lib.GUI_graphing_trendlines import GUI_graph, GUI_graph_trendline, plot_style_color, GUI_graph_trendline_real
+from tracker.lib.GUI_graphing_trendlines import GUI_graph, GUI_graph_trendline, plot_style_color
 from tracker.lib.graphing import GUI_graph_setup, three_D_graphs, plot_graphs, GUI_trim
 from tracker.lib.intel_realsense_D435i import record_bag_file, find_and_config_device, read_bag_file_and_config
 from tracker.lib.GUI_library import reload_table
@@ -199,7 +199,7 @@ class MyGUI(QMainWindow):
         self.Button3DGraph.clicked.connect(self.run_3D_graph)
         self.trendline_table_widget.setHidden(True)
         self.find_trendlines_button.setHidden(True)
-        self.find_trendlines_button.clicked.connect(self.find_trendlines)
+        self.find_trendlines_button.clicked.connect(self.find_trendlines_button_pressed)
         
         
         self.record_bag_button.clicked.connect(self.record_bag)
@@ -494,17 +494,12 @@ class MyGUI(QMainWindow):
         
     
 
-    def find_trendlines(self):
+    def find_trendlines_button_pressed(self):
         base_path = os.getcwd()
-
-        data_output_folder_path = self.get_output_folder_path(base_path, self.data_output)
-        graph_color_ranges, csv_files_array = find_objects_to_graph (data_output_folder_path)
-        GUI_graph_trendline_real(self.trendline_table_widget, csv_files_array)
+        # trendline_table_widget has variables required stored starting at row 20
+        GUI_graph_trendline(self.trendline_table_widget, self.graph_widget)
         
-            
-        
-           
-            
+          
 
 # Presets appear
     def show_presets(self):
@@ -668,12 +663,12 @@ class MyGUI(QMainWindow):
         return src, type_of_tracking, self.image, self.color_ranges, min_radius_object, data_output_folder_path, input_folder, data_output
 
 
-    def setup_trendline_table(self, title_of_table,csv_files_array, data_output, folder_name, data_output_folder_path):
+    def setup_trendline_table(self, title_of_table,csv_files_array, data_output, folder_name, data_output_folder_path, trendline_folder_path):
         parameters = parameter_to_plot(self.select_acceleration.isChecked(), self.select_momentum.isChecked(), self.select_energy.isChecked())
         self.trendline_table_widget.setHidden(False)
         self.find_trendlines_button.setHidden(False)
-        title_of_table.setColumnCount(len(csv_files_array)+1)
-        title_of_table.setRowCount(25)
+        title_of_table.setColumnCount(len(csv_files_array))
+        title_of_table.setRowCount(30)
         
         title_of_table.setVerticalHeaderItem(0, QTableWidgetItem('object name'))
         title_of_table.setVerticalHeaderItem(1, QTableWidgetItem('mass (kg)'))
@@ -707,6 +702,8 @@ class MyGUI(QMainWindow):
         title_of_table.setItem(23,column,QTableWidgetItem( str(csv_files_array) ))
         title_of_table.setVerticalHeaderItem(24,QTableWidgetItem( 'parameter_to_plot' ))    
         title_of_table.setItem(24,column,QTableWidgetItem( parameters.which_parameter_to_plot ))
+        title_of_table.setVerticalHeaderItem(25,QTableWidgetItem( 'trendline_folder_path' ))
+        title_of_table.setItem(25,column,QTableWidgetItem( str(trendline_folder_path) ))
 
         for (__, file_name, mass) in csv_files_array:
             title_of_table.setItem(0,column, QTableWidgetItem(file_name))
@@ -793,7 +790,7 @@ class MyGUI(QMainWindow):
 
         self.graph_widget.draw()
         self.Button3DGraph.setHidden(False)
-        self.setup_trendline_table(self.trendline_table_widget, csv_files_array, data_output, self.folder_name.text(), data_output_folder_path)
+        self.setup_trendline_table(self.trendline_table_widget, csv_files_array, data_output, self.folder_name.text(), data_output_folder_path, trendline_folder_path)
         
 
         #plt.tight_layout()

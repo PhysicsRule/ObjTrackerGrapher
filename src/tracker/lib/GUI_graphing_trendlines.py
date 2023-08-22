@@ -12,6 +12,9 @@ import matplotlib.animation as animation
 
 import pandas as pd
 from scipy import *
+from scipy.signal import lfilter
+from scipy.optimize import least_squares
+from scipy.optimize import curve_fit
 import os
 import time
 
@@ -20,7 +23,7 @@ import numpy as np
 from tracker.lib.general import GUI_creates_an_array_of_csv_files
 from tracker.lib.setup_files import create_new_folder, create_calc_file
 from tracker.lib.user_input import select_type_of_tracking, select_multiple_files
-from tracker.lib.graphing import plot_graphs, GUI_trim, trim_from_collision, best_fit_fun_graph, three_D_graphs, FindVelandAccTrend, FindMom, FindKE, FindTotalEnergy
+from tracker.lib.graphing import plot_graphs, GUI_trim, trim_from_collision, three_D_graphs, FindVelandAccTrend, FindMom, FindKE, FindTotalEnergy
 from mpl_toolkits import mplot3d
 
 def plot_style_color():
@@ -48,9 +51,7 @@ def GUI_graph (which_parameter_to_plot, data_output_folder_path, graph_color_ran
     new_sheet_folder = 'trendlines'
     trendline_folder_path = create_new_folder (file_path, new_sheet_folder)
     #create a file to store the trendline equations 
-    calc_file_name =  "calcs.csv"
-    calc_file_name_path = os.path.abspath(os.path.join(trendline_folder_path + '/' + calc_file_name + '/' ))   
-    create_calc_file(calc_file_name_path)
+    
 
     sum_mass = 0
 
@@ -139,109 +140,291 @@ def GUI_graph (which_parameter_to_plot, data_output_folder_path, graph_color_ran
     sum_mass = 0
     return trendline_folder_path, smooth_data_to_graph
 
-def GUI_graph_trendline_real(title_of_table, csv_files_array):
-    column = 0
-    for (file_path, file_name, mass) in csv_files_array:
-        item = QTableWidgetItem(''.format(0, column))
-        mass_str = float(title_of_table.item(1,column).text())
-        xmin_str = title_of_table.item(2,column).text()
-        xmax_str = title_of_table.item(3,column).text()
-        if (xmin_str =='' or (xmax_str=='')):
-            continue
-        xmin = float(xmin_str)
-        xmax = float(xmax_str)
-        print(mass, xmin, xmax)
-
-def GUI_graph_trendline (fig, axes, line_style_array, line_color_array, which_parameter_to_plot, showlegend, trendline_folder_path, graph_color_ranges, csv_files_array ):
-## TODO The values for the trendlines times will be modified through the GUI in the future
-    i = 0
-    collision = 'n'
-    ##collision = input('Do you want trendlines from a collision?\n')
-    if collision in 'yes':
-        trendline_times = [None]*6
-        trendline_times[0] = 0
-        trendline_times[1] = 0
-        trendline_times[2] = 0.2
-        trendline_times[3] = 0.4
-        trendline_times[4] = 0.6
-        trendline_times[5] = 0.8
-        print(trendline_times)
+def best_fit_fun_graph(fig, axes, Graph_data_window, LineS, LineC, which_parameter_to_plot, mass, file_name_dataframe_path, calc_file_name_path, trendline_type):
+# create a trendline with least squares method
     
-    xmin = 0.0
-    xmax= 0.6
+    # Creates an exponential trendline
+    def funexp(x, t, y):    
+        return x[0] * np.exp(-x[1] * t + x[2] )
 
+    def funsine(x, t, y): 
+        return x[0] * np.sin(x[1] * t + x[2] ) + x[3] - y 
+    
+    def fun_damped_sine(x, t, y):
+        return x[0] * np.exp(-x[1] * t) * np.sin(x[2] * t + x[3])  - y
+    
+    def funlinear(x, t, y):
+        return x[0] * t + x[1] - y
+    
+    def funquadratic(x, t, y):
+        return x[0] * t**2 + x[1] * t + x[2] - y
+    
+
+
+    # Generates a curve of best fit function based on the type use specifies in the future
+    def generate_data(axes, calc_file_name_path, trendline, Var_for_loop, t, A, sigma, omega, beta, noise=0, n_outliers=0, random_state=0 ):
+        A = round(A,5)
+        sigma = round(sigma,5)
+        omega = round(omega,5)
+        beta = round(beta,5)
+        if trendline == 'exp':
+            trendline_equation = str(Var_for_loop) + '= ' + A + ' * np.exp(-'+ sigma +' * t +'+ omega +  ')'
+            trendline_value = A * np.exp(-sigma * t + omega )
+        elif trendline == 'sine':
+            trendline_equation= str (Var_for_loop) + '= ' + A + '  * sin( ' + sigma + ' * t  + ' + omega, ') + ' + beta
+            trendline_value = A * np.sin(sigma * t + omega ) + beta
+        elif trendline == 'damped_sine':
+            trendline_equation =str (Var_for_loop) + '= ' + A + ' * np.exp(-' + sigma + ' * t) * np.sin( ' +  omega + ' * t + ' + beta
+            trendline_value = A * np.exp(-sigma * t) * np.sin(omega * t + beta) 
+        elif trendline == 'linear' or trendline == 'l' :
+            trendline_equation =str(Var_for_loop) + '= '+ str(A) + ' * t +' + str(sigma)
+            trendline_value = A * t + sigma
+        elif trendline == 'quadratic' or trendline == 'q':
+            trendline_equation =str(Var_for_loop) + '= ' + str(A) + '*t^2 + ' + str(sigma) +' * t + ' + str(omega)
+            trendline_value = A *t**2 + sigma * t + omega
+        else:
+            print(' No trendline given')
+            trendline_equation = ''
+            trendline_value= 0
+        print(trendline_equation)
+        with open(calc_file_name_path, 'a') as calcs_to_file:
+            calcs_to_file.write(f'{trendline_equation},{A},{sigma},{omega},{beta}\n') 
+        return trendline_equation, trendline_value
+
+    #This will find call the functions to generate the data for each graph given the y_axis
+    def find_trendline_of_each_graph(axes, trendline, VarForLoop, y_axis_lsq, LineS):
+        # global graph_data
+
+        vert_data = np.array(Graph_data_window[VarForLoop])
+
+        x0 = np.array([1.0, 1.0, 1.0, 1.0])
+        guess_mean = np.mean(vert_data)
+        guess_phase = 0
+        guess_amp = np.max(vert_data)-np.mean(vert_data)
+        guess_freq = 0.5
+        xsine0 = np.array([guess_amp, guess_freq, guess_phase, guess_mean])
+        # print(xsine0)
+        #print(Graph_data_window)
+        
+        
+        #basic least squares
+        #res_lsq = least_squares(fun, x0, args=(horiz_data,vert_data)) # need entire columns of time and  each variable
+        if trendline == 'exp':
+            res_lsq = least_squares(funexp, x0, loss='soft_l1', f_scale=0.1, args=(horiz_data, vert_data))        
+        elif trendline == 'sine':
+            #t= horiz_data
+            #optimize_func = lambda xsine0: xsine0[0] * np.sin(xsine0[1] * t + xsine0[2] ) + xsine0[3]-vert_data
+            #res_lsq = least_squares(optimize_func, xsine0)
+            res_lsq = least_squares(funsine, xsine0, loss='soft_l1', f_scale=0.1, args=(horiz_data, vert_data))        
+        elif trendline == 'damped_sine':
+            res_lsq = least_squares(fun_damped_sine, x0, loss='soft_l1', f_scale=0.1, args=(horiz_data, vert_data))        
+        elif trendline == 'linear' or trendline == 'l' :
+            res_lsq = least_squares(funlinear, x0, loss='soft_l1', f_scale=0.1, args=(horiz_data, vert_data))        
+        elif trendline == 'quadratic' or trendline == 'q':
+            res_lsq = least_squares(funquadratic, x0, loss='soft_l1', f_scale=0.1, args=(horiz_data, vert_data))        
+        
+        
+        
+        #robust handels outliers better?
+        #print (*res_lsq.x)
+
+        # Generates a set of data for the curve of best fit
+        trendline_equation, Graph_data_window[y_axis_lsq] = generate_data(axes, calc_file_name_path, trendline, VarForLoop, horiz_data, *res_lsq.x)
+        
+        return res_lsq.x
+
+    # BestFitFun Main Program
+    for i,var in enumerate(['x','y','z']):
+        # After viewing the data the person selects the type of trendline they want to use for each graph. 
+        trendline = trendline_type[i]   # 0,1,2 represents x,y, and z position curve fit option
+        horiz_data = np.array(Graph_data_window['Time'])
+        
+        # Find trendline of position data
+        y_lsq_var = str(str(var) + '(t)') 
+        if trendline != '':
+            A, sigma, omega, beta = find_trendline_of_each_graph(axes, trendline_type, var, y_lsq_var, LineS) 
+
+        # Find velocity data from the trendline of the position data
+        y_lsq_v_var = str('V'+ str(var) + '(t)') 
+        # TODO modify so other types of graphs will work besides quadratic and linear
+        # assume the trendline for the position data is either linear or quadratic
+        # x(t)=At^2+sigmat+omega then v(t)=2At+sigma
+        if trendline == 'quadratic' or trendline == 'q':
+            trendline = 'l'
+            A = 2*A
+        else: 
+        # linear
+            # if x(t)=At+sigma then v(t)=0t+A
+            sigma =  A
+            A = 0
+        # Put velocity data on the spreadsheet
+        trendline_equation,Graph_data_window[y_lsq_v_var] = generate_data(axes, calc_file_name_path, trendline, y_lsq_v_var, horiz_data, A, sigma, omega, beta, calc_file_name_path)
+
+        # Find the momentum data and equation from the velocity data and equation
+        if which_parameter_to_plot == 'p':
+            p_var = str('P'+ str(var) + '(t)')
+            Graph_data_window[p_var] = Graph_data_window[y_lsq_v_var] * mass
+            
+            mom_A = A*mass
+            mom_sigma = sigma *mass
+            trendline_equation,Graph_data_window[p_var] = generate_data(axes, calc_file_name_path, trendline, p_var, horiz_data, mom_A, mom_sigma, omega, beta, calc_file_name_path)
+        
+        # Find acceleration data from the trendline of the velocity data
+        if which_parameter_to_plot == 'a':
+            a_var = str('A'+ str(var))
+            y_lsq_a_var = str(str(a_var) + '(t)') 
+            # TODO modify so other types of graphs will work besides quadratic and linear
+            
+            # assume the trendline for the velocity data was linear 
+            # linear position: if V(t)=sigma then A(t)=0
+            # quadratic position if v(t)=At+sigma A(t)=A
+            sigma =  A
+            A = 0
+            trendline_equation,Graph_data_window[y_lsq_a_var] = generate_data(axes, calc_file_name_path, trendline, y_lsq_a_var, horiz_data, A, sigma, omega, beta, calc_file_name_path)
+
+        
+    # TODO Finish KE and PE for trendlines similar to post processing
+    if which_parameter_to_plot == 'E':
+        y_lsq_KE_var = str('lsqA'+ str('KE')) 
+        print ('For the KE vs time graph?') 
+        trendline = input()
+        if trendline !='':
+            find_trendline_of_each_graph(axes, trendline, 'KE', y_lsq_KE_var, LineS) 
+        y_lsq_PE_var = str('lsqA'+ str('PE')) 
+        print ('For the PE vs time graph?') 
+        trendline = input()
+        if trendline !='':
+            find_trendline_of_each_graph(axes, trendline, 'PE', y_lsq_PE_var, LineS)
+        y_lsq_Total_var = str('lsqA'+ str('Total')) 
+        print ('For the Total Energy vs time graph?') 
+        trendline = input()
+        if trendline !='':
+            find_trendline_of_each_graph(axes, trendline, 'Total', y_lsq_Total_var, LineS)
+
+    data_frame = pd.DataFrame(Graph_data_window) 
+    #print(smooth_data)
+    smooth_data_to_graph = data_frame.set_index('Time')
+    #smooth_data_to_graph.to_csv(file_name_dataframe_path)
+    
+       
+
+    for i,var in enumerate(['x','y','z']):
+        # print('just before plotting sytle', LineS)
+        y_lsq_var = str(str(var) + '(t)')
+        # black line of best fit
+        smooth_data_to_graph[y_lsq_var].plot(ax=axes[0,i], label='lsq', linestyle='-', color='k', linewidth=1)
+        y_lsq_v_var = str('V'+ str(var) + '(t)') 
+        smooth_data_to_graph[y_lsq_v_var].plot(ax=axes[1,i], label='lsq', linestyle='-', color=LineC, linewidth=1)
+        if which_parameter_to_plot == 'a':
+            a_var = str('A'+ str(var))
+            y_lsq_a_var = str(str(a_var) + '(t)') 
+            smooth_data_to_graph[y_lsq_a_var].plot(ax=axes[2,i], label='lsq', linestyle='-', color=LineC, linewidth=1)
+        if which_parameter_to_plot == 'p':
+            p_var = str('P'+ str(var) + '(t)')
+            smooth_data_to_graph[p_var].plot(ax=axes[2,i], label='lsq', linestyle='-', color=LineC, linewidth=1)
+    if which_parameter_to_plot == 'E':
+        smooth_data_to_graph[y_lsq_KE_var].plot(ax=axes[2,0], label='lsq', linestyle='-', color=LineC, linewidth=1)
+        smooth_data_to_graph[y_lsq_PE_var].plot(ax=axes[2,1], label='lsq', linestyle='-', color=LineC, linewidth=1)
+
+        smooth_data_to_graph[y_lsq_Total_var].plot(ax=axes[2,2], label='lsq', linestyle='-', color=LineC, linewidth=1)
+    
+    for graph_num_y in range(3):
+        axes[2,graph_num_y].set(xlabel='Time (s)')
+
+    return smooth_data_to_graph
+
+
+
+def GUI_graph_trendline (title_of_table, graph_widget):
+
+    # Use the trendline_table_widget values to find the trendlines of the current graph
+    # The variables are located starting at row 20
+    row_info = 20
+    data_output =               title_of_table.item(row_info    ,0).text()
+    folder_name =               title_of_table.item(row_info + 1,0).text()
+    data_output_folder_path =   title_of_table.item(row_info + 2,0).text()
+    csv_files_array_str =           title_of_table.item(row_info + 3,0).text()
+    which_parameter_to_plot  =  title_of_table.item(row_info + 4,0).text()
+    trendline_folder_path =     title_of_table.item(row_info + 5,0).text()
+    axes = graph_widget.axes
+    fig = graph_widget.fig
+    line_style_array, line_color_array, marker_shape_array, show_legend = plot_style_color()
+    
     calc_file_name =  "calcs.csv"
     calc_file_name_path = os.path.abspath(os.path.join(trendline_folder_path + '/' + calc_file_name + '/' ))   
     create_calc_file(calc_file_name_path)
-    object_number = 0
-    for (file_path, file_name, mass) in csv_files_array:  
-        # find the domain for each trendline, create a new *.csv for each trendline, 
+    i = 0
+    num_objects = title_of_table.columnCount()
+    trendline_type = []
 
+    for column in range(num_objects):
+        name = title_of_table.item(0,column).text()
+        mass = title_of_table.item(1,column).text()
+        x_min_str = title_of_table.item(2,column).text()
+        x_max_str = title_of_table.item(3,column).text()
+        if x_min_str == '':
+            x_min = float(title_of_table.item(2,0).text())
+            x_max = float(title_of_table.item(3,0).text())
+        else:
+            x_min = float(x_min_str)
+            x_max = float(x_max_str)
+            # print('csv_files_array',csv_files_array)
+        print(column)
+        
+        # gets the comboBox located in the cellWidget that shows which trendline they chose
+        trendline_type.append(title_of_table.cellWidget(4, column).currentText()) # x
+        trendline_type.append(title_of_table.cellWidget(5, column).currentText()) # y
+        trendline_type.append(title_of_table.cellWidget(6, column).currentText()) # z
+
+        print (trendline_type, trendline_type[1])
         s = 0
 
-        # The first trendline starts at time of t2
-        trendline_time_counter = 2
-        print('t', trendline_time_counter)
-        
         plt.ioff()
         
-        while True:
-            with open(calc_file_name_path, 'a') as calcs_to_file:
-                calcs_to_file.write(f'{file_name}\n') 
-            print(file_name)
-        # Let the user try multiple trendline for each object.They must do one for each object
-            file_name_dataframe = file_name  + "sheet.csv"
-            file_name_dataframe_path = os.path.abspath(os.path.join(trendline_folder_path + '/' + file_name_dataframe + '/' ))   
-            
-            graph_dataZoomed = pd.read_csv(file_name_dataframe_path, header=0)
-
-            # Find minimum and maximum for trendlines
-            if 'y' in collision:
-                graph_data_window = trim_from_collision(graph_dataZoomed, calc_file_name_path, trendline_times, trendline_time_counter)
         
-            else: 
-                graph_data_window = GUI_trim(graph_dataZoomed, calc_file_name_path, xmin, xmax)
+        with open(calc_file_name_path, 'a') as calcs_to_file:
+            calcs_to_file.write(f'{name}\n') 
+        print(name)
+        file_name_dataframe = name  + "sheet.csv"
+        file_name_dataframe_path = os.path.abspath(os.path.join(trendline_folder_path + '/' + file_name_dataframe + '/' ))   
+        
+        graph_dataZoomed = pd.read_csv(file_name_dataframe_path, header=0)
 
-            # PFind trendlines and graph
-            graph_data_window = best_fit_fun_graph(fig, axes, graph_data_window, line_style_array[i], line_color_array[i], which_parameter_to_plot, mass,file_name_dataframe_path, calc_file_name_path)
-            
-            file_name_dataframe_trendline = file_name  + str(s) + "trend.csv"
-            file_name_dataframe_path_trendline = os.path.abspath(os.path.join(trendline_folder_path + '/' + file_name_dataframe_trendline + '/' ))   
-            graph_data_window.to_csv(file_name_dataframe_path_trendline) 
+        # Find minimum and maximum for trendlines
+    
+        graph_data_window = GUI_trim(graph_dataZoomed, calc_file_name_path, x_min, x_max)
 
-            time.sleep(1)
-            
-            # Turns the plot back on and displays the curve fits
-            # If the user wants another trendline do the loop again, otherwise stop the program
-            
-            s += 1        
-            
-            if 'y' in collision:
-            # If the trendlines are being calculated automatically from the initial collision times
-                if trendline_time_counter <3:
-                    trendline_time_counter +=2 # Now it is 4 (after the collision)
-                else:
-                    break
-            else: 
-            # User is manually putting in the trendlines as they go for any situation
-                trendline_check = 'n'    
-                if trendline_check != 'y':
-                    break
+        # PFind trendlines and graph
+        graph_data_window = best_fit_fun_graph(fig, axes, graph_data_window, line_style_array[i], line_color_array[i], which_parameter_to_plot, mass,file_name_dataframe_path, calc_file_name_path, trendline_type)
+        
+        file_name_dataframe_trendline = name  + str(s) + "trend.csv"
+        file_name_dataframe_path_trendline = os.path.abspath(os.path.join(trendline_folder_path + '/' + file_name_dataframe_trendline + '/' ))   
+        graph_data_window.to_csv(file_name_dataframe_path_trendline) 
 
-        object_number += 1      
+        time.sleep(1)
+        
+        # Turns the plot back on and displays the curve fits
+        # If the user wants another trendline do the loop again, otherwise stop the program
+        
+        s += 1        
+    
         i += 1
         plt.tight_layout()
         plt.ioff()
         
         
-    # exit if spacebar or esc is pressed
-    #input('press return to finish')   
+        # exit if spacebar or esc is pressed
+        #input('press return to finish')   
 
-    # Save the image of the graphs when you close it
-    image_name= "graph_" + which_parameter_to_plot + ".png"
-    graph_path = os.path.abspath(os.path.join(trendline_folder_path, image_name ))   
-    fig.savefig(graph_path)
-    plt.show()  
-    plt.ioff()
+        # Save the image of the graphs when you close it
+        
+        # TODO save figure and 3D  when push a save figures button
+        '''
+        image_name= "graph_" + which_parameter_to_plot + ".png"
+        graph_path = os.path.abspath(os.path.join(trendline_folder_path, image_name ))   
+        fig.savefig(graph_path)
+        plt.show()  
+        plt.ioff()
+        '''
 
             
