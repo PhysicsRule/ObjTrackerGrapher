@@ -726,7 +726,7 @@ class MyGUI(QMainWindow):
     def run_graph(self, data_output_folder_path):
         
         # The folder that will be graphed
-        print('graph')
+        print('graphing')
         # What variable is to be graphed for the 3rd graph. It always graphs position and velocity
         if self.select_momentum.isChecked(): which_parameter_to_plot = 'p'
         elif self.select_energy.isChecked(): which_parameter_to_plot = 'e'

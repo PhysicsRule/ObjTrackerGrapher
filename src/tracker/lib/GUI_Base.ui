@@ -695,7 +695,7 @@ Select the additional variables you would like graphed</string>
       <enum>Qt::ElideLeft</enum>
      </property>
      <property name="rowCount">
-      <number>25</number>
+      <number>12</number>
      </property>
      <property name="columnCount">
       <number>3</number>
@@ -718,71 +718,6 @@ Select the additional variables you would like graphed</string>
      <attribute name="verticalHeaderMinimumSectionSize">
       <number>10</number>
      </attribute>
-     <row>
-      <property name="text">
-       <string>Objectold</string>
-      </property>
-     </row>
-     <row>
-      <property name="text">
-       <string>mass (kg)</string>
-      </property>
-     </row>
-     <row>
-      <property name="text">
-       <string>Minimum</string>
-      </property>
-     </row>
-     <row>
-      <property name="text">
-       <string>Maximum</string>
-      </property>
-     </row>
-     <row>
-      <property name="text">
-       <string>x-function type</string>
-      </property>
-     </row>
-     <row>
-      <property name="text">
-       <string>y-function type</string>
-      </property>
-     </row>
-     <row>
-      <property name="text">
-       <string>z-function type</string>
-      </property>
-     </row>
-     <row>
-      <property name="text">
-       <string>x-function</string>
-      </property>
-     </row>
-     <row>
-      <property name="text">
-       <string>x-R^2</string>
-      </property>
-     </row>
-     <row>
-      <property name="text">
-       <string>y-function</string>
-      </property>
-     </row>
-     <row>
-      <property name="text">
-       <string>y-R^2</string>
-      </property>
-     </row>
-     <row>
-      <property name="text">
-       <string>z-function</string>
-      </property>
-     </row>
-     <row>
-      <property name="text">
-       <string>z-R^2</string>
-      </property>
-     </row>
      <row/>
      <row/>
      <row/>

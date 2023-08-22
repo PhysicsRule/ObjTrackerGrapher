@@ -97,11 +97,11 @@ def find_objects_to_graph (data_output_folder_path):
                     graph_color_file = np.array([(('_'),('_'), (csv_file_name),('_'),(mass))], dtype=dt_2)
                     graph_color_ranges = np.hstack((graph_color_ranges,graph_color_file))
                 object_count += 1
-                
+
         if csv_found == False:
             print('*csv Data file was not found.')
-        else:
-            print ('graph_color_ranges', graph_color_ranges)
+        # else:
+            # print ('graph_color_ranges', graph_color_ranges)
     object_count = 1
     for _,_,name,_,mass in graph_color_ranges:
         if object_count == 1:
@@ -110,7 +110,7 @@ def find_objects_to_graph (data_output_folder_path):
         else:
             file_np = np.array([((data_output_folder_path), (name),(mass))], dtype=dt_object)
             csv_files_array = np.hstack((csv_files_array,file_np))
-            print('csv_files_array',csv_files_array)
+            # print('csv_files_array',csv_files_array)
         object_count += 1
 
     return graph_color_ranges, csv_files_array 
