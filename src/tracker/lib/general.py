@@ -85,18 +85,20 @@ def find_objects_to_graph (data_output_folder_path):
         print('Since a npy file of the objects was not saved, mass was set to 1.')
         mass = 1
         object_count = 1
-        csv_file = False
-        for np_file_name in os.listdir(data_output_folder_path):
-            if np_file_name.endswith('.csv'):
-                np_file_name = os.path.splitext(np_file_name)[0]
+        csv_found = False
+        for csv_file_name in os.listdir(data_output_folder_path):
+            if csv_file_name.endswith('.csv'):
+                csv_file_name = os.path.splitext(csv_file_name)[0]
                 csv_found = True
                 if object_count == 1:
-                    graph_color_file = np.array([(('_'),('_'), (np_file_name),('_'),(mass))], dtype=dt_2)
-                    graph_color_ranges = graph_color_file
+                    graph_color_file = np.array([(('_'),('_'), (csv_file_name),('_'),(mass))], dtype=dt_2)
+                    graph_color_ranges = graph_color_file           
                 else:
-                    graph_color_file = np.array([(('_'),('_'), (np_file_name),('_'),(mass))], dtype=dt_2)
+                    graph_color_file = np.array([(('_'),('_'), (csv_file_name),('_'),(mass))], dtype=dt_2)
                     graph_color_ranges = np.hstack((graph_color_ranges,graph_color_file))
-        if csv_file == False:
+                object_count += 1
+                
+        if csv_found == False:
             print('*csv Data file was not found.')
         else:
             print ('graph_color_ranges', graph_color_ranges)

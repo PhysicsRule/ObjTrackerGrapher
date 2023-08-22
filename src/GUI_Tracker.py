@@ -694,8 +694,8 @@ class MyGUI(QMainWindow):
             title_of_table.setVerticalHeaderItem(row + i*4 + 1, QTableWidgetItem(v_var_of_t))
             title_of_table.setVerticalHeaderItem(row + i*4 + 2, QTableWidgetItem(third_var_of_t))
             title_of_table.setVerticalHeaderItem(row + i*4 + 3, QTableWidgetItem(str('R^2 for ' + var_of_t)))
-        column = 0
         
+        column = 0
         # pass information to the trendline procedure in the table so user can see too
         title_of_table.setVerticalHeaderItem(20,QTableWidgetItem( 'data_output' ))
         title_of_table.setItem(20,column,QTableWidgetItem( str(data_output) ))
@@ -719,7 +719,8 @@ class MyGUI(QMainWindow):
                 title_of_table.setCellWidget(row, column, function_type_combo_box)
                 # set default value for combo_box
                 # function_type_combo_box.SelectedValue = "linear"
-
+            # Next object
+            column += 1 
 
 
     def run_graph(self, data_output_folder_path):
@@ -745,9 +746,6 @@ class MyGUI(QMainWindow):
         
         # The array of the colors to be tracked
         graph_color_ranges, csv_files_array = find_objects_to_graph (data_output_folder_path)
-        
-
-
 
         # self.grid_layout.addWidget(self.graph_widget_3D, 0, 1, alignment=Qt.Alignment())
 
