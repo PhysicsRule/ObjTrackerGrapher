@@ -89,7 +89,7 @@ def nine_graphs():
         )
 
         # Use the velocity data to find momentum or energy
-        if which_parameter_to_plot == "p":
+        if which_parameter_to_plot in {"p","P"}:
             data_frame, graph_data, smooth_data_to_graph = FindMom(
                 data_frame, header_list, points_to_smooth, mass
             )
@@ -126,7 +126,7 @@ def nine_graphs():
         i += 1
     ###TO DO THIS DOES NOT WORK. I GAVE UP SINCE THERE IS NOT ALWAYS A POINT ASSOCIATED WITH EACH OBJECT AT ANY GIVEN TIME
     # If the momentum is plotted, we also want the total momentum plotted for each axis
-    # if which_parameter_to_plot =='p':
+    # if which_parameter_to_plot in {"p","P"}:
     #    for i,var in enumerate(['x','y','z']):
     #        p_total =[]
     #        p_var = str('P'+ str(var))

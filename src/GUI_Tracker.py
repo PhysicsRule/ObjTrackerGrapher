@@ -498,7 +498,7 @@ class MyGUI(QMainWindow):
         base_path = os.getcwd()
         # trendline_table_widget has variables required stored starting at row 20
         GUI_graph_trendline(self.trendline_table_widget, self.graph_widget)
-        
+        self.graph_widget.draw()
           
 
 # Presets appear
@@ -765,10 +765,10 @@ class MyGUI(QMainWindow):
                 smooth_data_to_graph[var].plot(ax=self.graph_widget.axes[0,i], title=var, fontsize=8, marker=marker_shape_array[i_object], markersize=3, color=line_color_array[i_object],  linestyle=line_style_array[i_object], label=file_name)
                 v_var = str('V'+ str(var)) 
                 smooth_data_to_graph[v_var].plot(ax=self.graph_widget.axes[1,i], title=v_var, fontsize=8, marker=marker_shape_array[i_object], markersize=3, color=line_color_array[i_object], linestyle=line_style_array[i_object])
-                if which_parameter_to_plot == 'a':
+                if which_parameter_to_plot in {"a","A"}:
                     a_var = str('A'+ str(var)) 
                     smooth_data_to_graph[a_var].plot(ax=self.graph_widget.axes[2,i], title=a_var, fontsize=8, marker=marker_shape_array[i_object], markersize=3, color=line_color_array[i_object], linestyle=line_style_array[i_object])
-                elif which_parameter_to_plot =='p':
+                elif which_parameter_to_plot in {"p","P"}:
                     ##if 'CM' not in filename:
                     p_var = str('P'+ str(var)) 
                     smooth_data_to_graph[p_var].plot(ax=self.graph_widget.axes[2,i], title=p_var, fontsize=8, marker=marker_shape_array[i_object], markersize=3, color=line_color_array[i_object], linestyle=line_style_array[i_object])
