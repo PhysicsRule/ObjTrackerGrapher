@@ -355,7 +355,7 @@ def GUI_graph_trendline (title_of_table, graph_widget):
     for column in range(num_objects):
         trendline_type = []
         name = title_of_table.item(0,column).text()
-        mass = title_of_table.item(1,column).text()
+        mass = float(title_of_table.item(1,column).text())
         x_min_str = title_of_table.item(2,column).text()
         x_max_str = title_of_table.item(3,column).text()
         if x_min_str == '':
