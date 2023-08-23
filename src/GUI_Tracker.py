@@ -674,7 +674,24 @@ class MyGUI(QMainWindow):
         title_of_table.setVerticalHeaderItem(1, QTableWidgetItem('mass (kg)'))
         title_of_table.setVerticalHeaderItem(2, QTableWidgetItem('Minimum time'))
         title_of_table.setVerticalHeaderItem(3, QTableWidgetItem('Maximum time'))
-        row = 4
+        
+        column = 0
+        for (__, file_name, mass) in csv_files_array:
+            title_of_table.setItem(0,column, QTableWidgetItem(file_name))
+            title_of_table.setItem(1,column, QTableWidgetItem(str(mass)))
+            
+            for i,var in enumerate(['x','y','z']):
+                row = i + 4
+                title_of_table.setVerticalHeaderItem(row, QTableWidgetItem( str((var)+' function') ))
+                function_type_combo_box = QComboBox()
+                function_type_combo_box.addItems(['linear', 'quadratic', 'future',])
+                title_of_table.setCellWidget(row, column, function_type_combo_box)
+                # set default value for combo_box
+                # function_type_combo_box.SelectedValue = "linear"
+            # Next object
+            column += 1 
+
+        row = 7
         for i,var in enumerate(['x','y','z']):
             var_of_t = str(str(var)+'(t)') 
             v_var_of_t = str('V'+ str(var)+'(t)') 
@@ -705,19 +722,7 @@ class MyGUI(QMainWindow):
         title_of_table.setVerticalHeaderItem(25,QTableWidgetItem( 'trendline_folder_path' ))
         title_of_table.setItem(25,column,QTableWidgetItem( str(trendline_folder_path) ))
 
-        for (__, file_name, mass) in csv_files_array:
-            title_of_table.setItem(0,column, QTableWidgetItem(file_name))
-            title_of_table.setItem(1,column, QTableWidgetItem(str(mass)))
-            
-            for i,var in enumerate(['x','y','z']):
-                function_type_combo_box = QComboBox()
-                function_type_combo_box.addItems(['linear', 'quadratic', 'future',])
-                row = i + 4 
-                title_of_table.setCellWidget(row, column, function_type_combo_box)
-                # set default value for combo_box
-                # function_type_combo_box.SelectedValue = "linear"
-            # Next object
-            column += 1 
+        
 
 
     def run_graph(self, data_output_folder_path):
