@@ -226,15 +226,7 @@ def best_fit_fun_graph(fig, axes, Graph_data_window, LineS, LineC, which_paramet
             res_lsq = least_squares(funlinear, x0, loss='soft_l1', f_scale=0.1, args=(horiz_data, vert_data))        
         elif trendline == 'quadratic' or trendline == 'q':
             res_lsq = least_squares(funquadratic, x0, loss='soft_l1', f_scale=0.1, args=(horiz_data, vert_data))        
-        
-        
-        
-        #robust handels outliers better?
-        #print (*res_lsq.x)
 
-        # Generates a set of data for the curve of best fit
-        trendline_equation, Graph_data_window[y_lsq_var] = generate_data(axes, calc_file_name_path, trendline, VarForLoop, horiz_data, *res_lsq.x)
-        
         return res_lsq
 
     # BestFitFun Main Program
@@ -245,9 +237,9 @@ def best_fit_fun_graph(fig, axes, Graph_data_window, LineS, LineC, which_paramet
         
         # Find trendline of position data
         y_lsq_var = str(str(var)) 
-        if trendline != '':
-            res_lsq  = find_trendline_of_each_graph(axes, trendline, var, y_lsq_var, LineS) 
-        A, sigma, omega, beta, = res_lsq.x
+        
+        # Find trendline from position data
+        res_lsq  = find_trendline_of_each_graph(axes, trendline, var, y_lsq_var, LineS) 
 
         ''' An attempt to calculate the error for each parameter in the equation
         J = res_lsq.jac
@@ -271,6 +263,10 @@ def best_fit_fun_graph(fig, axes, Graph_data_window, LineS, LineC, which_paramet
 
         with open(calc_file_name_path, 'a') as calcs_to_file:
             calcs_to_file.write(f'mean square error,{mse}\n')
+        
+        trendline_equation, Graph_data_window[y_lsq_var] = generate_data(axes, calc_file_name_path, trendline, var, horiz_data, *res_lsq.x)
+        
+        A, sigma, omega, beta, = res_lsq.x
 
         # Find velocity data from the trendline of the position data
         y_lsq_v_var = str('V'+ str(var)) 
