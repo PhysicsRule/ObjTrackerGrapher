@@ -325,8 +325,7 @@ def best_fit_fun_graph(fig, axes, Graph_data_window, LineS, LineC, which_paramet
     data_frame = pd.DataFrame(Graph_data_window) 
     #print(smooth_data)
     smooth_data_to_graph = data_frame.set_index('Time')
-    #smooth_data_to_graph.to_csv(file_name_dataframe_path)
-    
+        
     LineC='k'
     for i,var in enumerate(['x','y','z']):
         # print('just before plotting sytle', LineS)
@@ -375,7 +374,6 @@ def GUI_graph_trendline (title_of_table, graph_widget):
     create_calc_file(calc_file_name_path)
     i = 0
     num_objects = title_of_table.columnCount()
-
     for column in range(num_objects):
         trendline_type = []
         name = title_of_table.item(0,column).text()
@@ -396,11 +394,7 @@ def GUI_graph_trendline (title_of_table, graph_widget):
         trendline_type.append(title_of_table.cellWidget(6, column).currentText()) # z
 
         print (trendline_type, trendline_type[1])
-        s = 0
-
-        #plt.ioff()
-        
-        
+         
         with open(calc_file_name_path, 'a') as calcs_to_file:
             calcs_to_file.write(f'{name}\n') 
         print(name)
@@ -410,32 +404,20 @@ def GUI_graph_trendline (title_of_table, graph_widget):
         graph_dataZoomed = pd.read_csv(file_name_dataframe_path, header=0)
 
         # Find minimum and maximum for trendlines
-    
         graph_data_window = GUI_trim(graph_dataZoomed, calc_file_name_path, x_min, x_max)
         with open(calc_file_name_path, 'a') as calcs_to_file:
             calcs_to_file.write(f'mass, {mass}, kg\n') 
 
-        # PFind trendlines and graph
+        # Find trendlines and graph
         graph_data_window = best_fit_fun_graph(fig, axes, graph_data_window, line_style_array[i], line_color_array[i], which_parameter_to_plot, mass,file_name_dataframe_path, calc_file_name_path, trendline_type)
         
-        file_name_dataframe_trendline = name  + str(s) + "trend.csv"
+        file_name_dataframe_trendline = name  + str(i) + "trend.csv"
         file_name_dataframe_path_trendline = os.path.abspath(os.path.join(trendline_folder_path + '/' + file_name_dataframe_trendline + '/' ))   
-        graph_data_window.to_csv(file_name_dataframe_path_trendline) 
-
-        s += 1        
-    
-        i += 1
-
-
-        # Save the image of the graphs when you close it
+        graph_data_window.to_csv(file_name_dataframe_path_trendline)       
         
-        # TODO save figure and 3D  when push a save figures button
-        '''
-        image_name= "graph_" + which_parameter_to_plot + ".png"
+        image_name= "graph_trendlines" + which_parameter_to_plot + ".png"
         graph_path = os.path.abspath(os.path.join(trendline_folder_path, image_name ))   
         fig.savefig(graph_path)
-        plt.show()  
-        plt.ioff()
-        '''
+        
+        i += 1
 
-            
