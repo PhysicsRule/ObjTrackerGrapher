@@ -99,47 +99,7 @@ class mlpcanvas(FigureCanvasQTAgg):
 
         super(mlpcanvas_3D, self).__init__(fig_3D)
 '''       
-class NewColorWindow(QWidget):
-    """
-    This "window" is a QWidget. If it has no parent, it
-    will appear as a free-floating window as we want.
-    """
-    def __init__(self):
-        super().__init__()
-        layout = QVBoxLayout()
-        self.label = QLabel("New Color Window")
-        #layout.addWidget(self.buttonBox)
-        #self.setLayout(layout)
-        self.resize(431, 431)
 
-        buttonBox = QDialogButtonBox(Qt.Vertical)
-        self.NewColorButton = QPushButton("New Color")
-        buttonBox.addButton(self.NewColorButton, QDialogButtonBox.ActionRole)
-        self.DoneButton = QPushButton("Done")
-        buttonBox.addButton(self.DoneButton, QDialogButtonBox.ActionRole)
-        self.CancelButton = QPushButton("Cancel")
-        buttonBox.addButton(self.CancelButton, QDialogButtonBox.ActionRole)
-        layout.addWidget(buttonBox)
-        self.setLayout(layout)
-
-        self.NewColorButton.clicked.connect(self.button_checking)
-        #self.DoneButton.clicked.connect(self.toggle_window)
-        #self.CancelButton.clicked.connect(self.toggle_window)
-
-    def button_checking():
-        print('NewColorButton')
-
-class TrendlineWindow(QWidget):
-    """
-    This "window" is a QWidget. If it has no parent, it
-    will appear as a free-floating window as we want.
-    """
-    def __init__(self):
-        super().__init__()
-        layout = QVBoxLayout()
-        self.label = QLabel("Trendline Window")
-        layout.addWidget(self.label)
-        self.setLayout(layout)
 class MyGUI(QMainWindow):
 
     def __init__(self):
@@ -157,13 +117,7 @@ class MyGUI(QMainWindow):
 
         self.toolbar=False
 
-        # default range for graph before zoomed in
-        
-        # Load existing data
-        #self.graph_widget = mlpcanvas()
         self.DataGraph.setHidden(True)
-        self.window_color = NewColorWindow()
-        self.window_trendline = TrendlineWindow()
         
         # Folder Options Hidden
         self.folder_list.setHidden(True)        # List of folders to put the data into
