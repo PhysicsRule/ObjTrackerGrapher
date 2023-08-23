@@ -391,6 +391,8 @@ def GUI_graph_trendline (title_of_table, graph_widget):
         # Find minimum and maximum for trendlines
     
         graph_data_window = GUI_trim(graph_dataZoomed, calc_file_name_path, x_min, x_max)
+        with open(calc_file_name_path, 'a') as calcs_to_file:
+            calcs_to_file.write(f'mass, {mass}, kg\n') 
 
         # PFind trendlines and graph
         graph_data_window = best_fit_fun_graph(fig, axes, graph_data_window, line_style_array[i], line_color_array[i], which_parameter_to_plot, mass,file_name_dataframe_path, calc_file_name_path, trendline_type)
