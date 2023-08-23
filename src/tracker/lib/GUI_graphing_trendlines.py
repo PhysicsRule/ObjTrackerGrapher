@@ -179,9 +179,12 @@ def best_fit_fun_graph(fig, axes, Graph_data_window, LineS, LineC, which_paramet
         elif trendline == 'linear' or trendline == 'l' :
             trendline_equation =str(Var_for_loop) + '= '+ str(A) + ' * t +' + str(sigma)
             trendline_value = A * t + sigma
+            omega = 0
+            beta = 0
         elif trendline == 'quadratic' or trendline == 'q':
             trendline_equation =str(Var_for_loop) + '= ' + str(A) + '*t^2 + ' + str(sigma) +' * t + ' + str(omega)
             trendline_value = A *t**2 + sigma * t + omega
+            beta = 0
         else:
             print(' No trendline given')
             trendline_equation = ''
@@ -356,14 +359,13 @@ def GUI_graph_trendline (title_of_table, graph_widget):
         trendline_type = []
         name = title_of_table.item(0,column).text()
         mass = float(title_of_table.item(1,column).text())
-        x_min_str = title_of_table.item(2,column).text()
-        x_max_str = title_of_table.item(3,column).text()
-        if x_min_str == '':
-            x_min = float(title_of_table.item(2,0).text())
-            x_max = float(title_of_table.item(3,0).text())
-        else:
-            x_min = float(x_min_str)
-            x_max = float(x_max_str)
+        
+        try: x_min = float(title_of_table.item(2,column).text())
+        except: x_min = float(title_of_table.item(2,0).text())
+
+        try: x_max = float(title_of_table.item(3,column).text())
+        except: x_max = float(title_of_table.item(3,0).text())
+
             # print('csv_files_array',csv_files_array)
         print(column)
         
