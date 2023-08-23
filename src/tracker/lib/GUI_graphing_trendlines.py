@@ -242,7 +242,7 @@ def best_fit_fun_graph(fig, axes, Graph_data_window, LineS, LineC, which_paramet
         # Find trendline of position data
         y_lsq_var = str(str(var) + '(t)') 
         if trendline != '':
-            A, sigma, omega, beta = find_trendline_of_each_graph(axes, trendline_type, var, y_lsq_var, LineS) 
+            A, sigma, omega, beta = find_trendline_of_each_graph(axes, trendline, var, y_lsq_var, LineS) 
 
         # Find velocity data from the trendline of the position data
         y_lsq_v_var = str('V'+ str(var) + '(t)') 
@@ -258,7 +258,7 @@ def best_fit_fun_graph(fig, axes, Graph_data_window, LineS, LineC, which_paramet
             sigma =  A
             A = 0
         # Put velocity data on the spreadsheet
-        trendline_equation,Graph_data_window[y_lsq_v_var] = generate_data(axes, calc_file_name_path, trendline, y_lsq_v_var, horiz_data, A, sigma, omega, beta, calc_file_name_path)
+        trendline_equation, Graph_data_window[y_lsq_v_var] = generate_data(axes, calc_file_name_path, trendline, y_lsq_v_var, horiz_data, A, sigma, omega, beta, calc_file_name_path)
 
         # Find the momentum data and equation from the velocity data and equation
         if which_parameter_to_plot == 'p':
@@ -286,18 +286,15 @@ def best_fit_fun_graph(fig, axes, Graph_data_window, LineS, LineC, which_paramet
     # TODO Finish KE and PE for trendlines similar to post processing
     if which_parameter_to_plot == 'E':
         y_lsq_KE_var = str('lsqA'+ str('KE')) 
-        print ('For the KE vs time graph?') 
-        trendline = input()
+        trendline = trendline_type[0]
         if trendline !='':
             find_trendline_of_each_graph(axes, trendline, 'KE', y_lsq_KE_var, LineS) 
         y_lsq_PE_var = str('lsqA'+ str('PE')) 
-        print ('For the PE vs time graph?') 
-        trendline = input()
+        trendline = trendline_type[1]
         if trendline !='':
             find_trendline_of_each_graph(axes, trendline, 'PE', y_lsq_PE_var, LineS)
         y_lsq_Total_var = str('lsqA'+ str('Total')) 
-        print ('For the Total Energy vs time graph?') 
-        trendline = input()
+        trendline = trendline_type[2]
         if trendline !='':
             find_trendline_of_each_graph(axes, trendline, 'Total', y_lsq_Total_var, LineS)
 
@@ -306,8 +303,6 @@ def best_fit_fun_graph(fig, axes, Graph_data_window, LineS, LineC, which_paramet
     smooth_data_to_graph = data_frame.set_index('Time')
     #smooth_data_to_graph.to_csv(file_name_dataframe_path)
     
-       
-
     for i,var in enumerate(['x','y','z']):
         # print('just before plotting sytle', LineS)
         y_lsq_var = str(str(var) + '(t)')
@@ -379,7 +374,7 @@ def GUI_graph_trendline (title_of_table, graph_widget):
         print (trendline_type, trendline_type[1])
         s = 0
 
-        plt.ioff()
+        #plt.ioff()
         
         
         with open(calc_file_name_path, 'a') as calcs_to_file:
@@ -409,8 +404,8 @@ def GUI_graph_trendline (title_of_table, graph_widget):
         s += 1        
     
         i += 1
-        plt.tight_layout()
-        plt.ioff()
+        #plt.tight_layout()
+        #plt.ioff()
         
         
         # exit if spacebar or esc is pressed

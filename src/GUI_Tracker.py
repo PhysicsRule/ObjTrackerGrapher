@@ -498,7 +498,7 @@ class MyGUI(QMainWindow):
         base_path = os.getcwd()
         # trendline_table_widget has variables required stored starting at row 20
         GUI_graph_trendline(self.trendline_table_widget, self.graph_widget)
-        
+        self.graph_widget.draw()
           
 
 # Presets appear
