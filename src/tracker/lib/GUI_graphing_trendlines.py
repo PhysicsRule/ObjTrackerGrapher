@@ -112,11 +112,11 @@ def GUI_graph (which_parameter_to_plot, data_output_folder_path, graph_color_ran
             smooth_data_to_graph, points_to_smooth
         )
         # Use the velocity data to find momentum or energy
-        if which_parameter_to_plot == "p":
+        if which_parameter_to_plot in {"p","P"}:
             __, graph_data, smooth_data_to_graph = FindMom(smooth_data_to_graph,
                 smooth_data_to_graph, header_list, points_to_smooth, mass
             )
-        if which_parameter_to_plot == which_parameter_to_plot == "E":
+        if which_parameter_to_plot == "E":
             __, graph_data, smooth_data_to_graph = FindKE(smooth_data_to_graph,
                 data_frame, header_list, points_to_smooth, mass
             )
@@ -240,12 +240,12 @@ def best_fit_fun_graph(fig, axes, Graph_data_window, LineS, LineC, which_paramet
         horiz_data = np.array(Graph_data_window['Time'])
         
         # Find trendline of position data
-        y_lsq_var = str(str(var) + '(t)') 
+        y_lsq_var = str(str(var)) 
         if trendline != '':
             A, sigma, omega, beta = find_trendline_of_each_graph(axes, trendline, var, y_lsq_var, LineS) 
 
         # Find velocity data from the trendline of the position data
-        y_lsq_v_var = str('V'+ str(var) + '(t)') 
+        y_lsq_v_var = str('V'+ str(var)) 
         # TODO modify so other types of graphs will work besides quadratic and linear
         # assume the trendline for the position data is either linear or quadratic
         # x(t)=At^2+sigmat+omega then v(t)=2At+sigma
@@ -261,8 +261,8 @@ def best_fit_fun_graph(fig, axes, Graph_data_window, LineS, LineC, which_paramet
         trendline_equation, Graph_data_window[y_lsq_v_var] = generate_data(axes, calc_file_name_path, trendline, y_lsq_v_var, horiz_data, A, sigma, omega, beta, calc_file_name_path)
 
         # Find the momentum data and equation from the velocity data and equation
-        if which_parameter_to_plot == 'p':
-            p_var = str('P'+ str(var) + '(t)')
+        if which_parameter_to_plot in {"p","P"}:
+            p_var = str('P'+ str(var))
             Graph_data_window[p_var] = Graph_data_window[y_lsq_v_var] * mass
             
             mom_A = A*mass
@@ -270,9 +270,9 @@ def best_fit_fun_graph(fig, axes, Graph_data_window, LineS, LineC, which_paramet
             trendline_equation,Graph_data_window[p_var] = generate_data(axes, calc_file_name_path, trendline, p_var, horiz_data, mom_A, mom_sigma, omega, beta, calc_file_name_path)
         
         # Find acceleration data from the trendline of the velocity data
-        if which_parameter_to_plot == 'a':
+        if which_parameter_to_plot in {"a","A"}:
             a_var = str('A'+ str(var))
-            y_lsq_a_var = str(str(a_var) + '(t)') 
+            y_lsq_a_var = str(str(a_var)) 
             # TODO modify so other types of graphs will work besides quadratic and linear
             
             # assume the trendline for the velocity data was linear 
@@ -303,19 +303,20 @@ def best_fit_fun_graph(fig, axes, Graph_data_window, LineS, LineC, which_paramet
     smooth_data_to_graph = data_frame.set_index('Time')
     #smooth_data_to_graph.to_csv(file_name_dataframe_path)
     
+    LineC='k'
     for i,var in enumerate(['x','y','z']):
         # print('just before plotting sytle', LineS)
-        y_lsq_var = str(str(var) + '(t)')
+        y_lsq_var = str(str(var) )
         # black line of best fit
-        smooth_data_to_graph[y_lsq_var].plot(ax=axes[0,i], label='lsq', linestyle='-', color='k', linewidth=1)
-        y_lsq_v_var = str('V'+ str(var) + '(t)') 
+        smooth_data_to_graph[y_lsq_var].plot(ax=axes[0,i], label='lsq', linestyle='-', color=LineC, linewidth=1)
+        y_lsq_v_var = str('V'+ str(var)) 
         smooth_data_to_graph[y_lsq_v_var].plot(ax=axes[1,i], label='lsq', linestyle='-', color=LineC, linewidth=1)
-        if which_parameter_to_plot == 'a':
+        if which_parameter_to_plot in {"a","A"}:
             a_var = str('A'+ str(var))
-            y_lsq_a_var = str(str(a_var) + '(t)') 
+            y_lsq_a_var = str(str(a_var) ) 
             smooth_data_to_graph[y_lsq_a_var].plot(ax=axes[2,i], label='lsq', linestyle='-', color=LineC, linewidth=1)
-        if which_parameter_to_plot == 'p':
-            p_var = str('P'+ str(var) + '(t)')
+        if which_parameter_to_plot in {"p","P"}:
+            p_var = str('P'+ str(var) )
             smooth_data_to_graph[p_var].plot(ax=axes[2,i], label='lsq', linestyle='-', color=LineC, linewidth=1)
     if which_parameter_to_plot == 'E':
         smooth_data_to_graph[y_lsq_KE_var].plot(ax=axes[2,0], label='lsq', linestyle='-', color=LineC, linewidth=1)
@@ -350,9 +351,9 @@ def GUI_graph_trendline (title_of_table, graph_widget):
     create_calc_file(calc_file_name_path)
     i = 0
     num_objects = title_of_table.columnCount()
-    trendline_type = []
 
     for column in range(num_objects):
+        trendline_type = []
         name = title_of_table.item(0,column).text()
         mass = title_of_table.item(1,column).text()
         x_min_str = title_of_table.item(2,column).text()
@@ -396,20 +397,10 @@ def GUI_graph_trendline (title_of_table, graph_widget):
         file_name_dataframe_path_trendline = os.path.abspath(os.path.join(trendline_folder_path + '/' + file_name_dataframe_trendline + '/' ))   
         graph_data_window.to_csv(file_name_dataframe_path_trendline) 
 
-        time.sleep(1)
-        
-        # Turns the plot back on and displays the curve fits
-        # If the user wants another trendline do the loop again, otherwise stop the program
-        
         s += 1        
     
         i += 1
-        #plt.tight_layout()
-        #plt.ioff()
-        
-        
-        # exit if spacebar or esc is pressed
-        #input('press return to finish')   
+
 
         # Save the image of the graphs when you close it
         

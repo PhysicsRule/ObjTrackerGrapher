@@ -50,9 +50,9 @@ def GUI_graph_setup(graph_widget, which_parameter_to_plot):
     graph_widget.axes[0,0].set(ylabel='Position (m)')
     graph_widget.axes[1,0].set(ylabel='Velocity (m/s)')
 
-    if which_parameter_to_plot =='a':
+    if which_parameter_to_plot in {"a","A"}:
         graph_widget.axes[2,0].set(ylabel='Acceleration m/s')
-    if which_parameter_to_plot =='p':
+    if which_parameter_to_plot in {"p","P"}:
         graph_widget.axes[2,0].set(ylabel='Momentum (kg*m/s)')
     if which_parameter_to_plot =='E':
         graph_widget.axes[2,0].set(ylabel='Energy (J)')
@@ -93,9 +93,9 @@ def graph_setup(which_parameter_to_plot):
     axes[0,0].set(ylabel='Position (m)')
     axes[1,0].set(ylabel='Velocity (m/s)')
 
-    if which_parameter_to_plot =='a':
+    if which_parameter_to_plot in {"a","A"}:
         axes[2,0].set(ylabel='Acceleration m/s')
-    if which_parameter_to_plot =='p':
+    if which_parameter_to_plot in {"p","P"}=='p':
         axes[2,0].set(ylabel='Momentum (kg*m/s)')
     if which_parameter_to_plot =='E':
         axes[2,0].set(ylabel='Energy (J)')
@@ -309,10 +309,10 @@ def plot_graphs(smooth_data_to_graph, LineS,LineC,marker_shape, fig, axes, which
         smooth_data_to_graph[var].plot(ax=axes[0,i], title=var, fontsize=8, marker=marker_shape, markersize=3, color=LineC,  linestyle=LineS, linewidth=0, label=filename)
         v_var = str('V'+ str(var)) 
         smooth_data_to_graph[v_var].plot(ax=axes[1,i], title=v_var, fontsize=8, marker=marker_shape, markersize=3, color=LineC, linestyle=LineS, linewidth=0)
-        if which_parameter_to_plot == 'a':
+        if which_parameter_to_plot in {"a","A"}:
             a_var = str('A'+ str(var)) 
             smooth_data_to_graph[a_var].plot(ax=axes[2,i], title=a_var, fontsize=8, marker=marker_shape, markersize=3, color=LineC, linestyle=LineS, linewidth=0)
-        elif which_parameter_to_plot =='p':
+        elif which_parameter_to_plot in {"p","P"}:
             ##if 'CM' not in filename:
             p_var = str('P'+ str(var)) 
             smooth_data_to_graph[p_var].plot(ax=axes[2,i], title=p_var, fontsize=8, marker=marker_shape, markersize=3, color=LineC, linestyle=LineS, linewidth=0)
@@ -493,7 +493,7 @@ def best_fit_fun(axes, Graph_data_window, LineS, which_parameter_to_plot, calc_f
         if trendline != '':
             find_trendline_of_each_graph(axes, trendline,v_var, y_lsq_v_var, LineS) 
 
-        if which_parameter_to_plot == 'a':
+        if which_parameter_to_plot in {"a","A"}:
             a_var = str('A'+ str(var))
             y_lsq_a_var = str('lsqA'+ str(var)) 
             print ('For the ',a_var, ' vs time graph?') 
@@ -501,7 +501,7 @@ def best_fit_fun(axes, Graph_data_window, LineS, which_parameter_to_plot, calc_f
             if trendline !='':
                 find_trendline_of_each_graph(axes, trendline, a_var, y_lsq_a_var, LineS) 
     
-        if which_parameter_to_plot == 'p':
+        if which_parameter_to_plot in {"p","P"}:
                 p_var = str('P'+ str(var))
                 y_lsq_p_var = str('lsqA'+ str(var)) 
                 print ('For the ',p_var, ' vs time graph?') 
@@ -537,10 +537,10 @@ def best_fit_fun(axes, Graph_data_window, LineS, which_parameter_to_plot, calc_f
         smooth_data_to_graph[y_lsq_var].plot(ax=axes[0,i], label='lsq', linestyle=LineS, color='y', linewidth=1)
         y_lsq_v_var = str('lsqV'+ str(var)) 
         smooth_data_to_graph[y_lsq_v_var].plot(ax=axes[1,i], label='lsq', linestyle=LineS, color='y', linewidth=1)
-        if which_parameter_to_plot == 'a':
+        if which_parameter_to_plot in {"a","A"}:
             y_lsq_a_var = str('lsqA'+ str(var)) 
             smooth_data_to_graph[y_lsq_a_var].plot(ax=axes[2,i], label='lsq', linestyle=LineS, color='y', linewidth=1)
-        if which_parameter_to_plot == 'p':
+        if which_parameter_to_plot in {"p","P"}:
             y_lsq_p_var = str('lsqA'+ str(var)) 
             smooth_data_to_graph[y_lsq_p_var].plot(ax=axes[2,i], label='lsq', linestyle=LineS, color='y', linewidth=1)
     if which_parameter_to_plot == 'E':
@@ -674,7 +674,7 @@ def best_fit_fun_graph(fig, axes, Graph_data_window, LineS, LineC, which_paramet
         trendline_equation,Graph_data_window[y_lsq_v_var] = generate_data(axes, calc_file_name_path, trendline, y_lsq_v_var, horiz_data, A, sigma, omega, beta, calc_file_name_path)
 
         # Find the momentum data and equation from the velocity data and equation
-        if which_parameter_to_plot == 'p':
+        if which_parameter_to_plot in {"p","P"}:
             p_var = str('P'+ str(var) + '(t)')
             Graph_data_window[p_var] = Graph_data_window[y_lsq_v_var] * mass
             
@@ -683,7 +683,7 @@ def best_fit_fun_graph(fig, axes, Graph_data_window, LineS, LineC, which_paramet
             trendline_equation,Graph_data_window[p_var] = generate_data(axes, calc_file_name_path, trendline, p_var, horiz_data, mom_A, mom_sigma, omega, beta, calc_file_name_path)
         
         # Find acceleration data from the trendline of the velocity data
-        if which_parameter_to_plot == 'a':
+        if which_parameter_to_plot in {"a","A"}:
             a_var = str('A'+ str(var))
             y_lsq_a_var = str(str(a_var) + '(t)') 
             # TODO modify so other types of graphs will work besides quadratic and linear
@@ -728,11 +728,11 @@ def best_fit_fun_graph(fig, axes, Graph_data_window, LineS, LineC, which_paramet
         smooth_data_to_graph[y_lsq_var].plot(ax=axes[0,i], label='lsq', linestyle='-', color='k', linewidth=1)
         y_lsq_v_var = str('V'+ str(var) + '(t)') 
         smooth_data_to_graph[y_lsq_v_var].plot(ax=axes[1,i], label='lsq', linestyle='-', color=LineC, linewidth=1)
-        if which_parameter_to_plot == 'a':
+        if which_parameter_to_plot in {"a","A"}:
             a_var = str('A'+ str(var))
             y_lsq_a_var = str(str(a_var) + '(t)') 
             smooth_data_to_graph[y_lsq_a_var].plot(ax=axes[2,i], label='lsq', linestyle='-', color=LineC, linewidth=1)
-        if which_parameter_to_plot == 'p':
+        if which_parameter_to_plot in {"p","P"}:
             p_var = str('P'+ str(var) + '(t)')
             smooth_data_to_graph[p_var].plot(ax=axes[2,i], label='lsq', linestyle='-', color=LineC, linewidth=1)
     if which_parameter_to_plot == 'E':

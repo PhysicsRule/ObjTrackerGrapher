@@ -135,11 +135,11 @@ for (file_path, file_name) in file_array:
         smooth_data_to_graph, points_to_smooth
     )
     # Use the velocity data to find momentum or energy
-    if which_parameter_to_plot == "p":
+    if which_parameter_to_plot in {"p","P"}:
         __, graph_data, smooth_data_to_graph = FindMom(smooth_data_to_graph,
             smooth_data_to_graph, header_list, points_to_smooth, mass[object_number]
         )
-    if which_parameter_to_plot == which_parameter_to_plot == "E":
+    if which_parameter_to_plot == "E":
         __, graph_data, smooth_data_to_graph = FindKE(smooth_data_to_graph,
             data_frame, header_list, points_to_smooth, mass[object_number]
         )
