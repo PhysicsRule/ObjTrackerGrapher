@@ -12,6 +12,7 @@ import matplotlib.animation as animation
 
 import pandas as pd
 from scipy import *
+from scipy import linalg
 from scipy.signal import lfilter
 from scipy.optimize import least_squares
 from scipy.optimize import curve_fit
@@ -179,9 +180,12 @@ def best_fit_fun_graph(fig, axes, Graph_data_window, LineS, LineC, which_paramet
         elif trendline == 'linear' or trendline == 'l' :
             trendline_equation =str(Var_for_loop) + '= '+ str(A) + ' * t +' + str(sigma)
             trendline_value = A * t + sigma
+            omega = 0
+            beta = 0
         elif trendline == 'quadratic' or trendline == 'q':
             trendline_equation =str(Var_for_loop) + '= ' + str(A) + '*t^2 + ' + str(sigma) +' * t + ' + str(omega)
             trendline_value = A *t**2 + sigma * t + omega
+            beta = 0
         else:
             print(' No trendline given')
             trendline_equation = ''
@@ -192,7 +196,7 @@ def best_fit_fun_graph(fig, axes, Graph_data_window, LineS, LineC, which_paramet
         return trendline_equation, trendline_value
 
     #This will find call the functions to generate the data for each graph given the y_axis
-    def find_trendline_of_each_graph(axes, trendline, VarForLoop, y_axis_lsq, LineS):
+    def find_trendline_of_each_graph(axes, trendline, VarForLoop, y_lsq_var, LineS):
         # global graph_data
 
         vert_data = np.array(Graph_data_window[VarForLoop])
@@ -222,16 +226,8 @@ def best_fit_fun_graph(fig, axes, Graph_data_window, LineS, LineC, which_paramet
             res_lsq = least_squares(funlinear, x0, loss='soft_l1', f_scale=0.1, args=(horiz_data, vert_data))        
         elif trendline == 'quadratic' or trendline == 'q':
             res_lsq = least_squares(funquadratic, x0, loss='soft_l1', f_scale=0.1, args=(horiz_data, vert_data))        
-        
-        
-        
-        #robust handels outliers better?
-        #print (*res_lsq.x)
 
-        # Generates a set of data for the curve of best fit
-        trendline_equation, Graph_data_window[y_axis_lsq] = generate_data(axes, calc_file_name_path, trendline, VarForLoop, horiz_data, *res_lsq.x)
-        
-        return res_lsq.x
+        return res_lsq
 
     # BestFitFun Main Program
     for i,var in enumerate(['x','y','z']):
@@ -241,8 +237,36 @@ def best_fit_fun_graph(fig, axes, Graph_data_window, LineS, LineC, which_paramet
         
         # Find trendline of position data
         y_lsq_var = str(str(var)) 
-        if trendline != '':
-            A, sigma, omega, beta = find_trendline_of_each_graph(axes, trendline, var, y_lsq_var, LineS) 
+        
+        # Find trendline from position data
+        res_lsq  = find_trendline_of_each_graph(axes, trendline, var, y_lsq_var, LineS) 
+
+        ''' An attempt to calculate the error for each parameter in the equation
+        J = res_lsq.jac
+        cov_inv = J.T.dot(J)
+        # Remove rows with zeros
+        indices = np.all(cov_inv == 0, axis=1)
+        nonzeros = cov_inv[np.logical_not(indices)]
+        
+        # Remove columns with zeros
+        idx = np.argwhere(np.all(nonzeros[..., :] == 0, axis=0))
+        cov_inv = np.delete(nonzeros, idx, axis=1)
+        print(cov_inv)
+        cov = linalg.inv(cov_inv)
+        variance = np.sqrt(np.diagonal(cov))
+        mse = (res_lsq.fun**2).mean()
+        variance = variance * mse
+        '''
+        mse = (res_lsq.fun**2).mean()
+        # dFit = errFit( np.linalg.inv(np.dot(result.jac.T, result.jac)), (errFunc(result.x, xdata, ydata)**2).sum()/(len(ydata)-len(pstart) ) ) 
+        # https://stackoverflow.com/questions/40187517/getting-covariance-matrix-of-fitted-parameters-from-scipy-optimize-least-squares
+
+        with open(calc_file_name_path, 'a') as calcs_to_file:
+            calcs_to_file.write(f'mean square error,{mse}\n')
+        
+        trendline_equation, Graph_data_window[y_lsq_var] = generate_data(axes, calc_file_name_path, trendline, var, horiz_data, *res_lsq.x)
+        
+        A, sigma, omega, beta, = res_lsq.x
 
         # Find velocity data from the trendline of the position data
         y_lsq_v_var = str('V'+ str(var)) 
@@ -288,15 +312,15 @@ def best_fit_fun_graph(fig, axes, Graph_data_window, LineS, LineC, which_paramet
         y_lsq_KE_var = str('lsqA'+ str('KE')) 
         trendline = trendline_type[0]
         if trendline !='':
-            find_trendline_of_each_graph(axes, trendline, 'KE', y_lsq_KE_var, LineS) 
+            res_lsq = find_trendline_of_each_graph(axes, trendline, 'KE', y_lsq_KE_var, LineS) 
         y_lsq_PE_var = str('lsqA'+ str('PE')) 
         trendline = trendline_type[1]
         if trendline !='':
-            find_trendline_of_each_graph(axes, trendline, 'PE', y_lsq_PE_var, LineS)
+            res_lsq = find_trendline_of_each_graph(axes, trendline, 'PE', y_lsq_PE_var, LineS)
         y_lsq_Total_var = str('lsqA'+ str('Total')) 
         trendline = trendline_type[2]
         if trendline !='':
-            find_trendline_of_each_graph(axes, trendline, 'Total', y_lsq_Total_var, LineS)
+            res_lsq = find_trendline_of_each_graph(axes, trendline, 'Total', y_lsq_Total_var, LineS)
 
     data_frame = pd.DataFrame(Graph_data_window) 
     #print(smooth_data)
@@ -356,14 +380,13 @@ def GUI_graph_trendline (title_of_table, graph_widget):
         trendline_type = []
         name = title_of_table.item(0,column).text()
         mass = float(title_of_table.item(1,column).text())
-        x_min_str = title_of_table.item(2,column).text()
-        x_max_str = title_of_table.item(3,column).text()
-        if x_min_str == '':
-            x_min = float(title_of_table.item(2,0).text())
-            x_max = float(title_of_table.item(3,0).text())
-        else:
-            x_min = float(x_min_str)
-            x_max = float(x_max_str)
+        
+        try: x_min = float(title_of_table.item(2,column).text())
+        except: x_min = float(title_of_table.item(2,0).text())
+
+        try: x_max = float(title_of_table.item(3,column).text())
+        except: x_max = float(title_of_table.item(3,0).text())
+
             # print('csv_files_array',csv_files_array)
         print(column)
         
@@ -389,6 +412,8 @@ def GUI_graph_trendline (title_of_table, graph_widget):
         # Find minimum and maximum for trendlines
     
         graph_data_window = GUI_trim(graph_dataZoomed, calc_file_name_path, x_min, x_max)
+        with open(calc_file_name_path, 'a') as calcs_to_file:
+            calcs_to_file.write(f'mass, {mass}, kg\n') 
 
         # PFind trendlines and graph
         graph_data_window = best_fit_fun_graph(fig, axes, graph_data_window, line_style_array[i], line_color_array[i], which_parameter_to_plot, mass,file_name_dataframe_path, calc_file_name_path, trendline_type)
