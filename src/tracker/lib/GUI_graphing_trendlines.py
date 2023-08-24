@@ -18,8 +18,10 @@ from scipy.optimize import least_squares
 from scipy.optimize import curve_fit
 import os
 import time
+from PyQt5.QtWidgets import *
 
 import numpy as np
+import csv
 
 from tracker.lib.general import GUI_creates_an_array_of_csv_files
 from tracker.lib.setup_files import create_new_folder, create_calc_file
@@ -420,4 +422,41 @@ def GUI_graph_trendline (title_of_table, graph_widget):
         fig.savefig(graph_path)
         
         i += 1
+
+    return calc_file_name_path
+    
+def GUI_show_equations_on_table(title_of_table, calc_file_name_path ):
+    first_row = 5
+    data =[]
+    max_rows = 18
+    column = 0
+    row_calc_file = -1
+    row_table = 1
+
+    ###XXX Does not work!!!
+    
+    with open(calc_file_name_path) as csvfile:
+        
+        calc_file = csv.reader(csvfile, delimiter=';')
+        for row in calc_file:
+            row_calc_file += 1
+            row_table += 1
+            data.append (row)
+            
+            if (row_calc_file < first_row):
+                    continue
+            if (row_calc_file-4)%13 == 0:
+                row_table -=12
+                column += 1
+
+            ##if  'mean square error' in cell:
+            ##    cell = data[1]
+            title_of_table.setItem(row_table ,column, QTableWidgetItem(str(row)))
+
+            
+            
+
+            
+            
+
 
