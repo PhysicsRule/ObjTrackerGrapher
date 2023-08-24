@@ -31,7 +31,7 @@ from tracker.lib.general import find_objects_to_graph
 from tracker.lib.user_input import make_new_folder
 from tracker.lib.GUI_color_tracker import GUI_color_tracking, find_lower_upper_bounds_on_screen
 from tracker.lib.GUI_real_time_color_tracker import GUI_real_time_color_tracking
-from tracker.lib.GUI_graphing_trendlines import GUI_graph, GUI_graph_trendline, plot_style_color
+from tracker.lib.GUI_graphing_trendlines import GUI_graph, GUI_graph_trendline, plot_style_color, GUI_show_equations_on_table
 from tracker.lib.graphing import GUI_graph_setup, three_D_graphs, plot_graphs, GUI_trim
 from tracker.lib.intel_realsense_D435i import record_bag_file, find_and_config_device, read_bag_file_and_config
 from tracker.lib.GUI_library import reload_table
@@ -451,8 +451,9 @@ class MyGUI(QMainWindow):
     def find_trendlines_button_pressed(self):
         base_path = os.getcwd()
         # trendline_table_widget has variables required stored starting at row 20
-        GUI_graph_trendline(self.trendline_table_widget, self.graph_widget)
+        calc_file_name_path = GUI_graph_trendline(self.trendline_table_widget, self.graph_widget)
         self.graph_widget.draw()
+        GUI_show_equations_on_table(self.trendline_table_widget, calc_file_name_path )
           
 
 # Presets appear
@@ -656,10 +657,10 @@ class MyGUI(QMainWindow):
             else:
                 third_var_of_t = str(parameters.which_parameter_to_plot + str(var_of_t)) # Example Ax or Py
             print(i)
-            title_of_table.setVerticalHeaderItem(row + i*4, QTableWidgetItem(var_of_t))
-            title_of_table.setVerticalHeaderItem(row + i*4 + 1, QTableWidgetItem(v_var_of_t))
-            title_of_table.setVerticalHeaderItem(row + i*4 + 2, QTableWidgetItem(third_var_of_t))
-            title_of_table.setVerticalHeaderItem(row + i*4 + 3, QTableWidgetItem(str('R^2 for ' + var_of_t)))
+            title_of_table.setVerticalHeaderItem(row + i*4, QTableWidgetItem(str('R^2 for ' + var_of_t)))
+            title_of_table.setVerticalHeaderItem(row + i*4 + 1, QTableWidgetItem(var_of_t))
+            title_of_table.setVerticalHeaderItem(row + i*4 + 2, QTableWidgetItem(v_var_of_t))
+            title_of_table.setVerticalHeaderItem(row + i*4 + 3, QTableWidgetItem(third_var_of_t))
         
         column = 0
         # pass information to the trendline procedure in the table so user can see too
