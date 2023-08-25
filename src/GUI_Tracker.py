@@ -29,7 +29,7 @@ from mpl_toolkits import mplot3d
 
 from tracker.lib.general import find_objects_to_graph
 from tracker.lib.user_input import make_new_folder
-from tracker.lib.GUI_color_tracker import GUI_color_tracking, find_lower_upper_bounds_on_screen
+from tracker.lib.GUI_tracker import GUI_tracking, find_lower_upper_bounds_on_screen
 from tracker.lib.GUI_real_time_color_tracker import GUI_real_time_color_tracking
 from tracker.lib.GUI_graphing_trendlines import GUI_graph, GUI_graph_trendline, plot_style_color, GUI_show_equations_on_table
 from tracker.lib.graphing import GUI_graph_setup, three_D_graphs, plot_graphs, GUI_trim
@@ -603,14 +603,27 @@ class MyGUI(QMainWindow):
                     self.color_ranges = np.load(dir_path_npy)
                     print('color range from previous own colors' , self.color_ranges)                 
             
-            # Save the np file in the output folder so you know which one was used
-            dir_out_path_npy = os.path.abspath(os.path.join(data_output_folder_path , self.color_ranges_text,'')) 
-            np.save(dir_out_path_npy , self.color_ranges)
+
             ##TODO save the numpy as a text file as well so it is easy to read
             #txt_npy_name = str(self.color_ranges_text + '.txt')
             #dir_out_path_txt_npy = os.path.abspath(os.path.join(data_output_folder_path , txt_npy_name )) 
             #np.savetxt(dir_out_path_txt_npy, np.array(self.color_ranges))
-            
+
+        # Object tracking. These values put in so we can use same tracker program as color    
+        elif type_of_tracking == 'obj_tracker':
+            lower = " "
+            upper = " "
+            ## TODO if you want mulitple objects, have a hstack of the number of objects to track
+            ## TODO XXX have the user input the radius !!!
+            radius_meters = 0.10
+            ##TODO Have the user input the mass
+            mass = 0.0
+            self.color_ranges = np.array([(ast.literal_eval(lower),ast.literal_eval(upper), (color),(radius_meters), (mass) )],dtype=dt)
+            self.color_ranges_text = 'nothing'
+
+        # Save the np file in the output folder so you know which one was used
+        dir_out_path_npy = os.path.abspath(os.path.join(data_output_folder_path , self.color_ranges_text,'')) 
+        np.save(dir_out_path_npy , self.color_ranges)
         ## TODO use a different value if needed to use src
         src=4
 
@@ -827,7 +840,7 @@ class MyGUI(QMainWindow):
         # config by looking at the camera (remove this from tracking program below)
         # find output folder here instead of 
         pipeline = find_and_config_device()
-        GUI_color_tracking(pipeline, src, type_of_tracking, image, color_ranges, min_radius_object, data_output_folder_path, input_folder, data_output)
+        GUI_tracking(pipeline, src, type_of_tracking, image, color_ranges, min_radius_object, data_output_folder_path, input_folder, data_output)
         
 
     def record_bag(self):
@@ -849,7 +862,7 @@ class MyGUI(QMainWindow):
         bag_folder_path =  os.path.abspath(os.path.join(data_output_folder_path + "/" + bag_file))
         pipeline = read_bag_file_and_config(types_of_streams_saved, data_output_folder_path, data_output_folder , bag_folder_path)
 
-        GUI_color_tracking(pipeline, src, type_of_tracking, image, color_ranges, min_radius_object, data_output_folder_path, input_folder, data_output)
+        GUI_tracking(pipeline, src, type_of_tracking, image, color_ranges, min_radius_object, data_output_folder_path, input_folder, data_output)
 
 
 

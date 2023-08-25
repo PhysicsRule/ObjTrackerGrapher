@@ -14,6 +14,7 @@ from tracker.lib.color import make_color_hsv, find_object_by_color
 from tracker.lib.general import open_the_video 
 from tracker.lib.color import GUI_find_hsv_bounds
 
+
 def find_lower_upper_bounds_on_screen(the_array):
     print('selecting colors')
     pipeline = find_and_config_device()
@@ -24,7 +25,7 @@ def find_lower_upper_bounds_on_screen(the_array):
     return output
 
 
-def GUI_color_tracking(pipeline, src, type_of_tracking, image,color_ranges, min_radius_of_object, data_output_folder_path, input_folder, data_output ):
+def GUI_tracking(pipeline, src, type_of_tracking, image,color_ranges, min_radius_of_object, data_output_folder_path, input_folder, data_output ):
     
     make_csv_files(color_ranges, data_output_folder_path)
     
@@ -40,6 +41,11 @@ def GUI_color_tracking(pipeline, src, type_of_tracking, image,color_ranges, min_
 
     # Find the furthest distance and in the future find a different origin TODO
     zeroed_x, zeroed_y, zeroed_z, clipping_distance = select_furthest_distance_color(pipeline)
+    if type_of_tracking == 'obj_tracker':
+        print('select bounding box')
+        bbox, ret = GUI_select_bounding_box(pipeline):
+    
+        
 
     # Now that everything is setup, track the objects
     first_time_check = True
@@ -61,8 +67,10 @@ def GUI_color_tracking(pipeline, src, type_of_tracking, image,color_ranges, min_
 
         for (lower,upper, color_name, radius_meters, mass) in color_ranges:
             # Find location of the object in x,y pixels using color masks
-            x_pixel, y_pixel, radius, mask = find_object_by_color(cv_color,hsv, lower,upper, color_name, radius_meters, mass, min_radius_of_object, max_num_point)     
-
+            if type_of_tracking == 'color':
+                x_pixel, y_pixel, radius, mask = find_object_by_color(cv_color,hsv, lower,upper, color_name, radius_meters, mass, min_radius_of_object, max_num_point)     
+            elif type_of_tracking == 'obj_tracker':
+                x_pixel, y_pixel, radius, mask = 
             if x_pixel is None:
                 continue
             # get.distance is a little slower so only use if necessarycenter = round(aligned_depth_frame.get_distance(int(x),int(y)),4)

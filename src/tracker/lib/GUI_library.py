@@ -6,7 +6,7 @@ from pyqtgraph.Qt import QtGui, QtCore
 import ast
 
 import numpy as np
-from tracker.lib.GUI_color_tracker import find_lower_upper_bounds_on_screen
+from tracker.lib.GUI_tracker import find_lower_upper_bounds_on_screen
 
 
 def reload_table (title_of_table):
