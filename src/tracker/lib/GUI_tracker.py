@@ -13,7 +13,7 @@ from tracker.lib.intel_realsense_D435i import get_all_frames_color, get_depth_me
 from tracker.lib.color import make_color_hsv, find_object_by_color
 from tracker.lib.general import open_the_video 
 from tracker.lib.color import GUI_find_hsv_bounds
-from tracker.lib.object_tracking import GUI_select_bounding_box, find_xyz_using_tracking_method
+from tracker.lib.object_tracking import GUI_select_bounding_box, find_xy_using_tracking_method, draw_bounding_box
 
 
 def find_lower_upper_bounds_on_screen(the_array):
@@ -34,7 +34,7 @@ def GUI_tracking(pipeline, src, type_of_tracking, image,color_ranges, min_radius
     zeroed_x, zeroed_y, zeroed_z, clipping_distance = select_furthest_distance_color(pipeline)
     if type_of_tracking == 'obj_tracker':
         print('select bounding box')
-        bbox, ret = GUI_select_bounding_box(pipeline)    
+        bbox, ret, tracker = GUI_select_bounding_box(pipeline)    
 
     # Now that everything is setup, track the objects
     first_time_check = True
@@ -58,7 +58,10 @@ def GUI_tracking(pipeline, src, type_of_tracking, image,color_ranges, min_radius
             if type_of_tracking == 'color':
                 x_pixel, y_pixel, radius, mask = find_object_by_color(cv_color,hsv, lower,upper, color_name, radius_meters, mass, min_radius_of_object, max_num_point)     
             elif type_of_tracking == 'obj_tracker':
-                x_pixel, y_pixel, radius, mask = find_xyz_using_tracking_method
+                depth_image = np.asanyarray(rs_depth.get_data())
+                x_pixel, y_pixel, bbox = find_xy_using_tracking_method(tracker, bbox, image)
+                draw_bounding_box(image, bbox)
+
             if x_pixel is None:
                 continue
             # get.distance is a little slower so only use if necessarycenter = round(aligned_depth_frame.get_distance(int(x),int(y)),4)
@@ -93,6 +96,7 @@ def GUI_tracking(pipeline, src, type_of_tracking, image,color_ranges, min_radius
         if image.show_depth:
             # Show depth colormap & color feed
             cv2.circle(depth_colormap, (int(x_pixel), int(y_pixel)), int(radius), (255, 255, 255), 2)
+            
             cv2.imshow('depth', depth_colormap)
             cv2.moveWindow('depth',850,0)
         if image.show_RGB:
