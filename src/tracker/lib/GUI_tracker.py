@@ -13,6 +13,7 @@ from tracker.lib.intel_realsense_D435i import get_all_frames_color, get_depth_me
 from tracker.lib.color import make_color_hsv, find_object_by_color
 from tracker.lib.general import open_the_video 
 from tracker.lib.color import GUI_find_hsv_bounds
+from tracker.lib.object_tracking import GUI_select_bounding_box, find_xyz_using_tracking_method
 
 
 def find_lower_upper_bounds_on_screen(the_array):
@@ -27,25 +28,13 @@ def find_lower_upper_bounds_on_screen(the_array):
 
 def GUI_tracking(pipeline, src, type_of_tracking, image,color_ranges, min_radius_of_object, data_output_folder_path, input_folder, data_output ):
     
-    make_csv_files(color_ranges, data_output_folder_path)
-    
+    make_csv_files(color_ranges, data_output_folder_path)   
     max_num_point=len(color_ranges)
-    ## GUI TODO Have GUI real existing folders and provide an optional name for a new folder name being the last one listed with the number incremented by 1
-    
-
-    # Configure and setup the cameras
-    
     warm_up_camera(pipeline)
-    # OpenCV initialization
-
-
-    # Find the furthest distance and in the future find a different origin TODO
     zeroed_x, zeroed_y, zeroed_z, clipping_distance = select_furthest_distance_color(pipeline)
     if type_of_tracking == 'obj_tracker':
         print('select bounding box')
-        bbox, ret = GUI_select_bounding_box(pipeline):
-    
-        
+        bbox, ret = GUI_select_bounding_box(pipeline)    
 
     # Now that everything is setup, track the objects
     first_time_check = True
@@ -58,8 +47,7 @@ def GUI_tracking(pipeline, src, type_of_tracking, image,color_ranges, min_radius
         # Get frames if valid
         frame_result = get_all_frames_color(pipeline)
         if not frame_result:
-            continue
-        
+            continue        
         (cv_color, rs_color, rs_depth), timestamp = frame_result
             
         ## Color Tracking by making a mask for each color tracked
@@ -70,7 +58,7 @@ def GUI_tracking(pipeline, src, type_of_tracking, image,color_ranges, min_radius
             if type_of_tracking == 'color':
                 x_pixel, y_pixel, radius, mask = find_object_by_color(cv_color,hsv, lower,upper, color_name, radius_meters, mass, min_radius_of_object, max_num_point)     
             elif type_of_tracking == 'obj_tracker':
-                x_pixel, y_pixel, radius, mask = 
+                x_pixel, y_pixel, radius, mask = find_xyz_using_tracking_method
             if x_pixel is None:
                 continue
             # get.distance is a little slower so only use if necessarycenter = round(aligned_depth_frame.get_distance(int(x),int(y)),4)

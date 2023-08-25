@@ -12,7 +12,6 @@ from tracker.lib.user_input import select_object_tracker_method
 def GUI_select_bounding_box(pipeline):
     print('select bounding box')
     check_no_selection = True
-    print('find the bbox')
     while check_no_selection:
         frame_result = get_all_frames_color(pipeline)
         if not frame_result:
