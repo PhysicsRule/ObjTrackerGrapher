@@ -34,8 +34,9 @@ from tracker.lib.GUI_real_time_color_tracker import GUI_real_time_color_tracking
 from tracker.lib.GUI_graphing_trendlines import GUI_graph, GUI_graph_trendline, plot_style_color, GUI_show_equations_on_table
 from tracker.lib.graphing import GUI_graph_setup, three_D_graphs, plot_graphs, GUI_trim
 from tracker.lib.intel_realsense_D435i import record_bag_file, find_and_config_device, read_bag_file_and_config
-from tracker.lib.GUI_library import reload_table
+# from tracker.lib.GUI_library import reload_table
 from tracker.lib.color import choose_or_create_color_range
+from tracker.lib.GUI_load_tables import load_data, load_data_objects, reload_table
 
 ## TODO possibly use this instead of passing each individual piece
 class folder_info:
@@ -277,8 +278,6 @@ class MyGUI(QMainWindow):
         dir_path = os.path.abspath(os.path.join(base_path, 'data', data, ''))
         # print('data file path', dir_path)
         list_files = []
-        list_files.append('-Select your own color pallet-')
-        list_files.append('Create new set of objects')
         for f in os.listdir(dir_path):
             list_files.append(f)
         self.combo_box_objects.addItems(list_files)
@@ -310,6 +309,8 @@ class MyGUI(QMainWindow):
             pass
         # return data_output_folder, data_output_folder_path
 
+
+
     def define_objects_shown(self):
         # Provide a table for user to state information for the object
         self.table_widget_objects.setColumnWidth(0,50)
@@ -318,7 +319,11 @@ class MyGUI(QMainWindow):
         self.table_widget_objects.setColumnWidth(3,80)
         # Hide onscreen for now. We may want to select the objets here in the future
         self.table_widget_objects.setColumnWidth(4,0)
-        objects_to_track  = self.load_data_objects(self.table_widget_objects) 
+        objects_to_track  = load_data_objects(self.table_widget_objects) 
+
+
+
+
 
     def color_button_pressed(self):
         self.data_output = 'color_o'
@@ -373,67 +378,7 @@ class MyGUI(QMainWindow):
         webbrowser.open('https://physicsrule.github.io/SkeletalTracking.github.io/')
         #webbrowser.get("google-chrome").open('https://physicsrule.github.io/SkeletalTracking.github.io/')
     
-    def load_data(self,type_of_tracking, input_folder, title_of_table):
-        # load the dictionary
-        ## TODO make this a file to read
-        objects_to_track = [{
-       'color' : "green" , 'lower' : (29, 67, 6) , 'upper' : (64, 255, 255) , 'radius' : 10 , 'mass' : 0.0},
-        {'color' : "red" , 'lower' : (0, 146, 12) , 'upper' : (11, 255, 206) , 'radius' : 10 , 'mass' : 0.0},
-        {'color' : "blue" , 'lower' : (58, 71, 52) , 'upper' : (125, 255, 170) , 'radius' : 10 , 'mass' : 0.0},
-        {'color' : "purple" , 'lower' : (139,  68,  78) , 'upper' : (170, 255, 255) , 'radius' : 10 , 'mass' : 0.0},
-        {'color' : "yellow" , 'lower' : (20, 36, 4) , 'upper' : (71, 238, 213), 'radius' : 10 , 'mass' : 0.0},
-        {'color' : "orange" , 'lower' : (0, 123, 189), 'upper' : (24, 255, 255) , 'radius' : 10 , 'mass' : 0.0}]
-        row = 0
-        title_of_table.setRowCount(len(objects_to_track))
-        for object in objects_to_track:
-            # Checkbox to chose default colors
-            item = QTableWidgetItem(''.format(row, 0))
-            item.setFlags(Qt.ItemFlag.ItemIsUserCheckable|Qt.ItemFlag.ItemIsEnabled)
-            item.setCheckState(Qt.CheckState.Unchecked)
-            title_of_table.setItem(row, 0, item)
-            # Columns for default colors
-            title_of_table.setItem(row,1, QTableWidgetItem(object[type_of_tracking]))
-            title_of_table.setItem(row,2, QTableWidgetItem(str(object['radius'])))
-            title_of_table.setItem(row,3, QTableWidgetItem(str(object['mass'])))
-            title_of_table.setItem(row,4, QTableWidgetItem(str((object['lower']))))
-            title_of_table.setItem(row,5, QTableWidgetItem(str((object['upper']))))
-            item_on_screen = QTableWidgetItem(''.format(row, 6))
-            item_on_screen.setFlags(Qt.ItemFlag.ItemIsUserCheckable|Qt.ItemFlag.ItemIsEnabled)
-            item_on_screen.setCheckState(Qt.CheckState.Unchecked)
-            title_of_table.setItem(row, 6, item_on_screen )
-            row +=1
-
-    def load_data_objects(self, title_of_table):
-        # load the dictionary
-        ## TODO make this a file to read
-        objects_to_track = [{
-       'name' : "object1" , 'radius' : 10 , 'mass' : 0.0},
-        {'name' : "object2" , 'radius' : 10 , 'mass' : 0.0},
-        {'name' : "object3" , 'radius' : 10 , 'mass' : 0.0},
-        {'name' : "object4" ,  'radius' : 10 , 'mass' : 0.0},
-        {'name' : "object5" , 'radius' : 10 , 'mass' : 0.0},
-        {'name' : "object6" , 'radius' : 10 , 'mass' : 0.0}]
-        row = 0
-        title_of_table.setRowCount(len(objects_to_track))
-        for object in objects_to_track:
-            # Checkbox to chose default colors
-            item = QTableWidgetItem(''.format(row, 0))
-            item.setFlags(Qt.ItemFlag.ItemIsUserCheckable|Qt.ItemFlag.ItemIsEnabled)
-            if row == 0: 
-                item.setCheckState(Qt.CheckState.Checked)
-            else: 
-                item.setCheckState(Qt.CheckState.Unchecked)
-            title_of_table.setItem(row, 0, item)
-            # Columns for default colors
-            title_of_table.setItem(row,1, QTableWidgetItem(str(object['name'])))
-            title_of_table.setItem(row,2, QTableWidgetItem(str(object['radius'])))
-            title_of_table.setItem(row,3, QTableWidgetItem(str(object['mass'])))
-            # For future selection of object??
-            item_on_screen = QTableWidgetItem(''.format(row, 4))
-            item_on_screen.setFlags(Qt.ItemFlag.ItemIsUserCheckable|Qt.ItemFlag.ItemIsEnabled)
-            item_on_screen.setCheckState(Qt.CheckState.Unchecked)
-            title_of_table.setItem(row, 4, item_on_screen )
-            row +=1
+    
 
     def default_colors_shown(self):
         type_of_tracking ='color'
@@ -447,7 +392,7 @@ class MyGUI(QMainWindow):
         self.table_widget_color.setColumnWidth(4,0)
         self.table_widget_color.setColumnWidth(5,0)
         self.table_widget_color.setColumnWidth(6,0)
-        objects_to_track  = self.load_data(type_of_tracking, input_folder,self.table_widget_color) 
+        objects_to_track  = load_data(type_of_tracking, input_folder,self.table_widget_color) 
 
         self.hide_default_colors(False)
         self.hide_choose(True)
@@ -487,7 +432,7 @@ class MyGUI(QMainWindow):
         self.table_widget_color_2.setColumnWidth(3,52)
         self.table_widget_color_2.setColumnWidth(4,80)
         self.table_widget_color_2.setColumnWidth(5,80)
-        objects_to_track  = self.load_data(type_of_tracking, input_folder, self.table_widget_color_2) 
+        objects_to_track  = load_data(type_of_tracking, input_folder, self.table_widget_color_2) 
         self.table_widget_color_2.setColumnWidth(6,56)
         self.find_lower_upper_button.setHidden(False)
 
@@ -883,6 +828,7 @@ class MyGUI(QMainWindow):
         # print(self.table_widget_color_2.rowCount())
         self.table_widget_color_2 = reload_table(self.table_widget_color_2 )
         self.color_ranges_text = self.lineEdit_define_color_name.text
+        return
 
 
 
