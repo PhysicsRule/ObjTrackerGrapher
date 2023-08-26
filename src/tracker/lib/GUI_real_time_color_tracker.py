@@ -28,8 +28,13 @@ from tracker.lib.color import make_color_hsv, find_object_by_color_with_red, fin
 from tracker.lib.general import open_the_video, create_data_file, make_default_folder 
 from tracker.lib.graphs_right_after import nine_graphs
 
-def GUI_real_time_color_tracking(src, type_of_tracking, image ,color_ranges , min_radius_object, data_output_folder_path):
-
+def GUI_real_time_color_tracking(image ,color_ranges , min_radius_object, data_output_folder_path, tracking_info):
+    """
+    Tracks 1 object using color tracking while watching a graph
+    x: blue line
+    y: red line
+    z: green line
+    """
     app = pg.mkQApp("Realtime_Graphing")
 
     class DataGraph(pg.PlotWidget):

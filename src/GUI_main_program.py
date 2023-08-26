@@ -39,7 +39,7 @@ from tracker.lib.color import choose_or_create_color_range
 from tracker.lib.GUI_load_tables import load_data, load_data_objects, reload_table
 
 ## TODO possibly use this instead of passing each individual piece
-class tracking_info:
+class tracking:
     """
     Information about the tracking type the data is saved with
     """  
@@ -360,8 +360,11 @@ class MyGUI(QMainWindow):
 
 
     def color_button_pressed(self):
+        self.tracking_info = tracking(types_of_streams_saved ='color',
+                                         type_of_tracking = 'color',
+                                         input_folder = 'color_i',
+                                         output_folder = 'color_o')
 
-        self.data_output = 'color_o'
         self.hide_color_radiobuttons(False)
         # Select the color from a list, use a predefined preset, or create a new one.
         self.table_widget_objects.setHidden(True)
@@ -369,14 +372,15 @@ class MyGUI(QMainWindow):
         self.default_colors_shown()
         self.hide_folder_details(False)
         self.hide_graph_options(False)
-        self.list_folders(self.data_output)
+        self.list_folders(self.tracking_info.output_folder)
 
 
     def infrared_90_button_pressed(self):
         # Define the the folders that will be used
-        type_of_tracking = 'obj_tracker'
-        input_folder = 'infrared_i'
-        data_output = 'infrared_o'
+        self.tracking_info = tracking(types_of_streams_saved ='infrared',
+                                         type_of_tracking = 'obj_tracker',
+                                         input_folder = 'infrared_i',
+                                         output_folder = 'infrared_o')
         # Color options are hidden
         self.hide_color_radiobuttons(True)
         self.table_widget_objects.setHidden(False)
@@ -561,33 +565,19 @@ class MyGUI(QMainWindow):
 
             # when tracking
             # data_output_folder_path=self.get_output_folder_path(base_path, str(time.time()))
-            input_folder='color_i'
-            data_output ='color_o'
-            return src, type_of_tracking, self.image, self.color_ranges, min_radius_object, data_output_folder_path, input_folder, data_output
+            self.tracking_info.input_folder='color_i'
+            self.tracking_info.output_folder ='color_o'
+            return src, type_of_tracking, self.image, self.color_ranges, min_radius_object, data_output_folder_path, self.tracking_info.input_folder, self.tracking_info.output_folder
 
         #  self.image = get_settings_to_pass(self)
         self.image = image_option(self.show_image_check.isChecked(), self.save_image_check.isChecked(), self.show_depth_check.isChecked(), self.save_depth_check.isChecked(), self.show_tracking_mask_check.isChecked(),self.save_tracking_mask_check.isChecked(), self.save_video.isChecked())
-        # self.color_info = tracking_info('color','color','color_i','color_o')
-        self.color_info = tracking_info(types_of_streams_saved ='color',
-                                         type_of_tracking = 'color',
-                                         input_folder = 'color_i',
-                                         output_folder = 'color_o')
+        
 
         ## TODO Add spot in GUI for this later. How do I do this?
         min_radius_object = 5
 
-        # pass the folder names for correct storage location and type of tracking
-        ## pass type of tracking into this function
-        type_of_tracking = self.color_info.type_of_tracking
-        print()
-        if type_of_tracking == 'color':
-            input_folder = 'color_i'
-            data_output = 'color_o'
-        elif type_of_tracking == 'infrared':
-            input_folder = 'infrared_i'
-            data_output = 'infrared_o'
         
-        data_output_folder_path = self.get_output_folder_path(base_path, data_output)
+        data_output_folder_path = self.get_output_folder_path(base_path, self.tracking_info.output_folder)
 
         # Store the array of colors to track in the output directory
         # color choice
@@ -597,7 +587,7 @@ class MyGUI(QMainWindow):
         # object count
         i = 0
         new_color_ranges =[]
-        if type_of_tracking == 'color':
+        if self.tracking_info.type_of_tracking == 'color':
             if self.select_default_colors.isChecked() or self.define_colors.isChecked():
                 if self.select_default_colors.isChecked():
                 # Just use the default colors and adjust the mass and radius
@@ -632,7 +622,7 @@ class MyGUI(QMainWindow):
             elif self.select_your_own_colors.isChecked():
             # You have previously defined the colors
                 self.color_ranges_text = self.combo_box_objects.currentText()
-                dir_path = os.path.abspath(os.path.join(base_path, 'data', input_folder, ''))
+                dir_path = os.path.abspath(os.path.join(base_path, 'data', self.tracking_info.input_folder, ''))
                 dir_path_npy= os.path.abspath(os.path.join(dir_path, self.color_ranges_text,''))
                 self.color_ranges = np.load(dir_path_npy)
                 print('color range from previous own colors' , self.color_ranges)                 
@@ -644,7 +634,7 @@ class MyGUI(QMainWindow):
             #np.savetxt(dir_out_path_txt_npy, np.array(self.color_ranges))
 
         # Object tracking. These values put in so we can use same tracker program as color    
-        elif type_of_tracking == 'obj_tracker':
+        elif self.tracking_info.type_of_tracking == 'obj_tracker':
             lower = " "
             upper = " "
             ## TODO if you want mulitple objects, have a hstack of the number of objects to track
@@ -659,10 +649,10 @@ class MyGUI(QMainWindow):
         dir_out_path_npy = os.path.abspath(os.path.join(data_output_folder_path , self.color_ranges_text,'')) 
         np.save(dir_out_path_npy , self.color_ranges)
         ## TODO use a different value if needed to use src
-        src=4
+
 
         # data_output_folder, data_output_folder_path = make_new_folder(data_output)
-        return src, type_of_tracking, self.image, self.color_ranges, min_radius_object, data_output_folder_path, input_folder, data_output
+        return self.image, self.color_ranges, min_radius_object, data_output_folder_path
 
 
     def setup_trendline_table(self, title_of_table,csv_files_array, data_output, folder_name, data_output_folder_path, trendline_folder_path):
@@ -855,24 +845,24 @@ class MyGUI(QMainWindow):
     # Run Tracker Button Function
     def run_real_time(self):
         print('running real-time')
-        src, type_of_tracking, image, color_ranges, min_radius_object, data_output_folder_path, input_folder, data_output = self.get_settings()
-        GUI_real_time_color_tracking(src, type_of_tracking, image ,color_ranges , min_radius_object, data_output_folder_path)
+        image, color_ranges, min_radius_object, data_output_folder_path = self.get_settings()
+        GUI_real_time_color_tracking(image ,color_ranges , min_radius_object, data_output_folder_path, self.tracking_info)
 
     def run_tracker(self):
-        src, type_of_tracking, image, color_ranges, min_radius_object, data_output_folder_path, input_folder, data_output = self.get_settings()
+        image, color_ranges, min_radius_object, data_output_folder_path  = self.get_settings()
         # config by looking at the camera (remove this from tracking program below)
         # find output folder here instead of 
         pipeline = find_and_config_device()
-        GUI_tracking(pipeline, src, type_of_tracking, image, color_ranges, min_radius_object, data_output_folder_path, input_folder, data_output)
+        GUI_tracking(pipeline, image, color_ranges, min_radius_object, data_output_folder_path, self.tracking_info)
         
     def record_bag(self):
         print('recording video')
-        src, type_of_tracking, image, color_ranges, min_radius_object, data_output_folder_path, input_folder, data_output = self.get_settings()
-        record_bag_file(data_output_folder_path, type_of_tracking)
+        image, color_ranges, min_radius_object, data_output_folder_path  = self.get_settings()
+        record_bag_file(data_output_folder_path, self.tracking_info.type_of_tracking)
 
     def track_from_bag(self):
         print('Tracking from a previously recorded bag file.')
-        src, type_of_tracking, image, color_ranges, min_radius_object, data_output_folder_path, input_folder, data_output = self.get_settings()
+        image, color_ranges, min_radius_object, data_output_folder_path  = self.get_settings()
         #config by opening pipeline from bag)
         types_of_streams_saved = 'color' #or 'infrared' at 90 fps or 'id300' at 300 fps
         ## TODO make this selectable
@@ -885,8 +875,8 @@ class MyGUI(QMainWindow):
         bag_file = 'bag.bag'
         bag_folder_path =  os.path.abspath(os.path.join(data_output_folder_path + "/" + bag_file))
         pipeline = read_bag_file_and_config(types_of_streams_saved, data_output_folder_path, data_output_folder , bag_folder_path)
-        GUI_tracking(pipeline, src, type_of_tracking, image, color_ranges, min_radius_object, data_output_folder_path, input_folder, data_output)
-
+        GUI_tracking(pipeline, image, color_ranges, min_radius_object, data_output_folder_path, self.tracking_info)
+        
     def toggle_window(self, window):
         if window.isVisible():
             window.hide()
