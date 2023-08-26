@@ -782,9 +782,7 @@ class MyGUI(QMainWindow):
         axes_3D.set_zlabel('y (meters)', labelpad=20)
         line_style_array, line_color_array, marker_shape_array, show_legend = plot_style_color()
         
-
         print (self.xmin, self.xmax)
-
         # The folder that will be graphed
         base_path = os.getcwd()
         data_output = 'color_o'
@@ -800,23 +798,16 @@ class MyGUI(QMainWindow):
         i_object =0
         for (file_path, file_name, mass) in csv_files_array:
         # For each object create a data_file from position data
-
             # Setup data_frame to put velocity, momentum, acceleration, and energy data
             file_name_dataframe = file_name  + "sheet.csv"
             file_name_dataframe_path = os.path.abspath(os.path.join(data_output_folder_path + '/' + file_name_dataframe + '/' ))   
-
             # Reads the current version of the *csv file and smooths it
             file_name_w_extension = file_name + '.csv'
             path_to_file = os.path.abspath(os.path.join(file_path, file_name_w_extension))
-            graph_data = pd.read_csv(path_to_file, header=0, names = header_list)
-            
-            # Dont need data_frame = pd.DataFrame(graph_data) 
-            # Dont need smooth_data_to_graph = data_frame.set_index('Time')
-            
+            graph_data = pd.read_csv(path_to_file, header=0, names = header_list)           
             # Trim
             graph_data_window = graph_data[graph_data["Time"]>self.xmin]
-            graph_data_window = graph_data_window[graph_data_window["Time"]<self.xmax]
-            
+            graph_data_window = graph_data_window[graph_data_window["Time"]<self.xmax]            
             axes_3D.plot3D(graph_data_window['x'],graph_data_window['z'], graph_data_window['y'], line_color_array[i_object], linestyle= line_style_array[i_object], markersize = 3, marker = marker_shape_array[i_object])
             axes_3D.scatter3D(graph_data_window['x'],graph_data_window['z'], graph_data_window['y'], c=line_color_array[i_object], cmap=line_color_array[i_object], marker = marker_shape_array[i_object])
             i_object +=1
@@ -829,8 +820,6 @@ class MyGUI(QMainWindow):
         self.table_widget_color_2 = reload_table(self.table_widget_color_2 )
         self.color_ranges_text = self.lineEdit_define_color_name.text
         return
-
-
 
     # Run Tracker Button Function
     def run_real_time(self):
@@ -846,7 +835,6 @@ class MyGUI(QMainWindow):
         pipeline = find_and_config_device()
         GUI_tracking(pipeline, src, type_of_tracking, image, color_ranges, min_radius_object, data_output_folder_path, input_folder, data_output)
         
-
     def record_bag(self):
         print('recording video')
         src, type_of_tracking, image, color_ranges, min_radius_object, data_output_folder_path, input_folder, data_output = self.get_settings()
@@ -867,15 +855,11 @@ class MyGUI(QMainWindow):
         bag_file = 'bag.bag'
         bag_folder_path =  os.path.abspath(os.path.join(data_output_folder_path + "/" + bag_file))
         pipeline = read_bag_file_and_config(types_of_streams_saved, data_output_folder_path, data_output_folder , bag_folder_path)
-
         GUI_tracking(pipeline, src, type_of_tracking, image, color_ranges, min_radius_object, data_output_folder_path, input_folder, data_output)
-
-
 
     def toggle_window(self, window):
         if window.isVisible():
             window.hide()
-
         else:
             window.show()
 class Worker1(QThread):
