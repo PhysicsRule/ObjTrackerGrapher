@@ -223,6 +223,43 @@ class MyGUI(QMainWindow):
         if os.path.isfile(f"{cwd}/cam_img_2.png"):
             os.remove(f"{cwd}/cam_img_2.png")
 '''
+    def hide_default_colors(self, hide_default):
+        # If hide_____ is false, we show all default info
+        self.table_widget_color.setHidden(hide_default)
+
+    def hide_choose(self, hide_choose):
+        # If hide_____ is false, we show all default info
+        self.combo_box_objects.setHidden(hide_choose)
+        self.folder_name_objects.setHidden(hide_choose)
+
+    def hide_define(self, hide_define):
+        # If hide_____ is false, we show all default info
+        self.table_widget_color_2.setHidden(hide_define)
+        self.lineEdit_define_color_name.setHidden(hide_define)
+        self.combo_box_objects.setHidden(hide_define)
+        # saved colors
+        self.folder_name_objects.setHidden(hide_define)
+        self.find_lower_upper_button.setHidden(hide_define)
+
+    def hide_color_radiobuttons(self, hide_color):
+        # Color radio buttons
+        self.select_default_colors.setHidden(hide_color)
+        self.select_your_own_colors.setHidden(hide_color)
+        self.define_colors.setHidden(hide_color)
+        self.hide_default_colors(True)
+        self.hide_choose(True)
+        self.hide_define(True)
+
+    def hide_folder_details(self, folder_details):
+        self.folder_list.setHidden(False)
+        self.folder_name.setHidden(False)
+
+    def hide_graph_options(self, graph_options):
+        self.select_acceleration.setHidden(graph_options)
+        self.select_momentum.setHidden(graph_options)
+        ## TODO Energy set this to the variable when complete
+        self.select_energy.setHidden(True)
+
     # List Folders to save the file to
     def list_folders(self, data):
         self.folder_list.clear()
@@ -283,42 +320,33 @@ class MyGUI(QMainWindow):
         self.table_widget_objects.setColumnWidth(4,0)
         objects_to_track  = self.load_data_objects(self.table_widget_objects) 
 
+    def color_button_pressed(self):
+        self.data_output = 'color_o'
+        self.hide_color_radiobuttons(False)
+        # Select the color from a list, use a predefined preset, or create a new one.
+        self.table_widget_objects.setHidden(True)
+        self.hide_default_colors(False)
+        self.default_colors_shown()
+        self.hide_folder_details(False)
+        self.hide_graph_options(False)
+        self.list_folders(self.data_output)
 
-    # Infrared chosen (vs. color)
+
     def infrared_90_button_pressed(self):
         # Define the the folders that will be used
         type_of_tracking = 'obj_tracker'
         input_folder = 'infrared_i'
         data_output = 'infrared_o'
         # Color options are hidden
-        self.select_default_colors.setHidden(True)
-        self.select_your_own_colors.setHidden(True)
-        self.define_colors.setHidden(True)
+        self.hide_color_radiobuttons(True)
 
-        self.combo_box_objects.setHidden(True)
-        self.folder_name_objects.setHidden(True)
-        self.lineEdit_define_color_name.setHidden(True)
-        self.find_lower_upper_button.setHidden(True)
-
-        self.table_widget_color.setHidden(True)
-        self.table_widget_color_2.setHidden(True)
-        
-        # Oject Tracking options shown
         self.table_widget_objects.setHidden(False)
+        self.hide_folder_details(False)
+        self.hide_graph_options(False)
+     
         self.define_objects_shown()
-        
-        # show other options
-        self.folder_list.setHidden(False)
-        self.folder_name.setHidden(False)
-        self.select_acceleration.setHidden(False)
-        self.select_momentum.setHidden(False)
-        '''
-        self.select_energy.setHidden(False)
-        '''
-        self.select_energy.setHidden(True)
-
-        # Folder List Showing Folders
         self.list_folders(data_output)
+
         print('Future')
         
     def set_folder_to_other(self):
@@ -326,9 +354,7 @@ class MyGUI(QMainWindow):
         input_folder = 'other_i'
         data_output = 'other_o' 
         # Select the color from a list, use a predefined preset, or create a new one.
-        self.select_default_colors.setHidden(True)
-        self.select_your_own_colors.setHidden(True)
-        self.define_colors.setHidden(True)
+        self.hide_color_radiobuttons(True)
 
         self.table_widget_objects.setHidden(False)
         
@@ -346,6 +372,7 @@ class MyGUI(QMainWindow):
         type_of_tracking = 'other'
         input_folder = 'other_i'
         data_output = 'other_o' 
+        self.hide_color_radiobuttons(True)
         self.table_widget_objects.setHidden(True)
         print('skeletal')
         webbrowser.open('https://physicsrule.github.io/SkeletalTracking.github.io/')
@@ -426,28 +453,22 @@ class MyGUI(QMainWindow):
         self.table_widget_color.setColumnWidth(5,0)
         self.table_widget_color.setColumnWidth(6,0)
         objects_to_track  = self.load_data(type_of_tracking, input_folder,self.table_widget_color) 
-        self.table_widget_color.setHidden(False)
-        self.table_widget_color_2.setHidden(True)
 
-        self.lineEdit_define_color_name.setHidden(True)
-        self.combo_box_objects.setHidden(True)
-        # saved colors
-        self.folder_name_objects.setHidden(True)
-        self.find_lower_upper_button.setHidden(True)
+        self.hide_default_colors(False)
+        self.hide_choose(True)
+        self.hide_define(True)
+
+
 
     def your_own_colors_shown(self):
         stype_of_tracking ='color'
         input_folder = 'color_i'
         data_output = 'color_o'
-        # default colors
-        self.table_widget_color.setHidden(True)
-        self.combo_box_objects.setHidden(False)
-        # saved colors
-        self.folder_name_objects.setHidden(False)
-        self.table_widget_color_2.setHidden(True)
 
-        self.lineEdit_define_color_name.setHidden(True)
-        self.find_lower_upper_button.setHidden(True)
+        self.hide_default_colors(True)
+        self.hide_choose(False)
+        self.hide_define(True)
+
         
         self.select_object_file(input_folder)
 
@@ -476,38 +497,14 @@ class MyGUI(QMainWindow):
         self.find_lower_upper_button.setHidden(False)
 
 
-    def color_button_pressed(self):
-        self.data_output = 'color_o'
-        # Select the color from a list, use a predefined preset, or create a new one.
-        self.select_default_colors.setHidden(False)
-        self.select_your_own_colors.setHidden(False)
-        self.define_colors.setHidden(False)
-        self.table_widget_objects.setHidden(True)
-        self.table_widget_color.setHidden(False)
 
-        self.folder_list.setHidden(False)
-        self.folder_name.setHidden(False)
-        self.select_acceleration.setHidden(False)
-        self.select_momentum.setHidden(False)
-        self.select_energy.setHidden(True)
-        '''
-        self.select_energy.setHidden(False)
-        '''
-
-        # Folder List Showing Folders
-        self.list_folders(self.data_output)
 
     # Color Selected
     def color_selected(self):
         # Define the the folders that will be used      
         self.folder_list.setHidden(False)
         self.folder_name.setHidden(False)
-        self.select_acceleration.setHidden(False)
-        self.select_momentum.setHidden(False)
-        '''
-        self.select_energy.setHidden(False)
-        '''
-        self.select_energy.setHidden(True)
+
         # Folder List Showing Folders
         data_output = 'color_o'
         self.list_folders(data_output)
