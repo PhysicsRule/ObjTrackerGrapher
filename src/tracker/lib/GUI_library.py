@@ -28,3 +28,5 @@ def reload_table (title_of_table):
             title_of_table.setItem(row,5, QTableWidgetItem(str(upper)))
     return title_of_table
 
+
+

@@ -125,6 +125,7 @@ class MyGUI(QMainWindow):
         self.table_widget_color.setHidden(True)
         self.folder_name_objects.setHidden(True)
         self.table_widget_color_2.setHidden(True) # For new colors
+        self.table_widget_objects.setHidden(True)
         self.lineEdit_define_color_name.setHidden(True)
         self.find_lower_upper_button.setHidden(True)
         # Acceleration, Energy, Momentum  Hidden
@@ -272,15 +273,40 @@ class MyGUI(QMainWindow):
             pass
         # return data_output_folder, data_output_folder_path
 
+    def define_objects_shown(self):
+        # Provide a table for user to state information for the object
+        self.table_widget_objects.setColumnWidth(0,50)
+        self.table_widget_objects.setColumnWidth(1,80)
+        self.table_widget_objects.setColumnWidth(2,80)
+        self.table_widget_objects.setColumnWidth(3,80)
+        # Hide onscreen for now. We may want to select the objets here in the future
+        self.table_widget_objects.setColumnWidth(4,0)
+        objects_to_track  = self.load_data_objects(self.table_widget_objects) 
+
+
     # Infrared chosen (vs. color)
     def infrared_90_button_pressed(self):
         # Define the the folders that will be used
-        type_of_tracking = 'infrared'
+        type_of_tracking = 'obj_tracker'
         input_folder = 'infrared_i'
         data_output = 'infrared_o'
         # Color options are hidden
         self.select_default_colors.setHidden(True)
         self.select_your_own_colors.setHidden(True)
+        self.define_colors.setHidden(True)
+
+        self.combo_box_objects.setHidden(True)
+        self.folder_name_objects.setHidden(True)
+        self.lineEdit_define_color_name.setHidden(True)
+        self.find_lower_upper_button.setHidden(True)
+
+        self.table_widget_color.setHidden(True)
+        self.table_widget_color_2.setHidden(True)
+        
+        # Oject Tracking options shown
+        self.table_widget_objects.setHidden(False)
+        self.define_objects_shown()
+        
         # show other options
         self.folder_list.setHidden(False)
         self.folder_name.setHidden(False)
@@ -303,6 +329,8 @@ class MyGUI(QMainWindow):
         self.select_default_colors.setHidden(True)
         self.select_your_own_colors.setHidden(True)
         self.define_colors.setHidden(True)
+
+        self.table_widget_objects.setHidden(False)
         
 
         self.folder_list.setHidden(False)
@@ -318,7 +346,7 @@ class MyGUI(QMainWindow):
         type_of_tracking = 'other'
         input_folder = 'other_i'
         data_output = 'other_o' 
-        
+        self.table_widget_objects.setHidden(True)
         print('skeletal')
         webbrowser.open('https://physicsrule.github.io/SkeletalTracking.github.io/')
         #webbrowser.get("google-chrome").open('https://physicsrule.github.io/SkeletalTracking.github.io/')
@@ -353,6 +381,38 @@ class MyGUI(QMainWindow):
             title_of_table.setItem(row, 6, item_on_screen )
             row +=1
 
+    def load_data_objects(self, title_of_table):
+        # load the dictionary
+        ## TODO make this a file to read
+        objects_to_track = [{
+       'name' : "object1" , 'radius' : 10 , 'mass' : 0.0},
+        {'name' : "object2" , 'radius' : 10 , 'mass' : 0.0},
+        {'name' : "object3" , 'radius' : 10 , 'mass' : 0.0},
+        {'name' : "object4" ,  'radius' : 10 , 'mass' : 0.0},
+        {'name' : "object5" , 'radius' : 10 , 'mass' : 0.0},
+        {'name' : "object6" , 'radius' : 10 , 'mass' : 0.0}]
+        row = 0
+        title_of_table.setRowCount(len(objects_to_track))
+        for object in objects_to_track:
+            # Checkbox to chose default colors
+            item = QTableWidgetItem(''.format(row, 0))
+            item.setFlags(Qt.ItemFlag.ItemIsUserCheckable|Qt.ItemFlag.ItemIsEnabled)
+            if row == 0: 
+                item.setCheckState(Qt.CheckState.Checked)
+            else: 
+                item.setCheckState(Qt.CheckState.Unchecked)
+            title_of_table.setItem(row, 0, item)
+            # Columns for default colors
+            title_of_table.setItem(row,1, QTableWidgetItem(str(object['name'])))
+            title_of_table.setItem(row,2, QTableWidgetItem(str(object['radius'])))
+            title_of_table.setItem(row,3, QTableWidgetItem(str(object['mass'])))
+            # For future selection of object??
+            item_on_screen = QTableWidgetItem(''.format(row, 4))
+            item_on_screen.setFlags(Qt.ItemFlag.ItemIsUserCheckable|Qt.ItemFlag.ItemIsEnabled)
+            item_on_screen.setCheckState(Qt.CheckState.Unchecked)
+            title_of_table.setItem(row, 4, item_on_screen )
+            row +=1
+
     def default_colors_shown(self):
         type_of_tracking ='color'
         input_folder = 'color_i'
@@ -368,6 +428,7 @@ class MyGUI(QMainWindow):
         objects_to_track  = self.load_data(type_of_tracking, input_folder,self.table_widget_color) 
         self.table_widget_color.setHidden(False)
         self.table_widget_color_2.setHidden(True)
+
         self.lineEdit_define_color_name.setHidden(True)
         self.combo_box_objects.setHidden(True)
         # saved colors
@@ -384,6 +445,7 @@ class MyGUI(QMainWindow):
         # saved colors
         self.folder_name_objects.setHidden(False)
         self.table_widget_color_2.setHidden(True)
+
         self.lineEdit_define_color_name.setHidden(True)
         self.find_lower_upper_button.setHidden(True)
         
@@ -398,7 +460,9 @@ class MyGUI(QMainWindow):
         self.combo_box_objects.setHidden(True)
         self.folder_name_objects.setHidden(True)
 
+
         self.table_widget_color_2.setHidden(False)
+
         self.lineEdit_define_color_name.setHidden(False)
 
         self.table_widget_color_2.setColumnWidth(0,30)
@@ -418,6 +482,8 @@ class MyGUI(QMainWindow):
         self.select_default_colors.setHidden(False)
         self.select_your_own_colors.setHidden(False)
         self.define_colors.setHidden(False)
+        self.table_widget_objects.setHidden(True)
+        self.table_widget_color.setHidden(False)
 
         self.folder_list.setHidden(False)
         self.folder_name.setHidden(False)

@@ -930,8 +930,8 @@ Select the additional variables you would like graphed</string>
      </property>
      <property name="text">
       <string>Infrared
-90 fps
-(Future)</string>
+Object tracking
+90 fps</string>
      </property>
     </widget>
     <widget class="QLineEdit" name="folder_name">
@@ -1376,7 +1376,7 @@ Select the additional variables you would like graphed</string>
       <rect>
        <x>370</x>
        <y>130</y>
-       <width>100</width>
+       <width>141</width>
        <height>17</height>
       </rect>
      </property>
@@ -1384,7 +1384,7 @@ Select the additional variables you would like graphed</string>
       <set>Qt::ImhLatinOnly</set>
      </property>
      <property name="text">
-      <string>Define colors now</string>
+      <string>Define colors  now</string>
      </property>
     </widget>
     <widget class="QTableWidget" name="table_widget_color_2">
@@ -1493,14 +1493,14 @@ Select the additional variables you would like graphed</string>
     <widget class="QPushButton" name="find_lower_upper_button">
      <property name="geometry">
       <rect>
-       <x>300</x>
+       <x>340</x>
        <y>160</y>
-       <width>231</width>
+       <width>151</width>
        <height>23</height>
       </rect>
      </property>
      <property name="text">
-      <string>Modify Lower and Upper for OnScreen Colors</string>
+      <string>Modify Colors OnScreen </string>
      </property>
     </widget>
     <widget class="QCheckBox" name="data_in_other">
@@ -1772,6 +1772,89 @@ then see it in 3D or find trendlines</string>
      <property name="wordWrap">
       <bool>true</bool>
      </property>
+    </widget>
+    <widget class="QTableWidget" name="table_widget_objects">
+     <property name="geometry">
+      <rect>
+       <x>100</x>
+       <y>180</y>
+       <width>431</width>
+       <height>181</height>
+      </rect>
+     </property>
+     <property name="minimumSize">
+      <size>
+       <width>371</width>
+       <height>181</height>
+      </size>
+     </property>
+     <property name="font">
+      <font>
+       <pointsize>7</pointsize>
+      </font>
+     </property>
+     <property name="editTriggers">
+      <set>QAbstractItemView::AnyKeyPressed|QAbstractItemView::CurrentChanged|QAbstractItemView::DoubleClicked|QAbstractItemView::EditKeyPressed</set>
+     </property>
+     <attribute name="horizontalHeaderMinimumSectionSize">
+      <number>10</number>
+     </attribute>
+     <attribute name="verticalHeaderDefaultSectionSize">
+      <number>20</number>
+     </attribute>
+     <attribute name="verticalHeaderMinimumSectionSize">
+      <number>20</number>
+     </attribute>
+     <column>
+      <property name="text">
+       <string>Use</string>
+      </property>
+      <property name="font">
+       <font>
+        <pointsize>7</pointsize>
+       </font>
+      </property>
+     </column>
+     <column>
+      <property name="text">
+       <string>Name</string>
+      </property>
+      <property name="font">
+       <font>
+        <pointsize>8</pointsize>
+       </font>
+      </property>
+     </column>
+     <column>
+      <property name="text">
+       <string>Radius(cm)</string>
+      </property>
+      <property name="font">
+       <font>
+        <pointsize>8</pointsize>
+       </font>
+      </property>
+     </column>
+     <column>
+      <property name="text">
+       <string>Mass(kg)</string>
+      </property>
+      <property name="font">
+       <font>
+        <pointsize>8</pointsize>
+       </font>
+      </property>
+     </column>
+     <column>
+      <property name="text">
+       <string>OnScreen</string>
+      </property>
+      <property name="font">
+       <font>
+        <pointsize>8</pointsize>
+       </font>
+      </property>
+     </column>
     </widget>
    </widget>
    <widget class="QComboBox" name="combo_test">
