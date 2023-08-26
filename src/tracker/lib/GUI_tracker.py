@@ -59,8 +59,11 @@ def GUI_tracking(pipeline, src, type_of_tracking, image,color_ranges, min_radius
                 x_pixel, y_pixel, radius, mask = find_object_by_color(cv_color,hsv, lower,upper, color_name, radius_meters, mass, min_radius_of_object, max_num_point)     
             elif type_of_tracking == 'obj_tracker':
                 depth_image = np.asanyarray(rs_depth.get_data())
-                x_pixel, y_pixel, bbox = find_xy_using_tracking_method(tracker, bbox, image)
-                draw_bounding_box(image, bbox)
+                depth_colormap = cv2.applyColorMap(cv2.convertScaleAbs(depth_image, alpha=0.10), cv2.COLORMAP_HSV)# Create a colormap from the depth data
+
+                cv_image= depth_colormap
+                x_pixel, y_pixel, bbox, radius = find_xy_using_tracking_method(tracker, bbox, cv_image)
+                draw_bounding_box(cv_image, bbox)
 
             if x_pixel is None:
                 continue

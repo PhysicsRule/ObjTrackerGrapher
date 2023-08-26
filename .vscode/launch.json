@@ -4,6 +4,7 @@
     // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
     "version": "0.2.0",
     "configurations": [
+
        
         {
             "name": "Graphs of trendlines",
@@ -30,7 +31,7 @@
             "name": "GUI Tracker",
             "type": "python",
             "request": "launch",
-            "program": "src/GUI_Tracker.py",
+            "program": "src/GUI_main_program.py",
             "console": "integratedTerminal"
         }
     ]

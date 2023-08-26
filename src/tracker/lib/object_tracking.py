@@ -17,30 +17,21 @@ def GUI_select_bounding_box(pipeline):
         if not frame_result:
             continue
         (cv_color, rs_color, rs_depth), _ = frame_result
+        
         ## TODO use rs_infrared to see infrared from camera 1
         depth_image = np.asanyarray(rs_depth.get_data())
         depth_colormap = cv2.applyColorMap(cv2.convertScaleAbs(depth_image, alpha=0.10), cv2.COLORMAP_HSV)# Create a colormap from the depth data
-
+        cv_image = depth_colormap
         # User inputs the type of tracking used
         tracker = select_object_tracker_method()
         # Select the object to track
         print('select object')
-        bbox = cv2.selectROI('ROI Selection', depth_colormap, False)          
-        ret = tracker.init(depth_image, bbox)
+        bbox = cv2.selectROI('ROI Selection', cv_image, False)          
+        ret = tracker.init(cv_image, bbox)
+        print(bbox)
         cv2.destroyWindow('ROI Selection')
         check_no_selection = False
     return bbox, ret, tracker
-
-def find_xy_using_tracking_method(tracker, bbox, image):
-    # Updtates the bbox using the tracker method chosen
-    ret, bbox, tracker = tracker.update(image)
-    if ret:
-        print('found a frame')# TODO add multiple objects and have a count of 0 and 1 so 2 objects
-        draw_bounding_box(image, bbox)
-        x_pixel = int(bbox[0]+bbox[2]/2)
-        y_pixel = int(bbox[1]+bbox[3]/2)
-        radius_meters = int(bbox[2]/2)
-    return x_pixel, y_pixel, bbox 
 
 def draw_bounding_box(image, bounding_box):
     # Draws a box to indicate what object is being tracked and noting its starting position.
@@ -49,4 +40,17 @@ def draw_bounding_box(image, bounding_box):
     width = int(bounding_box[2])
     height = int(bounding_box[3])
     cv2.rectangle(image, (x_coordinate, y_coordinate), (x_coordinate + width, y_coordinate + height), (255, 0,0), 3,1)
+
+def find_xy_using_tracking_method(tracker, bbox, cv_image):
+    # Updtates the bbox using the tracker method chosen
+    ret, bbox = tracker.update(cv_image)
+    if ret:
+        print('found a frame')# TODO add multiple objects and have a count of 0 and 1 so 2 objects
+        draw_bounding_box(cv_image, bbox)
+        x_pixel = int(bbox[0]+bbox[2]/2)
+        y_pixel = int(bbox[1]+bbox[3]/2)
+        radius = int(bbox[2]/2)
+        draw_bounding_box(cv_image, bbox)
+    return x_pixel, y_pixel, bbox, radius 
+
 
