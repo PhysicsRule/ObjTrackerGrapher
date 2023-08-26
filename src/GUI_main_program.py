@@ -39,21 +39,26 @@ from tracker.lib.color import choose_or_create_color_range
 from tracker.lib.GUI_load_tables import load_data, load_data_objects, reload_table
 
 ## TODO possibly use this instead of passing each individual piece
+class tracking_info:
+    """
+    Information about the tracking type the data is saved with
+    """  
+    def __init__(self, types_of_streams_saved, type_of_tracking, input_folder, output_folder):
+        self.types_of_streams_saved = types_of_streams_saved    # cd: color, id: infrared or id300
+        self.type_of_tracking = type_of_tracking                # color or infrared
+        self.input_folder = input_folder                        # example: color_i
+        self.output_folder = output_folder                      # example: color_o
+
 class folder_info:
     """
     Information about the folder the data is saved to
     """  
-def __init__(self, types_of_streams_saved, type_of_tracking, input_folder, output_folder, dir_path, data_output_folder, data_output_folder_path, color_ranges ):
-    self.types_of_streams_saved = types_of_streams_saved    # cd: color, id: infrared or id300
-    self.type_of_tracking = type_of_tracking                # color or infrared
-    self.input_folder = input_folder                        # example: color_i
-    self.output_folder = output_folder  
-    self.dir_path = dir_path                    # example: color_o
-    self.data_output_folder = data_output_folder            # example: drop1
-    self.data_output_folder_path = data_output_folder_path  
+    def __init__(self, data_output_folder, data_output_folder_path, color_ranges ):
+        self.data_output_folder = data_output_folder            # example: drop1
+        self.data_output_folder_path = data_output_folder_path  
 
-    # numpy with objects you are tracking with object name, mass, and radius
-    self.color_ranges = color_ranges                      #(lower,upper, color_name, radius_meters, mass)
+        # numpy with objects you are tracking with object name, mass, and radius
+        self.color_ranges = color_ranges                      #(lower,upper, color_name, radius_meters, mass)
 
 
 class image_option:
@@ -355,8 +360,7 @@ class MyGUI(QMainWindow):
 
 
     def color_button_pressed(self):
-        # folder_info.input_folder = 'color_i'
-        # folder_info.output_folder = 'color_o'
+
         self.data_output = 'color_o'
         self.hide_color_radiobuttons(False)
         # Select the color from a list, use a predefined preset, or create a new one.
@@ -563,13 +567,19 @@ class MyGUI(QMainWindow):
 
         #  self.image = get_settings_to_pass(self)
         self.image = image_option(self.show_image_check.isChecked(), self.save_image_check.isChecked(), self.show_depth_check.isChecked(), self.save_depth_check.isChecked(), self.show_tracking_mask_check.isChecked(),self.save_tracking_mask_check.isChecked(), self.save_video.isChecked())
-        
+        # self.color_info = tracking_info('color','color','color_i','color_o')
+        self.color_info = tracking_info(types_of_streams_saved ='color',
+                                         type_of_tracking = 'color',
+                                         input_folder = 'color_i',
+                                         output_folder = 'color_o')
+
         ## TODO Add spot in GUI for this later. How do I do this?
         min_radius_object = 5
 
         # pass the folder names for correct storage location and type of tracking
         ## pass type of tracking into this function
-        type_of_tracking ='color'
+        type_of_tracking = self.color_info.type_of_tracking
+        print()
         if type_of_tracking == 'color':
             input_folder = 'color_i'
             data_output = 'color_o'
