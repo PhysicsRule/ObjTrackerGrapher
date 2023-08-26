@@ -670,7 +670,7 @@ class MyGUI(QMainWindow):
             else:
                 third_var_of_t = str(parameters.which_parameter_to_plot + str(var_of_t)) # Example Ax or Py
             print(i)
-            title_of_table.setVerticalHeaderItem(row + i*4, QTableWidgetItem(str('R^2 for ' + var_of_t)))
+            title_of_table.setVerticalHeaderItem(row + i*4, QTableWidgetItem(str('MSE ' + var_of_t)))
             title_of_table.setVerticalHeaderItem(row + i*4 + 1, QTableWidgetItem(var_of_t))
             title_of_table.setVerticalHeaderItem(row + i*4 + 2, QTableWidgetItem(v_var_of_t))
             title_of_table.setVerticalHeaderItem(row + i*4 + 3, QTableWidgetItem(third_var_of_t))
