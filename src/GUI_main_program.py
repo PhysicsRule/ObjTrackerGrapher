@@ -336,9 +336,9 @@ class MyGUI(QMainWindow):
 
     def save_defined_objects(self):
         base_path = os.getcwd()
-        __, __, __, self.color_ranges, __, data_output_folder_path, input_folder, __ = self.get_settings()
+        __, self.color_ranges, __, data_output_folder_path = self.get_settings()
         self.color_ranges_text = self.lineEdit_define_color_name.text()
-        dir_path = os.path.abspath(os.path.join(base_path, 'data', input_folder, ''))
+        dir_path = os.path.abspath(os.path.join(base_path, 'data', self.tracking_info.input_folder, ''))
         dir_path_npy= os.path.abspath(os.path.join(dir_path, self.color_ranges_text,''))
         dir_out_path_npy = os.path.abspath(os.path.join(data_output_folder_path , self.color_ranges_text,'')) 
         self.color_ranges = np.load(dir_path_npy)
@@ -387,7 +387,8 @@ class MyGUI(QMainWindow):
         self.hide_folder_details(False)
         self.hide_graph_options(False)     
         self.define_objects_shown()
-        self.list_folders(data_output)
+        self.lineEdit_define_color_name.setHidden(False)
+        self.list_folders(self.tracking_info.output_folder)
         print('Future')
         
     def set_folder_to_other(self):
@@ -876,7 +877,7 @@ class MyGUI(QMainWindow):
         bag_folder_path =  os.path.abspath(os.path.join(data_output_folder_path + "/" + bag_file))
         pipeline = read_bag_file_and_config(types_of_streams_saved, data_output_folder_path, data_output_folder , bag_folder_path)
         GUI_tracking(pipeline, image, color_ranges, min_radius_object, data_output_folder_path, self.tracking_info)
-        
+
     def toggle_window(self, window):
         if window.isVisible():
             window.hide()
