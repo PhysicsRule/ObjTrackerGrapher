@@ -339,14 +339,11 @@ class MyGUI(QMainWindow):
         data_output = 'infrared_o'
         # Color options are hidden
         self.hide_color_radiobuttons(True)
-
         self.table_widget_objects.setHidden(False)
         self.hide_folder_details(False)
-        self.hide_graph_options(False)
-     
+        self.hide_graph_options(False)     
         self.define_objects_shown()
         self.list_folders(data_output)
-
         print('Future')
         
     def set_folder_to_other(self):
@@ -355,17 +352,11 @@ class MyGUI(QMainWindow):
         data_output = 'other_o' 
         # Select the color from a list, use a predefined preset, or create a new one.
         self.hide_color_radiobuttons(True)
-
         self.table_widget_objects.setHidden(False)
-        
-
-        self.folder_list.setHidden(False)
-        self.folder_name.setHidden(False)
-        self.select_energy.setHidden(True)
-        self.select_momentum.setHidden(True)
-
-        self.select_acceleration.setHidden(False)
-        self.select_acceleration.isChecked()
+        self.hide_folder_details(False)
+        self.hide_graph_options(False)     
+        self.define_objects_shown()
+        self.list_folders(data_output)
 
     def skeletal_tracker_pressed(self):
         self.set_folder_to_other()
@@ -374,6 +365,10 @@ class MyGUI(QMainWindow):
         data_output = 'other_o' 
         self.hide_color_radiobuttons(True)
         self.table_widget_objects.setHidden(True)
+        self.hide_folder_details(False)
+        self.hide_graph_options(False)     
+        self.define_objects_shown()
+        self.list_folders(data_output)
         print('skeletal')
         webbrowser.open('https://physicsrule.github.io/SkeletalTracking.github.io/')
         #webbrowser.get("google-chrome").open('https://physicsrule.github.io/SkeletalTracking.github.io/')
