@@ -947,7 +947,7 @@ Object tracking
       <string/>
      </property>
      <property name="placeholderText">
-      <string>Name of the folder you would like to create</string>
+      <string>Name of the folder you would like to create[Enter]</string>
      </property>
     </widget>
     <widget class="QPushButton" name="Button3DGraph">
@@ -1016,19 +1016,6 @@ Object tracking
        <string>z</string>
       </property>
      </item>
-    </widget>
-    <widget class="QLineEdit" name="mass_of_object">
-     <property name="geometry">
-      <rect>
-       <x>780</x>
-       <y>170</y>
-       <width>113</width>
-       <height>22</height>
-      </rect>
-     </property>
-     <property name="text">
-      <string>mass (kg)</string>
-     </property>
     </widget>
     <widget class="QPushButton" name="save_height_mass">
      <property name="geometry">
@@ -1483,17 +1470,26 @@ Object Tracking
     <widget class="QLineEdit" name="lineEdit_define_color_name">
      <property name="geometry">
       <rect>
-       <x>100</x>
+       <x>330</x>
        <y>160</y>
        <width>201</width>
        <height>21</height>
       </rect>
      </property>
+     <property name="text">
+      <string/>
+     </property>
+     <property name="maxLength">
+      <number>32765</number>
+     </property>
+     <property name="placeholderText">
+      <string>predefined name[Enter]</string>
+     </property>
     </widget>
     <widget class="QPushButton" name="find_lower_upper_button">
      <property name="geometry">
       <rect>
-       <x>340</x>
+       <x>130</x>
        <y>160</y>
        <width>151</width>
        <height>23</height>

@@ -40,18 +40,27 @@ from tracker.lib.GUI_load_tables import load_data, load_data_objects, reload_tab
 
 ## TODO possibly use this instead of passing each individual piece
 class folder_info:
-  def __init__(self, types_of_streams_saved, type_of_tracking, input_folder, output_folder, data_output_folder, data_output_folder_path, color_ranges ):
+    """
+    Information about the folder the data is saved to
+    """  
+def __init__(self, types_of_streams_saved, type_of_tracking, input_folder, output_folder, dir_path, data_output_folder, data_output_folder_path, color_ranges ):
     self.types_of_streams_saved = types_of_streams_saved    # cd: color, id: infrared or id300
     self.type_of_tracking = type_of_tracking                # color or infrared
     self.input_folder = input_folder                        # example: color_i
-    self.output_folder = output_folder                      # example: color_o
+    self.output_folder = output_folder  
+    self.dir_path = dir_path                    # example: color_o
     self.data_output_folder = data_output_folder            # example: drop1
     self.data_output_folder_path = data_output_folder_path  
 
     # numpy with objects you are tracking with object name, mass, and radius
     self.color_ranges = color_ranges                      #(lower,upper, color_name, radius_meters, mass)
 
+
 class image_option:
+    """
+    Which objects are displayed while the tracker is running
+    Each variable is a boolean
+    """
     def __init__(self, show_RGB, save_RGB, show_depth, save_depth, show_mask, save_mask, save_video):
         self.show_RGB = show_RGB 
         self.save_RGB = save_RGB
@@ -62,6 +71,11 @@ class image_option:
         self.save_video = save_video
 
 class parameter_to_plot:
+    """
+    The third row of the 9 graphs will display one of these
+    If acceleration or momentum is used, x,y,z columns are the same
+    If Energy is used, PEG, KE, and Total energy are each of the graphs in the column
+    """
     def __init__(self, acceleration, momentum, energy):
         if acceleration:
             self.which_parameter_to_plot =  'A'
@@ -71,7 +85,13 @@ class parameter_to_plot:
             self.which_parameter_to_plot =  'E'
 
 class mlpcanvas(FigureCanvasQTAgg):
-
+    """
+    The graphing canvas showing 9 graphs
+    position x,y,z
+    velocity x,y,z
+    one of 3 types of graphs acceleration, momentum or energy
+    1. graphs are cleared with the clear function, so the new data is not overlapping the old.
+    """
     fig: Figure
     axes: np.ndarray
 
@@ -87,7 +107,7 @@ class mlpcanvas(FigureCanvasQTAgg):
                        squeeze=True, subplot_kw=None,
                        gridspec_kw=None)
 
-'''class mlpcanvas_3D(FigureCanvasQTAgg):
+    '''class mlpcanvas_3D(FigureCanvasQTAgg):
     def __init__(self):
         # Setup 3D Graph
         fig_3D = plt.figure()
@@ -99,43 +119,32 @@ class mlpcanvas(FigureCanvasQTAgg):
         self.axes_3D.set_zlabel('y (meters)', labelpad=20)
 
         super(mlpcanvas_3D, self).__init__(fig_3D)
-'''       
+    '''       
 
 class MyGUI(QMainWindow):
-
+    """
+    MAIN DISPLAY that shows every object, qwidget
+    """
     def __init__(self):
         super(MyGUI, self).__init__()
-        ## TODO before making *.exe file !!
-        ## TODO move data file to src???
-        
-        # self.sc = mlpcanvas()
-        # self.sc.axes.plot([0,1,2,3,4], [10,1,20,3,40])
-        # self.setCentralWidget(self.sc)
-        
-        # self.show()
+        # Open the user interface file we developed with Qt Designer 5.11.1
         GUI_file_path = os.path.abspath(os.path.join('src', 'tracker', 'lib', 'GUI_Base.ui'))
         uic.loadUi(GUI_file_path, self)
-
+        # Toolbar for graph not showing yet
         self.toolbar=False
-
-        self.DataGraph.setHidden(True)
-        
         # Folder Options Hidden
         self.folder_list.setHidden(True)        # List of folders to put the data into
         self.folder_name.setHidden(True)  
+        # Tables
         self.table_widget_color.setHidden(True)
         self.folder_name_objects.setHidden(True)
         self.table_widget_color_2.setHidden(True) # For new colors
         self.table_widget_objects.setHidden(True)
-        self.lineEdit_define_color_name.setHidden(True)
-        self.find_lower_upper_button.setHidden(True)
         # Acceleration, Energy, Momentum  Hidden
         self.select_acceleration.setHidden(False)
         self.select_momentum.setHidden(False)
         ## TODO have energy as well
         self.select_energy.setHidden(True)
-        # Momentum/Energy Options Hidden
-        self.mass_of_object.setHidden(True)
         self.up_axis.setHidden(True)            # If using energy need the axis representing height for E=mgh
         self.r_height.setHidden(True)           # reference height for mgh
         self.save_height_mass.setHidden(True)
@@ -143,44 +152,56 @@ class MyGUI(QMainWindow):
         self.select_default_colors.setHidden(True)
         self.select_your_own_colors.setHidden(True)
         self.define_colors.setHidden(True)
+        # Defining your own colors
         self.combo_box_objects.setHidden(True)
-        # GUI shows up
-        self.show()
-        # Buttons: Main
-        self.find_lower_upper_button.clicked.connect(self.find_lower_upper_bounds)
-        self.real_time_button.clicked.connect(self.run_real_time)
-        self.tracker_button.clicked.connect(self.run_tracker)
-        self.graph_button.clicked.connect(self.run_graph)
+        self.lineEdit_define_color_name.setHidden(True)
+        self.find_lower_upper_button.setHidden(True)
+        # Don't show the 3D graphing until a graph is shown
         self.Button3DGraph.setHidden(True)
-        self.Button3DGraph.clicked.connect(self.run_3D_graph)
+        # Setting the bounds for the trendlines and the output equations / functions
         self.trendline_table_widget.setHidden(True)
         self.find_trendlines_button.setHidden(True)
-        self.find_trendlines_button.clicked.connect(self.find_trendlines_button_pressed)
+        # GUI shows up
+        self.show()
         
-        
-        self.record_bag_button.clicked.connect(self.record_bag)
-        self.track_from_bag_button.clicked.connect(self.track_from_bag)
-        # Buttons: Minor
+        # Buttons: Setup: 
+        # Sets folders to record to data_output and type_of_tracking
         self.color_button.clicked.connect(self.color_button_pressed)
         self.infrared_90_button.clicked.connect(self.infrared_90_button_pressed)
         self.other_folder.clicked.connect(self.set_folder_to_other)
         self.skeletal_button.clicked.connect(self.skeletal_tracker_pressed)
-
-        self.save_height_mass.clicked.connect(self.reference_height_save)
+        # Button: Define your own colors
+        self.find_lower_upper_button.clicked.connect(self.find_lower_upper_bounds)
         # Radio Buttons: Color Choice 
         self.select_default_colors.toggled.connect(self.default_colors_shown)
         self.select_your_own_colors.toggled.connect(self.your_own_colors_shown)
         self.define_colors.toggled.connect(self.define_colors_shown)
+
+        # Buttons: Start Tracking and/or Recording
+        self.real_time_button.clicked.connect(self.run_real_time)
+        self.tracker_button.clicked.connect(self.run_tracker)
+        self.record_bag_button.clicked.connect(self.record_bag)
+        self.track_from_bag_button.clicked.connect(self.track_from_bag)
+        
+        # Buttons Graphing
         # Radio Button: 3rd variable graphed
         self.select_acceleration.toggled.connect(self.acceleration_chosen)
         self.select_momentum.toggled.connect(self.momentum_chosen)
         self.select_energy.toggled.connect(self.energy_chosen)
-        # Graph info
+        # Button: Save reference height for energy graphs
+        self.save_height_mass.clicked.connect(self.reference_height_save)
+        # Button: Graph
+        self.graph_button.clicked.connect(self.run_graph)
+        # Button 3D
+        self.Button3DGraph.clicked.connect(self.run_3D_graph)
+        # Button Trendline
+        self.find_trendlines_button.clicked.connect(self.find_trendlines_button_pressed)
+        
+        # Actual 9x9 Graph layout
         self.graph_widget = mlpcanvas()
         self.grid_layout.addWidget(self.graph_widget,0,0,alignment=Qt.Alignment())        
         # self.graph_widget_3D = mlpcanvas_3D()
         self.addToolBar(NavigationToolbar2QT( self.graph_widget , self ))
-
 
         # Creating Radio Button Groups so only one of each can be selected
         self.color_group = QButtonGroup()
@@ -193,11 +214,10 @@ class MyGUI(QMainWindow):
         self.ame_group.addButton(self.select_acceleration)
         self.ame_group.addButton(self.select_momentum)
         self.ame_group.addButton(self.select_energy)
-        # Putting buttons in camera (cam) group
 
-        # Text/Line Edits
 
         self.folder_name.returnPressed.connect(self.user_creating_folder)
+        self.lineEdit_define_color_name.returnPressed.connect(self.save_defined_objects)
         # Threaded Class Stuff
         '''
         self.Worker1 = Worker1()
@@ -309,6 +329,15 @@ class MyGUI(QMainWindow):
             pass
         # return data_output_folder, data_output_folder_path
 
+    def save_defined_objects(self):
+        base_path = os.getcwd()
+        __, __, __, self.color_ranges, __, data_output_folder_path, input_folder, __ = self.get_settings()
+        self.color_ranges_text = self.lineEdit_define_color_name.text()
+        dir_path = os.path.abspath(os.path.join(base_path, 'data', input_folder, ''))
+        dir_path_npy= os.path.abspath(os.path.join(dir_path, self.color_ranges_text,''))
+        dir_out_path_npy = os.path.abspath(os.path.join(data_output_folder_path , self.color_ranges_text,'')) 
+        self.color_ranges = np.load(dir_path_npy)
+        np.save(dir_path_npy, self.color_ranges)
 
 
     def define_objects_shown(self):
@@ -326,6 +355,8 @@ class MyGUI(QMainWindow):
 
 
     def color_button_pressed(self):
+        # folder_info.input_folder = 'color_i'
+        # folder_info.output_folder = 'color_o'
         self.data_output = 'color_o'
         self.hide_color_radiobuttons(False)
         # Select the color from a list, use a predefined preset, or create a new one.
@@ -490,21 +521,17 @@ class MyGUI(QMainWindow):
         self.up_axis.setHidden(True)
         self.r_height.setHidden(True)
         self.save_height_mass.setHidden(True)
-        self.mass_of_object.setHidden(True)
 
     def momentum_chosen(self):
         self.up_axis.setHidden(True)
         self.r_height.setHidden(True)
         self.save_height_mass.setHidden(True)
-        ''' TODO when adding graphing of any Time,x,y,z
-        self.mass_of_object.setHidden(False)
-        '''
+
 
     def energy_chosen(self):
         self.up_axis.setHidden(False)
         self.r_height.setHidden(False)
         self.save_height_mass.setHidden(False)
-        self.mass_of_object.setHidden(False)
 
     def reference_height_save(self):
         try:
@@ -570,6 +597,7 @@ class MyGUI(QMainWindow):
                 # You have modified your own colors and color names to suit your situation. 
                 # They will be saved and you can name them
                     title_of_table = self.table_widget_color_2
+                    self.color_ranges_text  = self.lineEdit_define_color_name.text()
                 
                 # Read the colors from one of the 2 tables above
                 name_of_array = ''
@@ -590,21 +618,14 @@ class MyGUI(QMainWindow):
                             new_color_ranges = np.hstack((new_color_ranges,the_array))
                         i += 1
                     self.color_ranges = new_color_ranges
-             
-                if self.define_colors.isChecked():
-                    self.color_ranges_text = self.lineEdit_define_color_name.text()
-                    dir_path = os.path.abspath(os.path.join(base_path, 'data', input_folder, ''))
-                    dir_path_npy= os.path.abspath(os.path.join(dir_path, self.color_ranges_text,''))
-                    np.save(dir_path_npy, new_color_ranges)
 
             elif self.select_your_own_colors.isChecked():
             # You have previously defined the colors
                 self.color_ranges_text = self.combo_box_objects.currentText()
                 dir_path = os.path.abspath(os.path.join(base_path, 'data', input_folder, ''))
                 dir_path_npy= os.path.abspath(os.path.join(dir_path, self.color_ranges_text,''))
-                if self.select_your_own_colors.isChecked() :
-                    self.color_ranges = np.load(dir_path_npy)
-                    print('color range from previous own colors' , self.color_ranges)                 
+                self.color_ranges = np.load(dir_path_npy)
+                print('color range from previous own colors' , self.color_ranges)                 
             
 
             ##TODO save the numpy as a text file as well so it is easy to read
@@ -824,7 +845,6 @@ class MyGUI(QMainWindow):
     # Run Tracker Button Function
     def run_real_time(self):
         print('running real-time')
-        self.DataGraph.setHidden(True)
         src, type_of_tracking, image, color_ranges, min_radius_object, data_output_folder_path, input_folder, data_output = self.get_settings()
         GUI_real_time_color_tracking(src, type_of_tracking, image ,color_ranges , min_radius_object, data_output_folder_path)
 
