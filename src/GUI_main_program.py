@@ -853,7 +853,8 @@ class MyGUI(QMainWindow):
         src, type_of_tracking, image, color_ranges, min_radius_object, data_output_folder_path, input_folder, data_output = self.get_settings()
         #config by opening pipeline from bag)
         types_of_streams_saved = 'color' #or 'infrared' at 90 fps or 'id300' at 300 fps
-        type_of_tracking = 'obj_tracker'
+        ## TODO make this selectable
+        # type_of_tracking = 'obj_tracker'
         data_output_folder = self.folder_name.text()
         if self.folder_name.text() == '':
             data_output_folder = 'default'
