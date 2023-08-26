@@ -34,8 +34,9 @@ from tracker.lib.GUI_real_time_color_tracker import GUI_real_time_color_tracking
 from tracker.lib.GUI_graphing_trendlines import GUI_graph, GUI_graph_trendline, plot_style_color, GUI_show_equations_on_table
 from tracker.lib.graphing import GUI_graph_setup, three_D_graphs, plot_graphs, GUI_trim
 from tracker.lib.intel_realsense_D435i import record_bag_file, find_and_config_device, read_bag_file_and_config
-from tracker.lib.GUI_library import reload_table
+# from tracker.lib.GUI_library import reload_table
 from tracker.lib.color import choose_or_create_color_range
+from tracker.lib.GUI_load_tables import load_data, load_data_objects, reload_table
 
 ## TODO possibly use this instead of passing each individual piece
 class folder_info:
@@ -223,6 +224,43 @@ class MyGUI(QMainWindow):
         if os.path.isfile(f"{cwd}/cam_img_2.png"):
             os.remove(f"{cwd}/cam_img_2.png")
 '''
+    def hide_default_colors(self, hide_default):
+        # If hide_____ is false, we show all default info
+        self.table_widget_color.setHidden(hide_default)
+
+    def hide_choose(self, hide_choose):
+        # If hide_____ is false, we show all default info
+        self.combo_box_objects.setHidden(hide_choose)
+        self.folder_name_objects.setHidden(hide_choose)
+
+    def hide_define(self, hide_define):
+        # If hide_____ is false, we show all default info
+        self.table_widget_color_2.setHidden(hide_define)
+        self.lineEdit_define_color_name.setHidden(hide_define)
+        self.combo_box_objects.setHidden(hide_define)
+        # saved colors
+        self.folder_name_objects.setHidden(hide_define)
+        self.find_lower_upper_button.setHidden(hide_define)
+
+    def hide_color_radiobuttons(self, hide_color):
+        # Color radio buttons
+        self.select_default_colors.setHidden(hide_color)
+        self.select_your_own_colors.setHidden(hide_color)
+        self.define_colors.setHidden(hide_color)
+        self.hide_default_colors(True)
+        self.hide_choose(True)
+        self.hide_define(True)
+
+    def hide_folder_details(self, folder_details):
+        self.folder_list.setHidden(False)
+        self.folder_name.setHidden(False)
+
+    def hide_graph_options(self, graph_options):
+        self.select_acceleration.setHidden(graph_options)
+        self.select_momentum.setHidden(graph_options)
+        ## TODO Energy set this to the variable when complete
+        self.select_energy.setHidden(True)
+
     # List Folders to save the file to
     def list_folders(self, data):
         self.folder_list.clear()
@@ -240,8 +278,6 @@ class MyGUI(QMainWindow):
         dir_path = os.path.abspath(os.path.join(base_path, 'data', data, ''))
         # print('data file path', dir_path)
         list_files = []
-        list_files.append('-Select your own color pallet-')
-        list_files.append('Create new set of objects')
         for f in os.listdir(dir_path):
             list_files.append(f)
         self.combo_box_objects.addItems(list_files)
@@ -273,6 +309,8 @@ class MyGUI(QMainWindow):
             pass
         # return data_output_folder, data_output_folder_path
 
+
+
     def define_objects_shown(self):
         # Provide a table for user to state information for the object
         self.table_widget_objects.setColumnWidth(0,50)
@@ -281,43 +319,35 @@ class MyGUI(QMainWindow):
         self.table_widget_objects.setColumnWidth(3,80)
         # Hide onscreen for now. We may want to select the objets here in the future
         self.table_widget_objects.setColumnWidth(4,0)
-        objects_to_track  = self.load_data_objects(self.table_widget_objects) 
+        objects_to_track  = load_data_objects(self.table_widget_objects) 
 
 
-    # Infrared chosen (vs. color)
+
+
+
+    def color_button_pressed(self):
+        self.data_output = 'color_o'
+        self.hide_color_radiobuttons(False)
+        # Select the color from a list, use a predefined preset, or create a new one.
+        self.table_widget_objects.setHidden(True)
+        self.hide_default_colors(False)
+        self.default_colors_shown()
+        self.hide_folder_details(False)
+        self.hide_graph_options(False)
+        self.list_folders(self.data_output)
+
+
     def infrared_90_button_pressed(self):
         # Define the the folders that will be used
         type_of_tracking = 'obj_tracker'
         input_folder = 'infrared_i'
         data_output = 'infrared_o'
         # Color options are hidden
-        self.select_default_colors.setHidden(True)
-        self.select_your_own_colors.setHidden(True)
-        self.define_colors.setHidden(True)
-
-        self.combo_box_objects.setHidden(True)
-        self.folder_name_objects.setHidden(True)
-        self.lineEdit_define_color_name.setHidden(True)
-        self.find_lower_upper_button.setHidden(True)
-
-        self.table_widget_color.setHidden(True)
-        self.table_widget_color_2.setHidden(True)
-        
-        # Oject Tracking options shown
+        self.hide_color_radiobuttons(True)
         self.table_widget_objects.setHidden(False)
+        self.hide_folder_details(False)
+        self.hide_graph_options(False)     
         self.define_objects_shown()
-        
-        # show other options
-        self.folder_list.setHidden(False)
-        self.folder_name.setHidden(False)
-        self.select_acceleration.setHidden(False)
-        self.select_momentum.setHidden(False)
-        '''
-        self.select_energy.setHidden(False)
-        '''
-        self.select_energy.setHidden(True)
-
-        # Folder List Showing Folders
         self.list_folders(data_output)
         print('Future')
         
@@ -326,92 +356,29 @@ class MyGUI(QMainWindow):
         input_folder = 'other_i'
         data_output = 'other_o' 
         # Select the color from a list, use a predefined preset, or create a new one.
-        self.select_default_colors.setHidden(True)
-        self.select_your_own_colors.setHidden(True)
-        self.define_colors.setHidden(True)
-
+        self.hide_color_radiobuttons(True)
         self.table_widget_objects.setHidden(False)
-        
-
-        self.folder_list.setHidden(False)
-        self.folder_name.setHidden(False)
-        self.select_energy.setHidden(True)
-        self.select_momentum.setHidden(True)
-
-        self.select_acceleration.setHidden(False)
-        self.select_acceleration.isChecked()
+        self.hide_folder_details(False)
+        self.hide_graph_options(False)     
+        self.define_objects_shown()
+        self.list_folders(data_output)
 
     def skeletal_tracker_pressed(self):
         self.set_folder_to_other()
         type_of_tracking = 'other'
         input_folder = 'other_i'
         data_output = 'other_o' 
+        self.hide_color_radiobuttons(True)
         self.table_widget_objects.setHidden(True)
+        self.hide_folder_details(False)
+        self.hide_graph_options(False)     
+        self.define_objects_shown()
+        self.list_folders(data_output)
         print('skeletal')
         webbrowser.open('https://physicsrule.github.io/SkeletalTracking.github.io/')
         #webbrowser.get("google-chrome").open('https://physicsrule.github.io/SkeletalTracking.github.io/')
     
-    def load_data(self,type_of_tracking, input_folder, title_of_table):
-        # load the dictionary
-        ## TODO make this a file to read
-        objects_to_track = [{
-       'color' : "green" , 'lower' : (29, 67, 6) , 'upper' : (64, 255, 255) , 'radius' : 10 , 'mass' : 0.0},
-        {'color' : "red" , 'lower' : (0, 146, 12) , 'upper' : (11, 255, 206) , 'radius' : 10 , 'mass' : 0.0},
-        {'color' : "blue" , 'lower' : (58, 71, 52) , 'upper' : (125, 255, 170) , 'radius' : 10 , 'mass' : 0.0},
-        {'color' : "purple" , 'lower' : (139,  68,  78) , 'upper' : (170, 255, 255) , 'radius' : 10 , 'mass' : 0.0},
-        {'color' : "yellow" , 'lower' : (20, 36, 4) , 'upper' : (71, 238, 213), 'radius' : 10 , 'mass' : 0.0},
-        {'color' : "orange" , 'lower' : (0, 123, 189), 'upper' : (24, 255, 255) , 'radius' : 10 , 'mass' : 0.0}]
-        row = 0
-        title_of_table.setRowCount(len(objects_to_track))
-        for object in objects_to_track:
-            # Checkbox to chose default colors
-            item = QTableWidgetItem(''.format(row, 0))
-            item.setFlags(Qt.ItemFlag.ItemIsUserCheckable|Qt.ItemFlag.ItemIsEnabled)
-            item.setCheckState(Qt.CheckState.Unchecked)
-            title_of_table.setItem(row, 0, item)
-            # Columns for default colors
-            title_of_table.setItem(row,1, QTableWidgetItem(object[type_of_tracking]))
-            title_of_table.setItem(row,2, QTableWidgetItem(str(object['radius'])))
-            title_of_table.setItem(row,3, QTableWidgetItem(str(object['mass'])))
-            title_of_table.setItem(row,4, QTableWidgetItem(str((object['lower']))))
-            title_of_table.setItem(row,5, QTableWidgetItem(str((object['upper']))))
-            item_on_screen = QTableWidgetItem(''.format(row, 6))
-            item_on_screen.setFlags(Qt.ItemFlag.ItemIsUserCheckable|Qt.ItemFlag.ItemIsEnabled)
-            item_on_screen.setCheckState(Qt.CheckState.Unchecked)
-            title_of_table.setItem(row, 6, item_on_screen )
-            row +=1
-
-    def load_data_objects(self, title_of_table):
-        # load the dictionary
-        ## TODO make this a file to read
-        objects_to_track = [{
-       'name' : "object1" , 'radius' : 10 , 'mass' : 0.0},
-        {'name' : "object2" , 'radius' : 10 , 'mass' : 0.0},
-        {'name' : "object3" , 'radius' : 10 , 'mass' : 0.0},
-        {'name' : "object4" ,  'radius' : 10 , 'mass' : 0.0},
-        {'name' : "object5" , 'radius' : 10 , 'mass' : 0.0},
-        {'name' : "object6" , 'radius' : 10 , 'mass' : 0.0}]
-        row = 0
-        title_of_table.setRowCount(len(objects_to_track))
-        for object in objects_to_track:
-            # Checkbox to chose default colors
-            item = QTableWidgetItem(''.format(row, 0))
-            item.setFlags(Qt.ItemFlag.ItemIsUserCheckable|Qt.ItemFlag.ItemIsEnabled)
-            if row == 0: 
-                item.setCheckState(Qt.CheckState.Checked)
-            else: 
-                item.setCheckState(Qt.CheckState.Unchecked)
-            title_of_table.setItem(row, 0, item)
-            # Columns for default colors
-            title_of_table.setItem(row,1, QTableWidgetItem(str(object['name'])))
-            title_of_table.setItem(row,2, QTableWidgetItem(str(object['radius'])))
-            title_of_table.setItem(row,3, QTableWidgetItem(str(object['mass'])))
-            # For future selection of object??
-            item_on_screen = QTableWidgetItem(''.format(row, 4))
-            item_on_screen.setFlags(Qt.ItemFlag.ItemIsUserCheckable|Qt.ItemFlag.ItemIsEnabled)
-            item_on_screen.setCheckState(Qt.CheckState.Unchecked)
-            title_of_table.setItem(row, 4, item_on_screen )
-            row +=1
+    
 
     def default_colors_shown(self):
         type_of_tracking ='color'
@@ -425,29 +392,23 @@ class MyGUI(QMainWindow):
         self.table_widget_color.setColumnWidth(4,0)
         self.table_widget_color.setColumnWidth(5,0)
         self.table_widget_color.setColumnWidth(6,0)
-        objects_to_track  = self.load_data(type_of_tracking, input_folder,self.table_widget_color) 
-        self.table_widget_color.setHidden(False)
-        self.table_widget_color_2.setHidden(True)
+        objects_to_track  = load_data(type_of_tracking, input_folder,self.table_widget_color) 
 
-        self.lineEdit_define_color_name.setHidden(True)
-        self.combo_box_objects.setHidden(True)
-        # saved colors
-        self.folder_name_objects.setHidden(True)
-        self.find_lower_upper_button.setHidden(True)
+        self.hide_default_colors(False)
+        self.hide_choose(True)
+        self.hide_define(True)
+
+
 
     def your_own_colors_shown(self):
         stype_of_tracking ='color'
         input_folder = 'color_i'
         data_output = 'color_o'
-        # default colors
-        self.table_widget_color.setHidden(True)
-        self.combo_box_objects.setHidden(False)
-        # saved colors
-        self.folder_name_objects.setHidden(False)
-        self.table_widget_color_2.setHidden(True)
 
-        self.lineEdit_define_color_name.setHidden(True)
-        self.find_lower_upper_button.setHidden(True)
+        self.hide_default_colors(True)
+        self.hide_choose(False)
+        self.hide_define(True)
+
         
         self.select_object_file(input_folder)
 
@@ -471,43 +432,19 @@ class MyGUI(QMainWindow):
         self.table_widget_color_2.setColumnWidth(3,52)
         self.table_widget_color_2.setColumnWidth(4,80)
         self.table_widget_color_2.setColumnWidth(5,80)
-        objects_to_track  = self.load_data(type_of_tracking, input_folder, self.table_widget_color_2) 
+        objects_to_track  = load_data(type_of_tracking, input_folder, self.table_widget_color_2) 
         self.table_widget_color_2.setColumnWidth(6,56)
         self.find_lower_upper_button.setHidden(False)
 
 
-    def color_button_pressed(self):
-        self.data_output = 'color_o'
-        # Select the color from a list, use a predefined preset, or create a new one.
-        self.select_default_colors.setHidden(False)
-        self.select_your_own_colors.setHidden(False)
-        self.define_colors.setHidden(False)
-        self.table_widget_objects.setHidden(True)
-        self.table_widget_color.setHidden(False)
 
-        self.folder_list.setHidden(False)
-        self.folder_name.setHidden(False)
-        self.select_acceleration.setHidden(False)
-        self.select_momentum.setHidden(False)
-        self.select_energy.setHidden(True)
-        '''
-        self.select_energy.setHidden(False)
-        '''
-
-        # Folder List Showing Folders
-        self.list_folders(self.data_output)
 
     # Color Selected
     def color_selected(self):
         # Define the the folders that will be used      
         self.folder_list.setHidden(False)
         self.folder_name.setHidden(False)
-        self.select_acceleration.setHidden(False)
-        self.select_momentum.setHidden(False)
-        '''
-        self.select_energy.setHidden(False)
-        '''
-        self.select_energy.setHidden(True)
+
         # Folder List Showing Folders
         data_output = 'color_o'
         self.list_folders(data_output)
@@ -845,9 +782,7 @@ class MyGUI(QMainWindow):
         axes_3D.set_zlabel('y (meters)', labelpad=20)
         line_style_array, line_color_array, marker_shape_array, show_legend = plot_style_color()
         
-
         print (self.xmin, self.xmax)
-
         # The folder that will be graphed
         base_path = os.getcwd()
         data_output = 'color_o'
@@ -863,23 +798,16 @@ class MyGUI(QMainWindow):
         i_object =0
         for (file_path, file_name, mass) in csv_files_array:
         # For each object create a data_file from position data
-
             # Setup data_frame to put velocity, momentum, acceleration, and energy data
             file_name_dataframe = file_name  + "sheet.csv"
             file_name_dataframe_path = os.path.abspath(os.path.join(data_output_folder_path + '/' + file_name_dataframe + '/' ))   
-
             # Reads the current version of the *csv file and smooths it
             file_name_w_extension = file_name + '.csv'
             path_to_file = os.path.abspath(os.path.join(file_path, file_name_w_extension))
-            graph_data = pd.read_csv(path_to_file, header=0, names = header_list)
-            
-            # Dont need data_frame = pd.DataFrame(graph_data) 
-            # Dont need smooth_data_to_graph = data_frame.set_index('Time')
-            
+            graph_data = pd.read_csv(path_to_file, header=0, names = header_list)           
             # Trim
             graph_data_window = graph_data[graph_data["Time"]>self.xmin]
-            graph_data_window = graph_data_window[graph_data_window["Time"]<self.xmax]
-            
+            graph_data_window = graph_data_window[graph_data_window["Time"]<self.xmax]            
             axes_3D.plot3D(graph_data_window['x'],graph_data_window['z'], graph_data_window['y'], line_color_array[i_object], linestyle= line_style_array[i_object], markersize = 3, marker = marker_shape_array[i_object])
             axes_3D.scatter3D(graph_data_window['x'],graph_data_window['z'], graph_data_window['y'], c=line_color_array[i_object], cmap=line_color_array[i_object], marker = marker_shape_array[i_object])
             i_object +=1
@@ -891,8 +819,7 @@ class MyGUI(QMainWindow):
         # print(self.table_widget_color_2.rowCount())
         self.table_widget_color_2 = reload_table(self.table_widget_color_2 )
         self.color_ranges_text = self.lineEdit_define_color_name.text
-
-
+        return
 
     # Run Tracker Button Function
     def run_real_time(self):
@@ -908,7 +835,6 @@ class MyGUI(QMainWindow):
         pipeline = find_and_config_device()
         GUI_tracking(pipeline, src, type_of_tracking, image, color_ranges, min_radius_object, data_output_folder_path, input_folder, data_output)
         
-
     def record_bag(self):
         print('recording video')
         src, type_of_tracking, image, color_ranges, min_radius_object, data_output_folder_path, input_folder, data_output = self.get_settings()
@@ -929,15 +855,11 @@ class MyGUI(QMainWindow):
         bag_file = 'bag.bag'
         bag_folder_path =  os.path.abspath(os.path.join(data_output_folder_path + "/" + bag_file))
         pipeline = read_bag_file_and_config(types_of_streams_saved, data_output_folder_path, data_output_folder , bag_folder_path)
-
         GUI_tracking(pipeline, src, type_of_tracking, image, color_ranges, min_radius_object, data_output_folder_path, input_folder, data_output)
-
-
 
     def toggle_window(self, window):
         if window.isVisible():
             window.hide()
-
         else:
             window.show()
 class Worker1(QThread):

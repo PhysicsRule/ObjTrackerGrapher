@@ -929,7 +929,7 @@ Select the additional variables you would like graphed</string>
       <enum>Qt::NoFocus</enum>
      </property>
      <property name="text">
-      <string>Infrared
+      <string>Infrared(Future)
 Object tracking
 90 fps</string>
      </property>
@@ -1305,9 +1305,9 @@ Object tracking
       <enum>Qt::NoFocus</enum>
      </property>
      <property name="text">
-      <string>Infrared
-300 fps (thin)
-(Future)</string>
+      <string>Infrared(Future)
+Object Tracking
+300 fps (thin)</string>
      </property>
     </widget>
     <widget class="QPushButton" name="track_from_bag_button">
@@ -1855,6 +1855,22 @@ then see it in 3D or find trendlines</string>
        </font>
       </property>
      </column>
+    </widget>
+    <widget class="QLabel" name="label">
+     <property name="geometry">
+      <rect>
+       <x>370</x>
+       <y>770</y>
+       <width>251</width>
+       <height>16</height>
+      </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">color: rgb(255, 255, 255);</string>
+     </property>
+     <property name="text">
+      <string>New bag files need new names or errors occur</string>
+     </property>
     </widget>
    </widget>
    <widget class="QComboBox" name="combo_test">
