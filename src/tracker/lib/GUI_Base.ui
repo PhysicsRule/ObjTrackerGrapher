@@ -594,7 +594,7 @@ Select the additional variables you would like graphed</string>
       <string>Default Colors</string>
      </property>
      <property name="checked">
-      <bool>false</bool>
+      <bool>true</bool>
      </property>
     </widget>
     <widget class="QRadioButton" name="select_your_own_colors">

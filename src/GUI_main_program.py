@@ -113,7 +113,8 @@ class MyGUI(QMainWindow):
         self.toolbar=False
         # Folder Options Hidden
         self.folder_list.setHidden(True)        # List of folders to put the data into
-        self.folder_name.setHidden(True)  
+        self.folder_name.setHidden(True) 
+        self.folder_name.clear() 
         # Tables
         self.table_widget_color.setHidden(True)
         self.table_widget_color_2.setHidden(True) # For new colors
@@ -139,6 +140,7 @@ class MyGUI(QMainWindow):
         # Setting the bounds for the trendlines and the output equations / functions
         self.trendline_table_widget.setHidden(True)
         self.find_trendlines_button.setHidden(True)
+
         # GUI shows up
         self.show()
         
@@ -188,10 +190,13 @@ class MyGUI(QMainWindow):
         self.color_group.addButton(self.select_default_colors)
         self.color_group.addButton(self.select_your_own_colors)
         self.color_group.addButton(self.define_colors)
+        self.select_default_colors.setChecked(True)
+        
         # Putting buttons in AME group
         self.ame_group.addButton(self.select_acceleration)
         self.ame_group.addButton(self.select_momentum)
         self.ame_group.addButton(self.select_energy)
+        self.select_acceleration.setChecked(True)
 
 
         # self.folder_name.returnPressed.connect(self.user_creating_folder)
@@ -287,6 +292,7 @@ class MyGUI(QMainWindow):
             yr, month, day, hr, minute = map(int,t )
             data_output_folder = str(f'minute {minute}')
             print('data output folder default', t)
+            self.folder_name.insert(data_output_folder)
         else:
             data_output_folder = folder_name
         data_output_folder_path = self.get_output_folder_path(base_path, self.tracking_info.output_folder, data_output_folder)
@@ -314,12 +320,12 @@ class MyGUI(QMainWindow):
     def save_defined_objects(self):
         # Once a person hits ENTER the objects they just created get saved to the input file
         base_path = os.getcwd()
-        self.color_ranges_text = self.lineEdit_define_color_name.text()
-        self.color_ranges = load_ranges(self.table_widget_color_2)
+        color_ranges_text = self.lineEdit_define_color_name.text()
+        color_ranges = load_ranges(self.table_widget_color_2)
         input_folder = self.tracking_info.input_folder
         dir_path = os.path.abspath(os.path.join(base_path, 'data', input_folder, ''))
-        dir_path_npy= os.path.abspath(os.path.join(dir_path, self.color_ranges_text,''))
-        np.save(dir_path_npy, self.color_ranges)
+        dir_path_npy= os.path.abspath(os.path.join(dir_path, color_ranges_text,''))
+        np.save(dir_path_npy, color_ranges)
         
         ## TODO look at previous table
         ## this is probably garbage
@@ -780,7 +786,7 @@ class MyGUI(QMainWindow):
         # The folder that will be graphed
         base_path = os.getcwd()
         data_output = 'color_o'
-        data_output_folder_path = self.get_output_folder_path(base_path, data_output)
+        data_output_folder_path = self.get_output_folder_path(base_path, data_output, self.folder_name.text())
         
         # The array of the colors to be tracked
         graph_color_ranges, csv_files_array = find_objects_to_graph (data_output_folder_path)
