@@ -190,10 +190,13 @@ class MyGUI(QMainWindow):
         self.color_group.addButton(self.select_default_colors)
         self.color_group.addButton(self.select_your_own_colors)
         self.color_group.addButton(self.define_colors)
+        self.select_default_colors.setChecked(True)
+        
         # Putting buttons in AME group
         self.ame_group.addButton(self.select_acceleration)
         self.ame_group.addButton(self.select_momentum)
         self.ame_group.addButton(self.select_energy)
+        self.select_acceleration.setChecked(True)
 
 
         # self.folder_name.returnPressed.connect(self.user_creating_folder)

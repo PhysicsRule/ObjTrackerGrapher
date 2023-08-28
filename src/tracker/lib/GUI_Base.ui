@@ -593,6 +593,9 @@ Select the additional variables you would like graphed</string>
      <property name="text">
       <string>Default Colors</string>
      </property>
+     <property name="checked">
+      <bool>true</bool>
+     </property>
     </widget>
     <widget class="QRadioButton" name="select_your_own_colors">
      <property name="geometry">
@@ -1311,6 +1314,9 @@ Object Tracking
      </property>
      <property name="text">
       <string>Acceleration</string>
+     </property>
+     <property name="checked">
+      <bool>true</bool>
      </property>
     </widget>
     <widget class="QRadioButton" name="select_energy">
