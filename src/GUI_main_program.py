@@ -285,7 +285,7 @@ class MyGUI(QMainWindow):
         if folder_name =='':
             t= time.strftime("%Y %m %d %H %M").split()
             yr, month, day, hr, minute = map(int,t )
-            data_output_folder == minute
+            data_output_folder = str(f'minute {minute}')
             print('data output folder default', t)
         else:
             data_output_folder = folder_name
