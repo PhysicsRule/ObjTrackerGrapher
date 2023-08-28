@@ -36,7 +36,7 @@ from tracker.lib.graphing import GUI_graph_setup, three_D_graphs, plot_graphs, G
 from tracker.lib.intel_realsense_D435i import record_bag_file, find_and_config_device, read_bag_file_and_config
 # from tracker.lib.GUI_library import reload_table
 from tracker.lib.color import choose_or_create_color_range
-from tracker.lib.GUI_load_tables import load_data, load_data_objects, reload_table
+from tracker.lib.GUI_tables import load_ranges, load_data, load_data_objects, reload_table
 
 ## TODO possibly use this instead of passing each individual piece
 class tracking:
@@ -235,7 +235,7 @@ class MyGUI(QMainWindow):
         # If hide_____ is false, we show all default info
         self.table_widget_color_2.setHidden(hide_define)
         self.lineEdit_define_color_name.setHidden(hide_define)
-        self.combo_box_objects.setHidden(hide_define)
+        #self.combo_box_objects.setHidden(hide_define)
         # saved colors
         self.find_lower_upper_button.setHidden(hide_define)
 
@@ -312,14 +312,22 @@ class MyGUI(QMainWindow):
         return data_output_folder, data_output_folder_path
 
     def save_defined_objects(self):
+        # Once a person hits ENTER the objects they just created get saved to the input file
         base_path = os.getcwd()
-        __, self.color_ranges, __, data_output_folder_path = self.get_settings()
         self.color_ranges_text = self.lineEdit_define_color_name.text()
-        dir_path = os.path.abspath(os.path.join(base_path, 'data', self.tracking_info.input_folder, ''))
+        self.color_ranges = load_ranges(self.table_widget_color_2)
+        input_folder = self.tracking_info.input_folder
+        dir_path = os.path.abspath(os.path.join(base_path, 'data', input_folder, ''))
         dir_path_npy= os.path.abspath(os.path.join(dir_path, self.color_ranges_text,''))
-        dir_out_path_npy = os.path.abspath(os.path.join(data_output_folder_path , self.color_ranges_text,'')) 
-        self.color_ranges = np.load(dir_path_npy)
         np.save(dir_path_npy, self.color_ranges)
+        
+        ## TODO look at previous table
+        ## this is probably garbage
+        # output_folder = self.tracking_info.output_folder
+        # data_output_folder, data_output_folder_path = self.user_creating_folder(base_path, self.folder_name.text())
+        # dir_out_path_npy = os.path.abspath(os.path.join(data_output_folder_path , self.color_ranges_text,'')) 
+        # self.color_ranges = np.load(dir_path_npy)
+        
 
 
     def define_objects_shown(self):
@@ -579,24 +587,7 @@ class MyGUI(QMainWindow):
                     self.color_ranges_text  = self.lineEdit_define_color_name.text()
                 
                 # Read the colors from one of the 2 tables above
-                name_of_array = ''
-                for row in range(title_of_table.rowCount()):
-                    if title_of_table.item(row,0).checkState() == Qt.CheckState.Checked:
-                        item = QTableWidgetItem(''.format(row, 1))
-                        color = title_of_table.item(row,1).text()
-                        print('color', color)
-                        lower = title_of_table.item(row,4).text()
-                        upper = title_of_table.item(row,5).text()
-                        radius_meters = float(title_of_table.item(row,2).text())/100
-                        mass = title_of_table.item(row,3).text()
-
-                        the_array = np.array([(ast.literal_eval(lower),ast.literal_eval(upper), (color),(radius_meters), (mass) )],dtype=dt)
-                        if i==0:
-                            new_color_ranges = the_array
-                        else:
-                            new_color_ranges = np.hstack((new_color_ranges,the_array))
-                        i += 1
-                    self.color_ranges = new_color_ranges
+                self.color_ranges = load_ranges(title_of_table)
 
             elif self.select_your_own_colors.isChecked():
             # You have previously defined the colors
