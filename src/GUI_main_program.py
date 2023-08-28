@@ -32,7 +32,7 @@ from tracker.lib.user_input import make_new_folder
 from tracker.lib.GUI_tracker import GUI_tracking, find_lower_upper_bounds_on_screen
 from tracker.lib.GUI_real_time_color_tracker import GUI_real_time_color_tracking
 from tracker.lib.GUI_graphing_trendlines import GUI_graph, GUI_graph_trendline, plot_style_color, GUI_show_equations_on_table
-from tracker.lib.graphing import GUI_graph_setup, three_D_graphs, plot_graphs, GUI_trim
+from tracker.lib.graphing import GUI_graph_setup, three_D_graphs, plot_graphs, GUI_trim, parameters
 from tracker.lib.intel_realsense_D435i import record_bag_file, find_and_config_device, read_bag_file_and_config
 # from tracker.lib.GUI_library import reload_table
 from tracker.lib.color import choose_or_create_color_range
@@ -48,19 +48,6 @@ class tracking:
         self.type_of_tracking = type_of_tracking                # color or infrared
         self.input_folder = input_folder                        # example: color_i
         self.output_folder = output_folder                      # example: color_o
-
-class folder_info:
-    """
-    Information about the folder the data is saved to
-    """  
-    def __init__(self, data_output_folder, data_output_folder_path, color_ranges ):
-        self.data_output_folder = data_output_folder            # example: drop1
-        self.data_output_folder_path = data_output_folder_path  
-
-        # numpy with objects you are tracking with object name, mass, and radius
-        self.color_ranges = color_ranges                      #(lower,upper, color_name, radius_meters, mass)
-
-
 class image_option:
     """
     Which objects are displayed while the tracker is running
@@ -75,19 +62,6 @@ class image_option:
         self.save_mask = save_mask
         self.save_video = save_video
 
-class parameter_to_plot:
-    """
-    The third row of the 9 graphs will display one of these
-    If acceleration or momentum is used, x,y,z columns are the same
-    If Energy is used, PEG, KE, and Total energy are each of the graphs in the column
-    """
-    def __init__(self, acceleration, momentum, energy):
-        if acceleration:
-            self.which_parameter_to_plot =  'A'
-        elif momentum:
-            self.which_parameter_to_plot =  'P'
-        elif energy:
-            self.which_parameter_to_plot =  'E'
 
 class mlpcanvas(FigureCanvasQTAgg):
     """
@@ -221,7 +195,7 @@ class MyGUI(QMainWindow):
         self.ame_group.addButton(self.select_energy)
 
 
-        self.folder_name.returnPressed.connect(self.user_creating_folder)
+        # self.folder_name.returnPressed.connect(self.user_creating_folder)
         self.lineEdit_define_color_name.returnPressed.connect(self.save_defined_objects)
         # Threaded Class Stuff
         '''
@@ -307,19 +281,23 @@ class MyGUI(QMainWindow):
             list_files.append(f)
         self.combo_box_objects.addItems(list_files)
 
-    def user_creating_folder(self):
-        data = "color_o"
-        base_path = os.getcwd()
-        dir_path = os.path.abspath(os.path.join(base_path, 'data', data, ''))
+    def user_creating_folder(self, base_path, folder_name):
+        # Set the folder information even if none is given
+        base_path
+        if folder_name =='':
+            t= time.strftime("%Y %m %d %H %M").split()
+            yr, month, day, hr, minute = map(int,t )
+            data_output_folder == minute
+            print('data output folder default', t)
+        else:
+            data_output_folder = folder_name
+        data_output_folder_path = self.get_output_folder_path(base_path, self.tracking_info.output_folder, data_output_folder)
+        # Make a new directory if one does not exist
+        # for graphing, one should exist
+        # for tracking, create one
         check = False
         x = 0
-
         while not check:
-            if 'o' in data:
-                data_output_folder = self.folder_name.text()
-            elif 'i' in data:
-                data_output_folder = self.folder_name_objects.text()
-            data_output_folder_path = os.path.abspath(os.path.join(dir_path, data_output_folder, ''))
             # Create a folder to store all of the data in if it does not already exist
             if not os.path.exists(data_output_folder_path):
                 os.makedirs(data_output_folder_path)
@@ -332,7 +310,8 @@ class MyGUI(QMainWindow):
             print(f'\nYour folder will be available:\n {data_output_folder_path}')
         else:
             pass
-        # return data_output_folder, data_output_folder_path
+
+        return data_output_folder, data_output_folder_path
 
     def save_defined_objects(self):
         base_path = os.getcwd()
@@ -360,7 +339,7 @@ class MyGUI(QMainWindow):
 
 
     def color_button_pressed(self):
-        self.tracking_info = tracking(types_of_streams_saved ='color',
+        self.tracking_info = tracking(types_of_streams_saved = 'color',
                                          type_of_tracking = 'color',
                                          input_folder = 'color_i',
                                          output_folder = 'color_o')
@@ -510,14 +489,9 @@ class MyGUI(QMainWindow):
         pass
 
         # Pass through function
-    def get_output_folder_path(self, base_path, data_output):
+    def get_output_folder_path(self, base_path, data_output, data_output_folder):
         # output directory to store the data
         dir_path = os.path.abspath(os.path.join(base_path, 'data', data_output, ''))
-        data_output_folder = self.folder_name.text()
-        if self.folder_name.text() == '':
-            data_output_folder = 'default'
-            print('Select the folder to save into')
-            ## TODO erase existing folders in default
         data_output_folder_path = os.path.abspath(os.path.join(dir_path, data_output_folder, ''))
 
         return data_output_folder_path
@@ -526,6 +500,7 @@ class MyGUI(QMainWindow):
     # Choice of Acceleration, Momentum, or Energy
     # Hides the variables that momentum does not need so it cleans up the visual if used energy etc.
 
+    
     def acceleration_chosen(self):
         self.up_axis.setHidden(True)
         self.r_height.setHidden(True)
@@ -562,6 +537,7 @@ class MyGUI(QMainWindow):
             # This is the green color range
             self.color_ranges=np.array([([32, 70, 68], [ 64, 194, 227], 'green', 0.1, 0.)],dtype=np.dtype([('lower', np.int32, (3,)), ('upper', np.int32, (3,)), ('name', np.unicode_, 16), ('radius_meters', np.float32), ('mass', np.float32)]))
             min_radius_object=5
+            # XXX need dataoutput folder path after 169
             data_output_folder_path=self.get_output_folder_path(base_path, '169')
 
             # when tracking
@@ -577,8 +553,13 @@ class MyGUI(QMainWindow):
         ## TODO Add spot in GUI for this later. How do I do this?
         min_radius_object = 5
 
-        
-        data_output_folder_path = self.get_output_folder_path(base_path, self.tracking_info.output_folder)
+        '''
+        If the user does not push enter, then the text is ''
+        Also if the user does not put in a name, the text is ''
+        Default folder is found
+        Creates all folders in folders class
+        '''
+        data_output_folder, data_output_folder_path = self.user_creating_folder(base_path, self.folder_name.text())
 
         # Store the array of colors to track in the output directory
         # color choice
@@ -657,7 +638,7 @@ class MyGUI(QMainWindow):
 
 
     def setup_trendline_table(self, title_of_table,csv_files_array, data_output, folder_name, data_output_folder_path, trendline_folder_path):
-        parameters = parameter_to_plot(self.select_acceleration.isChecked(), self.select_momentum.isChecked(), self.select_energy.isChecked())
+        which_parameter_to_plot = parameters(self.select_acceleration.isChecked(), self.select_momentum.isChecked(), self.select_energy.isChecked())
         self.trendline_table_widget.setHidden(False)
         self.find_trendlines_button.setHidden(False)
         title_of_table.setColumnCount(len(csv_files_array))
@@ -688,12 +669,12 @@ class MyGUI(QMainWindow):
         for i,var in enumerate(['x','y','z']):
             var_of_t = str(str(var)+'(t)') 
             v_var_of_t = str('V'+ str(var)+'(t)') 
-            if parameters.which_parameter_to_plot =='E':
+            if which_parameter_to_plot =='E':
                 if i == 0:      third_var_of_t = 'PE(t)'
                 elif i == 1:    third_var_of_t = 'KE(t)'
                 else:           third_var_of_t = 'Total(t)'
             else:
-                third_var_of_t = str(parameters.which_parameter_to_plot + str(var_of_t)) # Example Ax or Py
+                third_var_of_t = str(which_parameter_to_plot + str(var_of_t)) # Example Ax or Py
             print(i)
             title_of_table.setVerticalHeaderItem(row + i*4, QTableWidgetItem(str('MSE ' + var_of_t)))
             title_of_table.setVerticalHeaderItem(row + i*4 + 1, QTableWidgetItem(var_of_t))
@@ -711,7 +692,7 @@ class MyGUI(QMainWindow):
         title_of_table.setVerticalHeaderItem(23,QTableWidgetItem( 'csv_files_array' ))
         title_of_table.setItem(23,column,QTableWidgetItem( str(csv_files_array) ))
         title_of_table.setVerticalHeaderItem(24,QTableWidgetItem( 'parameter_to_plot' ))    
-        title_of_table.setItem(24,column,QTableWidgetItem( parameters.which_parameter_to_plot ))
+        title_of_table.setItem(24,column,QTableWidgetItem( which_parameter_to_plot ))
         title_of_table.setVerticalHeaderItem(25,QTableWidgetItem( 'trendline_folder_path' ))
         title_of_table.setItem(25,column,QTableWidgetItem( str(trendline_folder_path) ))
 
@@ -723,21 +704,23 @@ class MyGUI(QMainWindow):
         # The folder that will be graphed
         print('graphing')
         # What variable is to be graphed for the 3rd graph. It always graphs position and velocity
-        if self.select_momentum.isChecked(): which_parameter_to_plot = 'p'
-        elif self.select_energy.isChecked(): which_parameter_to_plot = 'e'
-        # acceleration is default
-        else : which_parameter_to_plot = 'a'
+        
+        # TODO if this is needed put back in
+        # if self.select_momentum.isChecked(): which_parameter_to_plot = 'p'
+        # elif self.select_energy.isChecked(): which_parameter_to_plot = 'e'
+        # # acceleration is default
+        # else : which_parameter_to_plot = 'a'
 
-        if self.data_in_other.isChecked(): 
-            data_output = 'color_o'
-            self.select_momentum.isHidden(True)
-            self.select_energy.isHidden(True)
-            which_parameter_to_plot = 'a'
-        else:
-            data_output = 'color_o'
+        # if self.data_in_other.isChecked(): 
+        #     data_output = 'color_o'
+        #     self.select_momentum.isHidden(True)
+        #     self.select_energy.isHidden(True)
+        #     which_parameter_to_plot = 'a'
+        # else:
+        #     data_output = 'color_o'
         base_path = os.getcwd()
 
-        data_output_folder_path = self.get_output_folder_path(base_path, data_output)
+        data_output_folder, data_output_folder_path = self.user_creating_folder(base_path, self.folder_name.text())
         
         # The array of the colors to be tracked
         graph_color_ranges, csv_files_array = find_objects_to_graph (data_output_folder_path)
@@ -746,6 +729,7 @@ class MyGUI(QMainWindow):
 
         line_style_array, line_color_array, marker_shape_array, show_legend = plot_style_color()
         self.graph_widget.clear()
+        which_parameter_to_plot = parameters(self.select_acceleration.isChecked(), self.select_momentum.isChecked(), self.select_energy.isChecked())
         self.graph_widget, points_to_smooth = GUI_graph_setup(self.graph_widget, which_parameter_to_plot)
         trendline_folder_path, smooth_data_to_graph = GUI_graph (which_parameter_to_plot, data_output_folder_path, graph_color_ranges, csv_files_array, points_to_smooth )
 
@@ -788,7 +772,7 @@ class MyGUI(QMainWindow):
 
         self.graph_widget.draw()
         self.Button3DGraph.setHidden(False)
-        self.setup_trendline_table(self.trendline_table_widget, csv_files_array, data_output, self.folder_name.text(), data_output_folder_path, trendline_folder_path)
+        self.setup_trendline_table(self.trendline_table_widget, csv_files_array, self.tracking_info.output_folder, self.folder_name.text(), data_output_folder_path, trendline_folder_path)
         
 
         #plt.tight_layout()
