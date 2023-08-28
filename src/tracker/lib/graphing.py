@@ -33,6 +33,20 @@ from mpl_toolkits import mplot3d
 
 import requests
 
+def parameters(acceleration, momentum, energy):
+    """
+    The third row of the 9 graphs will display one of these
+    If acceleration or momentum is used, x,y,z columns are the same
+    If Energy is used, PEG, KE, and Total energy are each of the graphs in the column
+    """
+    if acceleration:
+        which_parameter_to_plot =  'A'
+    elif momentum:
+        which_parameter_to_plot =  'P'
+    elif energy:
+        which_parameter_to_plot =  'E'
+    return which_parameter_to_plot
+
 def GUI_graph_setup(graph_widget, which_parameter_to_plot):
     # TODO remove when we no longer use smoothing to find velocity and acceleration
     #print('To calculate the velocity, do you want to use 3,5, or 7 point smoothing? \n')

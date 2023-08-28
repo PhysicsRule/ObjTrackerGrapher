@@ -502,7 +502,7 @@ Select the additional variables you would like graphed</string>
      <property name="geometry">
       <rect>
        <x>100</x>
-       <y>180</y>
+       <y>380</y>
        <width>371</width>
        <height>181</height>
       </rect>
@@ -585,7 +585,7 @@ Select the additional variables you would like graphed</string>
      <property name="geometry">
       <rect>
        <x>100</x>
-       <y>130</y>
+       <y>330</y>
        <width>101</width>
        <height>20</height>
       </rect>
@@ -593,12 +593,15 @@ Select the additional variables you would like graphed</string>
      <property name="text">
       <string>Default Colors</string>
      </property>
+     <property name="checked">
+      <bool>false</bool>
+     </property>
     </widget>
     <widget class="QRadioButton" name="select_your_own_colors">
      <property name="geometry">
       <rect>
-       <x>220</x>
-       <y>130</y>
+       <x>200</x>
+       <y>330</y>
        <width>131</width>
        <height>20</height>
       </rect>
@@ -611,7 +614,7 @@ Select the additional variables you would like graphed</string>
      <property name="geometry">
       <rect>
        <x>100</x>
-       <y>160</y>
+       <y>360</y>
        <width>431</width>
        <height>21</height>
       </rect>
@@ -938,7 +941,7 @@ Object tracking
      <property name="geometry">
       <rect>
        <x>100</x>
-       <y>400</y>
+       <y>120</y>
        <width>381</width>
        <height>22</height>
       </rect>
@@ -1078,22 +1081,6 @@ Object tracking
       <string>Show Tracking Mask</string>
      </property>
     </widget>
-    <widget class="QLineEdit" name="folder_name_objects">
-     <property name="geometry">
-      <rect>
-       <x>780</x>
-       <y>140</y>
-       <width>111</width>
-       <height>21</height>
-      </rect>
-     </property>
-     <property name="text">
-      <string/>
-     </property>
-     <property name="placeholderText">
-      <string>Colored Objects' Name</string>
-     </property>
-    </widget>
     <widget class="QCheckBox" name="show_image_check">
      <property name="geometry">
       <rect>
@@ -1133,9 +1120,9 @@ Object tracking
      <property name="geometry">
       <rect>
        <x>100</x>
-       <y>430</y>
+       <y>150</y>
        <width>381</width>
-       <height>131</height>
+       <height>161</height>
       </rect>
      </property>
      <item>
@@ -1361,8 +1348,8 @@ Object Tracking
     <widget class="QRadioButton" name="define_colors">
      <property name="geometry">
       <rect>
-       <x>370</x>
-       <y>130</y>
+       <x>340</x>
+       <y>330</y>
        <width>141</width>
        <height>17</height>
       </rect>
@@ -1378,7 +1365,7 @@ Object Tracking
      <property name="geometry">
       <rect>
        <x>100</x>
-       <y>180</y>
+       <y>380</y>
        <width>431</width>
        <height>181</height>
       </rect>
@@ -1470,9 +1457,9 @@ Object Tracking
     <widget class="QLineEdit" name="lineEdit_define_color_name">
      <property name="geometry">
       <rect>
-       <x>330</x>
-       <y>160</y>
-       <width>201</width>
+       <x>100</x>
+       <y>360</y>
+       <width>101</width>
        <height>21</height>
       </rect>
      </property>
@@ -1489,8 +1476,8 @@ Object Tracking
     <widget class="QPushButton" name="find_lower_upper_button">
      <property name="geometry">
       <rect>
-       <x>130</x>
-       <y>160</y>
+       <x>380</x>
+       <y>360</y>
        <width>151</width>
        <height>23</height>
       </rect>
@@ -1607,7 +1594,7 @@ for output</string>
      <property name="geometry">
       <rect>
        <x>100</x>
-       <y>100</y>
+       <y>310</y>
        <width>571</width>
        <height>21</height>
       </rect>
@@ -1629,7 +1616,7 @@ for output</string>
       <enum>QFrame::StyledPanel</enum>
      </property>
      <property name="text">
-      <string>Step 2: If using color tracker... choose how you want to determine colors to track.</string>
+      <string>Step 3: If using color tracker... choose how you want to determine colors to track.</string>
      </property>
      <property name="textFormat">
       <enum>Qt::PlainText</enum>
@@ -1639,10 +1626,16 @@ for output</string>
      <property name="geometry">
       <rect>
        <x>100</x>
-       <y>370</y>
+       <y>100</y>
        <width>571</width>
        <height>21</height>
       </rect>
+     </property>
+     <property name="maximumSize">
+      <size>
+       <width>16777215</width>
+       <height>16777210</height>
+      </size>
      </property>
      <property name="font">
       <font>
@@ -1658,7 +1651,7 @@ for output</string>
       <string notr="true">color: rgb(255, 255, 255);</string>
      </property>
      <property name="text">
-      <string>Step 3: Type in the folder you want to track to or graph from. Then hit ENTER.</string>
+      <string>Step 2: Type in the folder you want to track to or graph from. Then hit ENTER.</string>
      </property>
      <property name="textFormat">
       <enum>Qt::PlainText</enum>
@@ -1773,7 +1766,7 @@ then see it in 3D or find trendlines</string>
      <property name="geometry">
       <rect>
        <x>100</x>
-       <y>180</y>
+       <y>380</y>
        <width>431</width>
        <height>181</height>
       </rect>

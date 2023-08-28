@@ -11,6 +11,29 @@ import numpy as np
 
 from tracker.lib.GUI_tracker import find_lower_upper_bounds_on_screen
 
+def load_ranges(title_of_table):
+    # Load a table that was created
+    dt = np.dtype([('lower', np.int32, (3,)),('upper', np.int32, (3,)), ('name', np.unicode_, 16), ('radius_meters', np.float32),('mass', np.float32)])
+    i = 0
+    name_of_array = ''
+    for row in range(title_of_table.rowCount()):
+        if title_of_table.item(row,0).checkState() == Qt.CheckState.Checked:
+            item = QTableWidgetItem(''.format(row, 1))
+            color = title_of_table.item(row,1).text()
+            print('color', color)
+            lower = title_of_table.item(row,4).text()
+            upper = title_of_table.item(row,5).text()
+            radius_meters = float(title_of_table.item(row,2).text())/100
+            mass = title_of_table.item(row,3).text()
+
+            the_array = np.array([(ast.literal_eval(lower),ast.literal_eval(upper), (color),(radius_meters), (mass) )],dtype=dt)
+            if i==0:
+                new_color_ranges = the_array
+            else:
+                new_color_ranges = np.hstack((new_color_ranges,the_array))
+            i += 1
+    return new_color_ranges
+
 def load_data(type_of_tracking, input_folder, title_of_table):
     # load the dictionary
     ## TODO make this a file to read

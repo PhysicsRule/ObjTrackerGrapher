@@ -17,7 +17,7 @@ from tracker.lib.object_tracking import GUI_select_bounding_box, find_xy_using_t
 
 
 def find_lower_upper_bounds_on_screen(the_array):
-    print('selecting colors')
+    # selecting your own color boundaries by tweeking the default
     pipeline = find_and_config_device()
     warm_up_camera(pipeline)
     (cv_color, rs_color, rs_depth), timestamp = get_all_frames_color(pipeline)
@@ -26,13 +26,18 @@ def find_lower_upper_bounds_on_screen(the_array):
     return output
 
 
-def GUI_tracking(pipeline, src, type_of_tracking, image,color_ranges, min_radius_of_object, data_output_folder_path, input_folder, data_output ):
-    
+def GUI_tracking(pipeline, image, color_ranges, min_radius_object, data_output_folder_path, tracking_info):
+    """
+    Track as you record
+    use color or obj_tracking
+    Hit graph afterwards to see results
+    about 30 fps when alining color image to depth image
+    """ 
     make_csv_files(color_ranges, data_output_folder_path)   
     max_num_point=len(color_ranges)
     warm_up_camera(pipeline)
     zeroed_x, zeroed_y, zeroed_z, clipping_distance = select_furthest_distance_color(pipeline)
-    if type_of_tracking == 'obj_tracker':
+    if tracking_info.type_of_tracking == 'obj_tracker':
         print('select bounding box')
         bbox, ret, tracker = GUI_select_bounding_box(pipeline)    
 
@@ -55,9 +60,9 @@ def GUI_tracking(pipeline, src, type_of_tracking, image,color_ranges, min_radius
 
         for (lower,upper, color_name, radius_meters, mass) in color_ranges:
             # Find location of the object in x,y pixels using color masks
-            if type_of_tracking == 'color':
-                x_pixel, y_pixel, radius, mask = find_object_by_color(cv_color,hsv, lower,upper, color_name, radius_meters, mass, min_radius_of_object, max_num_point)     
-            elif type_of_tracking == 'obj_tracker':
+            if tracking_info.type_of_tracking == 'color':
+                x_pixel, y_pixel, radius, mask = find_object_by_color(cv_color,hsv, lower,upper, color_name, radius_meters, mass, min_radius_object, max_num_point)     
+            elif tracking_info.type_of_tracking == 'obj_tracker':
                 depth_image = np.asanyarray(rs_depth.get_data())
                 depth_colormap = cv2.applyColorMap(cv2.convertScaleAbs(depth_image, alpha=0.10), cv2.COLORMAP_HSV)# Create a colormap from the depth data
 
