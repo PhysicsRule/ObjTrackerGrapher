@@ -594,7 +594,7 @@ Select the additional variables you would like graphed</string>
       <string>Default Colors</string>
      </property>
      <property name="checked">
-      <bool>true</bool>
+      <bool>false</bool>
      </property>
     </widget>
     <widget class="QRadioButton" name="select_your_own_colors">
@@ -1765,8 +1765,8 @@ then see it in 3D or find trendlines</string>
     <widget class="QTableWidget" name="table_widget_objects">
      <property name="geometry">
       <rect>
-       <x>100</x>
-       <y>380</y>
+       <x>310</x>
+       <y>430</y>
        <width>431</width>
        <height>181</height>
       </rect>
@@ -1781,6 +1781,9 @@ then see it in 3D or find trendlines</string>
       <font>
        <pointsize>7</pointsize>
       </font>
+     </property>
+     <property name="focusPolicy">
+      <enum>Qt::NoFocus</enum>
      </property>
      <property name="editTriggers">
       <set>QAbstractItemView::AnyKeyPressed|QAbstractItemView::CurrentChanged|QAbstractItemView::DoubleClicked|QAbstractItemView::EditKeyPressed</set>
@@ -1832,6 +1835,16 @@ then see it in 3D or find trendlines</string>
        <font>
         <pointsize>8</pointsize>
        </font>
+      </property>
+     </column>
+     <column>
+      <property name="text">
+       <string>lower</string>
+      </property>
+     </column>
+     <column>
+      <property name="text">
+       <string>upper</string>
       </property>
      </column>
      <column>

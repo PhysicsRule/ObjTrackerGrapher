@@ -341,16 +341,19 @@ class MyGUI(QMainWindow):
         # dir_out_path_npy = os.path.abspath(os.path.join(data_output_folder_path , self.color_ranges_text,'')) 
         # self.color_ranges = np.load(dir_path_npy)
         
-
+    
 
     def define_objects_shown(self):
         # Provide a table for user to state information for the object
         self.table_widget_objects.setColumnWidth(0,50)
         self.table_widget_objects.setColumnWidth(1,80)
+        # lower and upper bounds only used for color
         self.table_widget_objects.setColumnWidth(2,80)
         self.table_widget_objects.setColumnWidth(3,80)
-        # Hide onscreen for now. We may want to select the objets here in the future
         self.table_widget_objects.setColumnWidth(4,0)
+        self.table_widget_objects.setColumnWidth(5,0)
+        # Hide onscreen for now. We may want to select the objets here in the future
+        self.table_widget_objects.setColumnWidth(6,0)
         objects_to_track  = load_data_objects(self.table_widget_objects) 
 
 

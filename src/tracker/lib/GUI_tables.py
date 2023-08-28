@@ -89,10 +89,10 @@ def load_data_objects(title_of_table):
     # load the dictionary
     ## TODO make this a file to read
     objects_to_track = [{
-    'name' : "object1" , 'radius' : 10 , 'mass' : 0.0},
+    'name' : "object1" ,  'radius' : 10 , 'mass' : 0.0},
     {'name' : "object2" , 'radius' : 10 , 'mass' : 0.0},
     {'name' : "object3" , 'radius' : 10 , 'mass' : 0.0},
-    {'name' : "object4" ,  'radius' : 10 , 'mass' : 0.0},
+    {'name' : "object4" , 'radius' : 10 , 'mass' : 0.0},
     {'name' : "object5" , 'radius' : 10 , 'mass' : 0.0},
     {'name' : "object6" , 'radius' : 10 , 'mass' : 0.0}]
     row = 0
@@ -108,6 +108,8 @@ def load_data_objects(title_of_table):
         title_of_table.setItem(row, 0, item)
         # Columns for default colors
         title_of_table.setItem(row,1, QTableWidgetItem(str(object['name'])))
+        #title_of_table.setItem(row,2, QTableWidgetItem(str(object['lower'])))
+        #title_of_table.setItem(row,3, QTableWidgetItem(str(object['upper'])))
         title_of_table.setItem(row,2, QTableWidgetItem(str(object['radius'])))
         title_of_table.setItem(row,3, QTableWidgetItem(str(object['mass'])))
         # For future selection of object??
