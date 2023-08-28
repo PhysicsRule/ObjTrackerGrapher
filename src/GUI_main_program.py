@@ -321,8 +321,15 @@ class MyGUI(QMainWindow):
         # Once a person hits ENTER the objects they just created get saved to the input file
         base_path = os.getcwd()
         color_ranges_text = self.lineEdit_define_color_name.text()
-        color_ranges = load_ranges(self.table_widget_color_2)
         input_folder = self.tracking_info.input_folder
+        type_of_tracking = self.tracking_info.type_of_tracking
+        if type_of_tracking == 'color':
+            title_of_table = self.table_widget_color_2
+        else:
+            # anything besides color
+            title_of_table = self.table_widget_objects
+        color_ranges = load_ranges(title_of_table)
+        
         dir_path = os.path.abspath(os.path.join(base_path, 'data', input_folder, ''))
         dir_path_npy= os.path.abspath(os.path.join(dir_path, color_ranges_text,''))
         np.save(dir_path_npy, color_ranges)
