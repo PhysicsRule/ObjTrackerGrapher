@@ -116,7 +116,6 @@ class MyGUI(QMainWindow):
         self.folder_name.setHidden(True)  
         # Tables
         self.table_widget_color.setHidden(True)
-        self.folder_name_objects.setHidden(True)
         self.table_widget_color_2.setHidden(True) # For new colors
         self.table_widget_objects.setHidden(True)
         # Acceleration, Energy, Momentum  Hidden
@@ -230,7 +229,7 @@ class MyGUI(QMainWindow):
     def hide_choose(self, hide_choose):
         # If hide_____ is false, we show all default info
         self.combo_box_objects.setHidden(hide_choose)
-        self.folder_name_objects.setHidden(hide_choose)
+
 
     def hide_define(self, hide_define):
         # If hide_____ is false, we show all default info
@@ -238,7 +237,6 @@ class MyGUI(QMainWindow):
         self.lineEdit_define_color_name.setHidden(hide_define)
         self.combo_box_objects.setHidden(hide_define)
         # saved colors
-        self.folder_name_objects.setHidden(hide_define)
         self.find_lower_upper_button.setHidden(hide_define)
 
     def hide_color_radiobuttons(self, hide_color):
@@ -347,6 +345,7 @@ class MyGUI(QMainWindow):
         self.hide_color_radiobuttons(False)
         # Select the color from a list, use a predefined preset, or create a new one.
         self.table_widget_objects.setHidden(True)
+
         self.hide_default_colors(False)
         self.default_colors_shown()
         self.hide_folder_details(False)
@@ -438,8 +437,6 @@ class MyGUI(QMainWindow):
         # default colors
         self.table_widget_color.setHidden(True)
         self.combo_box_objects.setHidden(True)
-        self.folder_name_objects.setHidden(True)
-
 
         self.table_widget_color_2.setHidden(False)
 

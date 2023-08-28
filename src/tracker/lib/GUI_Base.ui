@@ -594,7 +594,7 @@ Select the additional variables you would like graphed</string>
       <string>Default Colors</string>
      </property>
      <property name="checked">
-      <bool>true</bool>
+      <bool>false</bool>
      </property>
     </widget>
     <widget class="QRadioButton" name="select_your_own_colors">
@@ -1084,9 +1084,9 @@ Object tracking
     <widget class="QLineEdit" name="folder_name_objects">
      <property name="geometry">
       <rect>
-       <x>780</x>
-       <y>140</y>
-       <width>111</width>
+       <x>100</x>
+       <y>160</y>
+       <width>101</width>
        <height>21</height>
       </rect>
      </property>
@@ -1332,7 +1332,7 @@ Object Tracking
       <string>Acceleration</string>
      </property>
      <property name="checked">
-      <bool>false</bool>
+      <bool>true</bool>
      </property>
     </widget>
     <widget class="QRadioButton" name="select_energy">
@@ -1473,9 +1473,9 @@ Object Tracking
     <widget class="QLineEdit" name="lineEdit_define_color_name">
      <property name="geometry">
       <rect>
-       <x>330</x>
+       <x>100</x>
        <y>160</y>
-       <width>201</width>
+       <width>101</width>
        <height>21</height>
       </rect>
      </property>
@@ -1492,7 +1492,7 @@ Object Tracking
     <widget class="QPushButton" name="find_lower_upper_button">
      <property name="geometry">
       <rect>
-       <x>130</x>
+       <x>380</x>
        <y>160</y>
        <width>151</width>
        <height>23</height>
