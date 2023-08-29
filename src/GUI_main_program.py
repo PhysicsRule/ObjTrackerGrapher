@@ -61,7 +61,6 @@ class image_option:
         self.save_mask = save_mask
         self.save_video = save_video
 
-
 class mlpcanvas(FigureCanvasQTAgg):
     """
     The graphing canvas showing 9 graphs
@@ -393,6 +392,7 @@ class MyGUI(QMainWindow):
         self.hide_graph_options(False)     
         self.define_objects_shown()
         self.lineEdit_define_color_name.setHidden(False)
+        self.show_depth_check.setChecked(True)
         self.list_folders(self.tracking_info.output_folder)
         print('infrared with object tracking')
         
@@ -497,6 +497,8 @@ class MyGUI(QMainWindow):
         base_path = os.getcwd()
         # trendline_table_widget has variables required stored starting at row 20
         calc_file_name_path = GUI_graph_trendline(self.trendline_table_widget, self.graph_widget)
+        
+        #TODOdo I need?
         self.graph_widget.draw()
         GUI_show_equations_on_table(self.trendline_table_widget, calc_file_name_path )
           
@@ -690,7 +692,7 @@ class MyGUI(QMainWindow):
                 else:           third_var_of_t = 'Total(t)'
             else:
                 third_var_of_t = str(which_parameter_to_plot + str(var_of_t)) # Example Ax or Py
-            print(i)
+            
             title_of_table.setVerticalHeaderItem(row + i*4, QTableWidgetItem(str('MSE ' + var_of_t)))
             title_of_table.setVerticalHeaderItem(row + i*4 + 1, QTableWidgetItem(var_of_t))
             title_of_table.setVerticalHeaderItem(row + i*4 + 2, QTableWidgetItem(v_var_of_t))
@@ -839,7 +841,6 @@ class MyGUI(QMainWindow):
     def find_lower_upper_bounds(self):
         # print(self.table_widget_color_2.rowCount())
         self.table_widget_color_2 = reload_table(self.table_widget_color_2 )
-        self.color_ranges_text = self.lineEdit_define_color_name.text
         return
 
     # Run Tracker Button Function
