@@ -19,14 +19,36 @@ def load_ranges(title_of_table):
     for row in range(title_of_table.rowCount()):
         if title_of_table.item(row,0).checkState() == Qt.CheckState.Checked:
             item = QTableWidgetItem(''.format(row, 1))
-            color = title_of_table.item(row,1).text()
-            print('color', color)
-            lower = title_of_table.item(row,4).text()
-            upper = title_of_table.item(row,5).text()
+            color =         title_of_table.item(row,1).text()
             radius_meters = float(title_of_table.item(row,2).text())/100
-            mass = title_of_table.item(row,3).text()
-
+            mass =          float(title_of_table.item(row,3).text())
+            lower =         title_of_table.item(row,4).text()
+            upper =         title_of_table.item(row,5).text()
+                     
             the_array = np.array([(ast.literal_eval(lower),ast.literal_eval(upper), (color),(radius_meters), (mass) )],dtype=dt)
+            if i==0:
+                new_color_ranges = the_array
+            else:
+                new_color_ranges = np.hstack((new_color_ranges,the_array))
+            i += 1
+    return new_color_ranges
+
+def load_object_ranges(title_of_table):
+    # Load a table that was created from objects
+    ## TODO make all table loading and reading json
+    dt_obj = np.dtype([('lower', np.unicode_, 16),('upper', np.unicode_, 16), ('name', np.unicode_, 16), ('radius_meters', np.float32),('mass', np.float32)])
+    # note, upper and lower not used, but could be for background subtraction
+    i = 0
+    for row in range(title_of_table.rowCount()):
+        if title_of_table.item(row,0).checkState() == Qt.CheckState.Checked:
+            item = QTableWidgetItem(''.format(row, 1))
+            color =         title_of_table.item(row,1).text()
+            radius_meters = float(title_of_table.item(row,2).text())/100
+            mass =          float(title_of_table.item(row,3).text())
+            lower =         ' '
+            upper =         ' '
+                     
+            the_array = np.array([((lower),(upper), (color),(radius_meters), (mass) )],dtype=dt_obj)
             if i==0:
                 new_color_ranges = the_array
             else:
@@ -112,8 +134,10 @@ def load_data_objects(title_of_table):
         #title_of_table.setItem(row,3, QTableWidgetItem(str(object['upper'])))
         title_of_table.setItem(row,2, QTableWidgetItem(str(object['radius'])))
         title_of_table.setItem(row,3, QTableWidgetItem(str(object['mass'])))
+        title_of_table.setItem(row,4, QTableWidgetItem("(0, 0, 0)"))    # Lower bounds from color
+        title_of_table.setItem(row,5, QTableWidgetItem("(0, 0, 0)"))    # upper bounds from color
         # For future selection of object??
-        item_on_screen = QTableWidgetItem(''.format(row, 4))
+        item_on_screen = QTableWidgetItem(''.format(row, 6))
         item_on_screen.setFlags(Qt.ItemFlag.ItemIsUserCheckable|Qt.ItemFlag.ItemIsEnabled)
         item_on_screen.setCheckState(Qt.CheckState.Unchecked)
         title_of_table.setItem(row, 4, item_on_screen )

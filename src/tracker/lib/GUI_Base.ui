@@ -1765,8 +1765,8 @@ then see it in 3D or find trendlines</string>
     <widget class="QTableWidget" name="table_widget_objects">
      <property name="geometry">
       <rect>
-       <x>310</x>
-       <y>430</y>
+       <x>100</x>
+       <y>380</y>
        <width>431</width>
        <height>181</height>
       </rect>
