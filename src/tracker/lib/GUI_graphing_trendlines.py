@@ -368,6 +368,8 @@ def GUI_graph_trendline (title_of_table, graph_widget):
     which_parameter_to_plot  =  title_of_table.item(row_info + 4,0).text()
     trendline_folder_path =     title_of_table.item(row_info + 5,0).text()
     axes = graph_widget.axes
+    #XXX this is what is causing mulitple trendlines to show up.
+    # We need to reference the original figure instead
     fig = graph_widget.fig
     line_style_array, line_color_array, marker_shape_array, show_legend = plot_style_color()
     

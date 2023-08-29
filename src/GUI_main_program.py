@@ -28,15 +28,14 @@ from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg, NavigationTool
 from mpl_toolkits import mplot3d
 
 from tracker.lib.general import find_objects_to_graph
-from tracker.lib.user_input import make_new_folder
-from tracker.lib.GUI_tracker import GUI_tracking, find_lower_upper_bounds_on_screen
+from tracker.lib.GUI_tracker import GUI_tracking
 from tracker.lib.GUI_real_time_color_tracker import GUI_real_time_color_tracking
 from tracker.lib.GUI_graphing_trendlines import GUI_graph, GUI_graph_trendline, plot_style_color, GUI_show_equations_on_table
 from tracker.lib.graphing import GUI_graph_setup, three_D_graphs, plot_graphs, GUI_trim, parameters
 from tracker.lib.intel_realsense_D435i import record_bag_file, find_and_config_device, read_bag_file_and_config
 # from tracker.lib.GUI_library import reload_table
 from tracker.lib.color import choose_or_create_color_range
-from tracker.lib.GUI_tables import load_ranges, load_data, load_data_objects, reload_table
+from tracker.lib.GUI_tables import load_ranges, load_object_ranges, load_data, load_data_objects, reload_table
 
 ## TODO possibly use this instead of passing each individual piece
 class tracking:
@@ -61,7 +60,6 @@ class image_option:
         self.show_mask = show_mask
         self.save_mask = save_mask
         self.save_video = save_video
-
 
 class mlpcanvas(FigureCanvasQTAgg):
     """
@@ -321,8 +319,19 @@ class MyGUI(QMainWindow):
         # Once a person hits ENTER the objects they just created get saved to the input file
         base_path = os.getcwd()
         color_ranges_text = self.lineEdit_define_color_name.text()
-        color_ranges = load_ranges(self.table_widget_color_2)
+        if color_ranges_text == "":
+            color_ranges_text = 'default'
         input_folder = self.tracking_info.input_folder
+        type_of_tracking = self.tracking_info.type_of_tracking
+        if type_of_tracking == 'color':
+            title_of_table = self.table_widget_color_2
+            color_ranges = load_ranges(title_of_table)
+        else:
+            # anything besides color
+            title_of_table = self.table_widget_objects
+            color_ranges = load_object_ranges(title_of_table)
+        
+        
         dir_path = os.path.abspath(os.path.join(base_path, 'data', input_folder, ''))
         dir_path_npy= os.path.abspath(os.path.join(dir_path, color_ranges_text,''))
         np.save(dir_path_npy, color_ranges)
@@ -334,16 +343,19 @@ class MyGUI(QMainWindow):
         # dir_out_path_npy = os.path.abspath(os.path.join(data_output_folder_path , self.color_ranges_text,'')) 
         # self.color_ranges = np.load(dir_path_npy)
         
-
+    
 
     def define_objects_shown(self):
         # Provide a table for user to state information for the object
         self.table_widget_objects.setColumnWidth(0,50)
         self.table_widget_objects.setColumnWidth(1,80)
+        # lower and upper bounds only used for color
         self.table_widget_objects.setColumnWidth(2,80)
         self.table_widget_objects.setColumnWidth(3,80)
-        # Hide onscreen for now. We may want to select the objets here in the future
         self.table_widget_objects.setColumnWidth(4,0)
+        self.table_widget_objects.setColumnWidth(5,0)
+        # Hide onscreen for now. We may want to select the objets here in the future
+        self.table_widget_objects.setColumnWidth(6,0)
         objects_to_track  = load_data_objects(self.table_widget_objects) 
 
 
@@ -380,8 +392,9 @@ class MyGUI(QMainWindow):
         self.hide_graph_options(False)     
         self.define_objects_shown()
         self.lineEdit_define_color_name.setHidden(False)
+        self.show_depth_check.setChecked(True)
         self.list_folders(self.tracking_info.output_folder)
-        print('Future')
+        print('infrared with object tracking')
         
     def set_folder_to_other(self):
         type_of_tracking = 'other'
@@ -415,7 +428,6 @@ class MyGUI(QMainWindow):
     def default_colors_shown(self):
         type_of_tracking ='color'
         input_folder = 'color_i'
-        data_output = 'color_o'
         # Set Data table for the colors to track
         self.table_widget_color.setColumnWidth(0,50)
         self.table_widget_color.setColumnWidth(1,100)
@@ -485,6 +497,8 @@ class MyGUI(QMainWindow):
         base_path = os.getcwd()
         # trendline_table_widget has variables required stored starting at row 20
         calc_file_name_path = GUI_graph_trendline(self.trendline_table_widget, self.graph_widget)
+        
+        #TODOdo I need?
         self.graph_widget.draw()
         GUI_show_equations_on_table(self.trendline_table_widget, calc_file_name_path )
           
@@ -585,21 +599,21 @@ class MyGUI(QMainWindow):
                 if self.select_default_colors.isChecked():
                 # Just use the default colors and adjust the mass and radius
                     title_of_table = self.table_widget_color
-                    self.color_ranges_text = "default_colors"
+                    color_ranges_text = "default_colors"
                 elif self.define_colors.isChecked():
                 # You have modified your own colors and color names to suit your situation. 
                 # They will be saved and you can name them
                     title_of_table = self.table_widget_color_2
-                    self.color_ranges_text  = self.lineEdit_define_color_name.text()
+                    color_ranges_text  = self.lineEdit_define_color_name.text()
                 
                 # Read the colors from one of the 2 tables above
                 self.color_ranges = load_ranges(title_of_table)
 
             elif self.select_your_own_colors.isChecked():
             # You have previously defined the colors
-                self.color_ranges_text = self.combo_box_objects.currentText()
+                color_ranges_text = self.combo_box_objects.currentText()
                 dir_path = os.path.abspath(os.path.join(base_path, 'data', self.tracking_info.input_folder, ''))
-                dir_path_npy= os.path.abspath(os.path.join(dir_path, self.color_ranges_text,''))
+                dir_path_npy= os.path.abspath(os.path.join(dir_path, color_ranges_text,''))
                 self.color_ranges = np.load(dir_path_npy)
                 print('color range from previous own colors' , self.color_ranges)                 
             
@@ -611,6 +625,17 @@ class MyGUI(QMainWindow):
 
         # Object tracking. These values put in so we can use same tracker program as color    
         elif self.tracking_info.type_of_tracking == 'obj_tracker':
+            # You are tracking objects.
+            title_of_table = self.table_widget_objects
+            color_ranges_text = self.lineEdit_define_color_name.text()
+            if color_ranges_text == '':
+                color_ranges_text = 'default'
+                self.lineEdit_define_color_name.insert(color_ranges_text)
+            self.color_ranges = load_object_ranges(title_of_table )
+            print(self.color_ranges)
+            '''
+            Lower bounds from color
+           
             lower = " "
             upper = " "
             ## TODO if you want mulitple objects, have a hstack of the number of objects to track
@@ -620,14 +645,12 @@ class MyGUI(QMainWindow):
             mass = 0.0
             self.color_ranges = np.array([(ast.literal_eval(lower),ast.literal_eval(upper), (color),(radius_meters), (mass) )],dtype=dt)
             self.color_ranges_text = 'nothing'
+            '''
 
         # Save the np file in the output folder so you know which one was used
-        dir_out_path_npy = os.path.abspath(os.path.join(data_output_folder_path , self.color_ranges_text,'')) 
+        dir_out_path_npy = os.path.abspath(os.path.join(data_output_folder_path , color_ranges_text,'')) 
         np.save(dir_out_path_npy , self.color_ranges)
         ## TODO use a different value if needed to use src
-
-
-        # data_output_folder, data_output_folder_path = make_new_folder(data_output)
         return self.image, self.color_ranges, min_radius_object, data_output_folder_path
 
 
@@ -669,7 +692,7 @@ class MyGUI(QMainWindow):
                 else:           third_var_of_t = 'Total(t)'
             else:
                 third_var_of_t = str(which_parameter_to_plot + str(var_of_t)) # Example Ax or Py
-            print(i)
+            
             title_of_table.setVerticalHeaderItem(row + i*4, QTableWidgetItem(str('MSE ' + var_of_t)))
             title_of_table.setVerticalHeaderItem(row + i*4 + 1, QTableWidgetItem(var_of_t))
             title_of_table.setVerticalHeaderItem(row + i*4 + 2, QTableWidgetItem(v_var_of_t))
@@ -785,7 +808,7 @@ class MyGUI(QMainWindow):
         print (self.xmin, self.xmax)
         # The folder that will be graphed
         base_path = os.getcwd()
-        data_output = 'color_o'
+        data_output = self.tracking_info.output_folder
         data_output_folder_path = self.get_output_folder_path(base_path, data_output, self.folder_name.text())
         
         # The array of the colors to be tracked
@@ -818,7 +841,6 @@ class MyGUI(QMainWindow):
     def find_lower_upper_bounds(self):
         # print(self.table_widget_color_2.rowCount())
         self.table_widget_color_2 = reload_table(self.table_widget_color_2 )
-        self.color_ranges_text = self.lineEdit_define_color_name.text
         return
 
     # Run Tracker Button Function

@@ -270,7 +270,7 @@ while continue_reading is True:
             if type_of_tracking == 'obj_tracker':
                 ret, bbox = tracker.update(image)
                 if ret:
-                    print('found a frame')
+                    # print('found a frame')
                     find_object_by_tracker(bbox, i, relative_timestamp, backgd, image, rs_depth, rs_infrared, data_output_folder_path, type_of_tracking, zeroed_x, zeroed_y, zeroed_z, clipping_distance, object_ranges, max_num_point)
             else: 
                 try:
