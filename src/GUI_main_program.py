@@ -865,7 +865,7 @@ class MyGUI(QMainWindow):
         print('Tracking from a previously recorded bag file.')
         image, color_ranges, min_radius_object, data_output_folder_path  = self.get_settings()
         #config by opening pipeline from bag)
-        types_of_streams_saved = 'color' #or 'infrared' at 90 fps or 'id300' at 300 fps
+       
         ## TODO make this selectable
         # type_of_tracking = 'obj_tracker'
         data_output_folder = self.folder_name.text()
@@ -875,7 +875,7 @@ class MyGUI(QMainWindow):
             ## TODO erase existing folders in default
         bag_file = 'bag.bag'
         bag_folder_path =  os.path.abspath(os.path.join(data_output_folder_path + "/" + bag_file))
-        pipeline = read_bag_file_and_config(types_of_streams_saved, data_output_folder_path, data_output_folder , bag_folder_path)
+        pipeline = read_bag_file_and_config(self.tracking_info.types_of_streams_saved, data_output_folder_path, data_output_folder , bag_folder_path)
         GUI_tracking(pipeline, image, color_ranges, min_radius_object, data_output_folder_path, self.tracking_info)
 
     def toggle_window(self, window):

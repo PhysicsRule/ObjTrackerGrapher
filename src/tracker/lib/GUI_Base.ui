@@ -1042,11 +1042,17 @@ Object tracking
        <height>20</height>
       </rect>
      </property>
+     <property name="toolTipDuration">
+      <number>2</number>
+     </property>
      <property name="styleSheet">
       <string notr="true">color: rgb(20,0,0);</string>
      </property>
      <property name="text">
       <string>Save Depth</string>
+     </property>
+     <property name="checkable">
+      <bool>true</bool>
      </property>
     </widget>
     <widget class="QCheckBox" name="save_image_check">
@@ -1063,6 +1069,9 @@ Object tracking
      </property>
      <property name="text">
       <string>Save Image</string>
+     </property>
+     <property name="checkable">
+      <bool>true</bool>
      </property>
     </widget>
     <widget class="QCheckBox" name="show_tracking_mask_check">
