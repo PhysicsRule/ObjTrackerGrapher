@@ -28,11 +28,11 @@ from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg, NavigationTool
 from mpl_toolkits import mplot3d
 
 from tracker.lib.general import find_objects_to_graph
-from tracker.lib.GUI_tracker import GUI_tracking
+from tracker.lib.GUI_tracker import GUI_tracking, GUI_obj_tracking
 from tracker.lib.GUI_real_time_color_tracker import GUI_real_time_color_tracking
 from tracker.lib.GUI_graphing_trendlines import GUI_graph, GUI_graph_trendline, plot_style_color, GUI_show_equations_on_table
 from tracker.lib.graphing import GUI_graph_setup, three_D_graphs, plot_graphs, GUI_trim, parameters
-from tracker.lib.intel_realsense_D435i import record_bag_file, find_and_config_device, read_bag_file_and_config
+from tracker.lib.intel_realsense_D435i import record_bag_file, find_and_config_device, read_bag_file_and_config, find_and_config_device_mult_stream
 # from tracker.lib.GUI_library import reload_table
 from tracker.lib.color import choose_or_create_color_range
 from tracker.lib.GUI_tables import load_ranges, load_object_ranges, load_data, load_data_objects, reload_table
@@ -853,9 +853,18 @@ class MyGUI(QMainWindow):
         image, color_ranges, min_radius_object, data_output_folder_path  = self.get_settings()
         # config by looking at the camera (remove this from tracking program below)
         # find output folder here instead of 
-        pipeline = find_and_config_device()
-        GUI_tracking(pipeline, image, color_ranges, min_radius_object, data_output_folder_path, self.tracking_info)
-        
+        if self.tracking_info.types_of_streams_saved =='cd':
+        # The color and depth streams need to be aligned for each frame slowing the tracking down
+            pipeline = find_and_config_device()
+            GUI_tracking(pipeline, image, color_ranges, min_radius_object, data_output_folder_path, self.tracking_info)
+        else: 
+        # The infrared and depth streams are already aligned
+        # object tracking at either 90 or 300 frames per second with infrared
+            pipeline, config = find_and_config_device_mult_stream(self.tracking_info.types_of_streams_saved)
+            GUI_obj_tracking(pipeline, image, color_ranges, min_radius_object, data_output_folder_path, self.tracking_info)
+
+    
+
     def record_bag(self):
         print('recording video')
         image, color_ranges, min_radius_object, data_output_folder_path  = self.get_settings()
@@ -876,10 +885,10 @@ class MyGUI(QMainWindow):
         bag_file = 'bag.bag'
         bag_folder_path =  os.path.abspath(os.path.join(data_output_folder_path + "/" + bag_file))
         pipeline = read_bag_file_and_config(self.tracking_info.types_of_streams_saved, data_output_folder_path, data_output_folder , bag_folder_path)
-        #if self.tracking_info.types_of_streams_saved =="cd":
-        GUI_tracking(pipeline, image, color_ranges, min_radius_object, data_output_folder_path, self.tracking_info)
-        #elif "id" in self.tracking_info.types_of_streams_saved:
-        #    GUI_tracking_object(pipeline, image, color_ranges, min_radius_object, data_output_folder_path, self.tracking_info)
+        if self.tracking_info.types_of_streams_saved =="cd":
+            GUI_tracking(pipeline, image, color_ranges, min_radius_object, data_output_folder_path, self.tracking_info)
+        elif "id" in self.tracking_info.types_of_streams_saved:
+            GUI_obj_tracking(pipeline, image, color_ranges, min_radius_object, data_output_folder_path, self.tracking_info)
 
     def toggle_window(self, window):
         if window.isVisible():

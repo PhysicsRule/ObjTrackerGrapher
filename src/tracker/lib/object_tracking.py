@@ -40,11 +40,11 @@ def GUI_select_bounding_box_infrared(pipeline):
         frame_result = get_all_frames_infrared(pipeline)
         if not frame_result:
             continue
-        (rs_depth, rs_infrared1), _ = frame_result
+        (rs_depth, rs_infrared), _ = frame_result
         
         ## TODO use rs_infrared to see infrared from camera 1
         depth_image = np.asanyarray(rs_depth.get_data())
-        infrared_image = np.asanyarray(rs_infrared1.get_data())
+        infrared_image = np.asanyarray(rs_infrared.get_data())
         depth_colormap = cv2.applyColorMap(cv2.convertScaleAbs(depth_image, alpha=0.10), cv2.COLORMAP_HSV)# Create a colormap from the depth data
         # User inputs the type of tracking used
         tracker = select_object_tracker_method()
