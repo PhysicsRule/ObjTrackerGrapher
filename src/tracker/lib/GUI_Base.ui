@@ -636,7 +636,7 @@ Select the additional variables you would like graphed</string>
      </property>
      <property name="text">
       <string>Run Tracker
-60 fps</string>
+medium fps</string>
      </property>
     </widget>
     <widget class="QPushButton" name="graph_button">
@@ -676,7 +676,7 @@ Select the additional variables you would like graphed</string>
      </property>
      <property name="text">
       <string>Record Bag
-60 fps</string>
+highest fps</string>
      </property>
     </widget>
     <widget class="QTableWidget" name="trendline_table_widget">
@@ -903,7 +903,7 @@ Select the additional variables you would like graphed</string>
      </property>
      <property name="text">
       <string>Run Real-Time Graph
-30 fps</string>
+Low fps</string>
      </property>
     </widget>
     <widget class="QPushButton" name="color_button">
@@ -916,7 +916,8 @@ Select the additional variables you would like graphed</string>
       </rect>
      </property>
      <property name="text">
-      <string>Color</string>
+      <string>Color
+16,30,60 fps</string>
      </property>
     </widget>
     <widget class="QPushButton" name="infrared_90_button">
@@ -932,7 +933,7 @@ Select the additional variables you would like graphed</string>
       <enum>Qt::NoFocus</enum>
      </property>
      <property name="text">
-      <string>Infrared(Future)
+      <string>Infrared
 Object tracking
 90 fps</string>
      </property>

@@ -51,7 +51,7 @@ def find_and_config_device_mult_stream(types_of_streams_saved) -> Any:
         config.enable_stream(rs.stream.color, 848, 480, rs.format.bgr8, 60)
         if types_of_streams_saved == 'all':
             config.enable_stream(rs.stream.infrared, 1, 848, 480, rs.format.y8, 60)
-
+    
     # If you want to use multiple cameras in the future this is useful
     #ctx = rs.context()
     #if len(ctx.devices) > 0:
@@ -79,6 +79,7 @@ def find_and_config_device_mult_stream(types_of_streams_saved) -> Any:
             #ep = sensor.set_option(rs.option.exposure, 78)
             #ep = sensor.set_option(rs.option.enable_auto_exposure)
     '''
+
     return pipeline, config
 
 
@@ -109,7 +110,7 @@ def record_bag_file(data_output_folder_path, types_of_streams_saved):
         #    print('end')
         #    break
     pipeline.stop()
-    read_bag_file_and_config(types_of_streams_saved, data_output_folder_path, 'bag', filepath_bag)
+    # read_bag_file_and_config(types_of_streams_saved, data_output_folder_path, 'bag', filepath_bag)
     print('done recording')
 
 def get_all_frames_color(rs_pipeline) -> Optional[Tuple[Tuple[Any, Any, Any], Any]]:
@@ -150,7 +151,7 @@ def get_all_frames_infrared(rs_pipeline) -> Optional[Tuple[Tuple[Any, Any, Any],
     timestamp = rs_frames.get_timestamp()
 
     # Extract color/depth frames
-    rs_infrared1 = rs_frames.get_infrared_frame()
+    rs_infrared = rs_frames.get_infrared_frame()
     rs_depth = rs_frames.get_depth_frame().as_depth_frame()
 
     # Check that both frames are valid & return false if they aren't
@@ -158,7 +159,7 @@ def get_all_frames_infrared(rs_pipeline) -> Optional[Tuple[Tuple[Any, Any, Any],
         return None
 
     # Calculate elapsed time from start_datetime, if applicable  
-    return (rs_depth, rs_infrared1), timestamp
+    return (rs_depth, rs_infrared), timestamp
 
 
 def select_clipping_distance(frame, rs_depth) -> Tuple[Any, float, float]:
@@ -236,12 +237,10 @@ def set_the_origin(point) -> Tuple[float, float, float]:
     return zeroed_x, zeroed_y, zeroed_z
 
 def select_furthest_distance_color(pipeline) -> Tuple[float, float, float, float]:
-
     # Selects the furthest distance and sets the origin to be the top left corner
     ## TODO add another selection box to say what the x,y,z origin should be after we are confident of z axis
     # OpenCV color frame
     cv_color = None
-
     # Select background as a maximum depth
     clipping_distance = 0
 
@@ -251,9 +250,7 @@ def select_furthest_distance_color(pipeline) -> Tuple[float, float, float, float
         frame_result = get_all_frames_color(pipeline)
         if not frame_result:
             continue
-
         (cv_color, rs_color, rs_depth), _ = frame_result
-
         # Find the clipping distance
         clipping_distance, color_point, zeroed_z = select_location(cv_color, rs_color, rs_depth)
         print('clipping distance is', clipping_distance)
@@ -261,18 +258,17 @@ def select_furthest_distance_color(pipeline) -> Tuple[float, float, float, float
         # for now this just sets all zeroed values as 0 insted of a specific origin, so the origin is the cent of the camera
         zeroed_x, zeroed_y, zeroed_z = set_the_origin (color_point)
 
-    print('Hit space bar to start and stop recording')
+    print('Hit space bar to start and stop recording.')
     space = 0
     while space != 32:
         space = cv2.waitKey(1) & 0xff
-
     # Remove ROI selection window, as it is no longer necessary
     cv2.destroyWindow('Select a clipping distance. Is will be the upper left of box')
     #cv2.destroyWindow('ROI Selection')
 
     return zeroed_x, zeroed_y, zeroed_z, clipping_distance 
 
-'''
+
 def select_furthest_distance_infrared(pipeline):
     # Selects the furthest distance and sets the origin to be the top left corner
     ## TODO add another selection box to say what the x,y,z origin should be after we are confident of z axis
@@ -280,40 +276,35 @@ def select_furthest_distance_infrared(pipeline):
     
     # Select background as a maximum depth
     clipping_distance = 0
-
     while clipping_distance < 0.1:
         # Get the OpenCV color/RealSense depth frames & skip iteration if
         # necessary
-        frame_result = get_depth_infrared_frames(pipeline,start=None)
+        frame_result = get_all_frames_infrared(pipeline)
         if not frame_result:
             continue
-
         (rs_depth, rs_infrared), _ = frame_result
-
         if not rs_infrared:
                 continue
         infrared_image = np.asanyarray(rs_infrared.get_data())
-
         # Find distance (depth) to wall & store as clipping distance
         # Note that it is reduced slightly to allow some room for error (*0.95)
          # Find the clipping distance
         clipping_distance, depth_point, zeroed_z = select_location(infrared_image, rs_infrared, rs_depth)
-        
         #TODO later call above to find the origin then call the following after
         # for now this just sets all zeroed values as 0 instead of a specific origin, so the origin is the cent of the camera
         zeroed_x, zeroed_y, zeroed_z = set_the_origin (depth_point)
 
-
-    print('Hit space bar to start and stop recording')
+    ## TODO add this back in if we use background subtraction again
+    '''print('Hit space bar to start and stop recording')
     space = 0
     while space != 32:
         space = cv2.waitKey(1) & 0xff
-
+    '''
     # Remove ROI selection window, as it is no longer necessary
     cv2.destroyWindow('ROI Selection')
 
-    return zeroed_x, zeroed_y, zeroed_z
-'''
+    return zeroed_x, zeroed_y, zeroed_z, clipping_distance
+
 
 def read_bag_file_and_config(types_of_streams_saved, data_output_folder_path, folder_name , bag_folder_path) -> Any:
     try:
