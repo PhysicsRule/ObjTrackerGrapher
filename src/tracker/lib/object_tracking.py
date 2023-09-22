@@ -72,7 +72,7 @@ def find_xy_using_tracking_method(tracker, bbox, cv_image):
         # print('found a frame')# TODO add multiple objects and have a count of 0 and 1 so 2 objects
         x_pixel = int(bbox[0]+bbox[2]/2)
         y_pixel = int(bbox[1]+bbox[3]/2)
-        radius = int(bbox[2]/2)
-    return x_pixel, y_pixel, bbox, radius 
+        radius_of_bbox = int(bbox[2]/2)     # plots a circle around object instead of a box
+    return x_pixel, y_pixel, bbox, radius_of_bbox 
 
 

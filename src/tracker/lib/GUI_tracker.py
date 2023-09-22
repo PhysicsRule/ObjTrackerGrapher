@@ -98,7 +98,7 @@ def GUI_tracking(pipeline, image, color_ranges, min_radius_object, data_output_f
                 depth_colormap = cv2.applyColorMap(cv2.convertScaleAbs(depth_image, alpha=0.10), cv2.COLORMAP_HSV)# Create a colormap from the depth data
 
                 cv_image= depth_colormap
-                radius = 10 # showing if tracker is not working
+                radius = 0 # showing if tracker is not working
                 mask = None
                 x_pixel, y_pixel, bbox, radius = find_xy_using_tracking_method(tracker, bbox, cv_image)
                 draw_bounding_box(cv_image, bbox)
