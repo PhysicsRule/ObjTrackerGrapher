@@ -70,11 +70,9 @@ def find_xy_using_tracking_method(tracker, bbox, cv_image):
     ret, bbox = tracker.update(cv_image)
     if ret:
         # print('found a frame')# TODO add multiple objects and have a count of 0 and 1 so 2 objects
-        draw_bounding_box(cv_image, bbox)
         x_pixel = int(bbox[0]+bbox[2]/2)
         y_pixel = int(bbox[1]+bbox[3]/2)
         radius = int(bbox[2]/2)
-        draw_bounding_box(cv_image, bbox)
     return x_pixel, y_pixel, bbox, radius 
 
 

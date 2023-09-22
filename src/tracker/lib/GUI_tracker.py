@@ -99,6 +99,7 @@ def GUI_tracking(pipeline, image, color_ranges, min_radius_object, data_output_f
 
                 cv_image= depth_colormap
                 radius = 10 # showing if tracker is not working
+                mask = None
                 x_pixel, y_pixel, bbox, radius = find_xy_using_tracking_method(tracker, bbox, cv_image)
                 draw_bounding_box(cv_image, bbox)
 
