@@ -25,17 +25,17 @@ def find_lower_upper_bounds_on_screen(the_array):
     output = GUI_find_hsv_bounds(the_array, cv_color)
     return output
 
-def what_to_do_with_images(i, x_pixel, y_pixel, radius,image,rs_depth,cv_color,mask,data_output_folder_path):
+def what_to_do_with_images(i, x_pixel, y_pixel, radius,image,depth_colormap,cv_color,mask,data_output_folder_path):
     # shows the object on the images chosen
     # saves the images chosen into the data folder
-    depth_image = np.asanyarray(rs_depth.get_data())
-    depth_colormap = cv2.applyColorMap(cv2.convertScaleAbs(depth_image, alpha=0.10), cv2.COLORMAP_HSV)# Create a colormap from the depth data
+    
     if image.show_depth:
         # Show depth colormap & color feed
         cv2.circle(depth_colormap, (int(x_pixel), int(y_pixel)), int(radius), (255, 255, 255), 2)  
         cv2.imshow('depth', depth_colormap)
         cv2.moveWindow('depth',850,0)
     if image.show_RGB:
+        cv2.circle(cv_color, (int(x_pixel), int(y_pixel)), int(radius), (255, 255, 255), 2)  
         cv2.imshow('Tracking', cv_color)
         cv2.moveWindow('Tracking',0,0)
     
@@ -88,15 +88,14 @@ def GUI_tracking(pipeline, image, color_ranges, min_radius_object, data_output_f
             
         ## Color Tracking by making a mask for each color tracked
         hsv = make_color_hsv(cv_color)
+        depth_image = np.asanyarray(rs_depth.get_data())
+        depth_colormap = cv2.applyColorMap(cv2.convertScaleAbs(depth_image, alpha=0.10), cv2.COLORMAP_HSV)# Create a colormap from the depth data
 
         for (lower,upper, color_name, radius_meters, mass) in color_ranges:
             # Find location of the object in x,y pixels using color masks
             if tracking_info.type_of_tracking == 'color':
                 x_pixel, y_pixel, radius, mask = find_object_by_color(cv_color,hsv, lower,upper, color_name, radius_meters, mass, min_radius_object, max_num_point)     
             elif tracking_info.type_of_tracking == 'obj_tracker':
-                depth_image = np.asanyarray(rs_depth.get_data())
-                depth_colormap = cv2.applyColorMap(cv2.convertScaleAbs(depth_image, alpha=0.10), cv2.COLORMAP_HSV)# Create a colormap from the depth data
-
                 cv_image= depth_colormap
                 radius = 0 # showing if tracker is not working
                 mask = None
@@ -132,7 +131,7 @@ def GUI_tracking(pipeline, image, color_ranges, min_radius_object, data_output_f
                 cv2.putText(cv_color, 'Y coordinate: ' + str(y_coord), (0,60), cv2.FONT_HERSHEY_SIMPLEX, 0.75, (50,170,50), 2)
                 cv2.putText(cv_color, 'Z coordinate: ' + str(z_coord), (0,80), cv2.FONT_HERSHEY_SIMPLEX, 0.75, (50,170,50), 2)
             
-        what_to_do_with_images(i, x_pixel, y_pixel, radius,image,rs_depth,cv_color,mask,data_output_folder_path)
+        what_to_do_with_images(i, x_pixel, y_pixel, radius,image,depth_colormap,cv_color,mask,data_output_folder_path)
         
         # saves the images into an array to convert to a movie when stopped
         if image.save_video:
@@ -206,8 +205,7 @@ def GUI_obj_tracking(pipeline, image, color_ranges, min_radius_object, data_outp
             radius = 0 # showing if tracker is not working
             mask = None
             x_pixel, y_pixel, bbox, radius = find_xy_using_tracking_method(tracker, bbox, depth_colormap)
-            draw_bounding_box(cv_color, bbox)
-
+            
             if x_pixel is None:
                 continue
             # get.distance is a little slower so only use if necessarycenter = round(aligned_depth_frame.get_distance(int(x),int(y)),4)
@@ -236,8 +234,8 @@ def GUI_obj_tracking(pipeline, image, color_ranges, min_radius_object, data_outp
                 cv2.putText(cv_color, 'X coordinate: ' + str(x_coord), (0,40), cv2.FONT_HERSHEY_SIMPLEX, 0.75, (50,170,50), 2)
                 cv2.putText(cv_color, 'Y coordinate: ' + str(y_coord), (0,60), cv2.FONT_HERSHEY_SIMPLEX, 0.75, (50,170,50), 2)
                 cv2.putText(cv_color, 'Z coordinate: ' + str(z_coord), (0,80), cv2.FONT_HERSHEY_SIMPLEX, 0.75, (50,170,50), 2)
-            
-        what_to_do_with_images(i, x_pixel, y_pixel, radius,image,rs_depth,cv_color,mask,data_output_folder_path)
+                # draw_bounding_box(cv_color, bbox)
+        what_to_do_with_images(i, x_pixel, y_pixel, radius,image,depth_colormap,cv_color,mask,data_output_folder_path)
         
         # saves the images into an array to convert to a movie when stopped
         if image.save_video:

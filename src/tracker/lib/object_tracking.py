@@ -40,11 +40,11 @@ def GUI_select_bounding_box_infrared(pipeline):
         frame_result = get_all_frames_infrared(pipeline)
         if not frame_result:
             continue
-        (rs_depth, rs_infrared), _ = frame_result
+        (rs_depth, rs_infrared1), _ = frame_result
         
         ## TODO use rs_infrared to see infrared from camera 1
         depth_image = np.asanyarray(rs_depth.get_data())
-        infrared_image = np.asanyarray(rs_infrared.get_data())
+        infrared_image = np.asanyarray(rs_infrared1.get_data())
         depth_colormap = cv2.applyColorMap(cv2.convertScaleAbs(depth_image, alpha=0.10), cv2.COLORMAP_HSV)# Create a colormap from the depth data
         # User inputs the type of tracking used
         tracker = select_object_tracker_method()
@@ -72,7 +72,10 @@ def find_xy_using_tracking_method(tracker, bbox, cv_image):
         # print('found a frame')# TODO add multiple objects and have a count of 0 and 1 so 2 objects
         x_pixel = int(bbox[0]+bbox[2]/2)
         y_pixel = int(bbox[1]+bbox[3]/2)
-        radius_of_bbox = int(bbox[2]/2)     # plots a circle around object instead of a box
+        radius_of_bbox = int(bbox[2]/2) # plots a circle around object instead of a box
+    else:
+        return None, None, None, None 
+        print('no object found')
     return x_pixel, y_pixel, bbox, radius_of_bbox 
 
 

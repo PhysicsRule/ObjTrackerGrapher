@@ -79,8 +79,7 @@ def find_and_config_device_mult_stream(types_of_streams_saved) -> Any:
             #ep = sensor.set_option(rs.option.exposure, 78)
             #ep = sensor.set_option(rs.option.enable_auto_exposure)
     '''
-    profile = pipeline.start(config)
-    warm_up_camera(pipeline)
+
     return pipeline, config
 
 
@@ -111,7 +110,7 @@ def record_bag_file(data_output_folder_path, types_of_streams_saved):
         #    print('end')
         #    break
     pipeline.stop()
-    read_bag_file_and_config(types_of_streams_saved, data_output_folder_path, 'bag', filepath_bag)
+    # read_bag_file_and_config(types_of_streams_saved, data_output_folder_path, 'bag', filepath_bag)
     print('done recording')
 
 def get_all_frames_color(rs_pipeline) -> Optional[Tuple[Tuple[Any, Any, Any], Any]]:
