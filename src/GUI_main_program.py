@@ -861,6 +861,7 @@ class MyGUI(QMainWindow):
         # The infrared and depth streams are already aligned
         # object tracking at either 90 or 300 frames per second with infrared
             pipeline, config = find_and_config_device_mult_stream(self.tracking_info.types_of_streams_saved)
+            pipeline.start(config)
             GUI_obj_tracking(pipeline, image, color_ranges, min_radius_object, data_output_folder_path, self.tracking_info)
 
     
