@@ -36,20 +36,20 @@ def find_and_config_device():
     
     return pipeline
 
-def find_and_config_device_mult_stream(type_of_tracking) -> Any:
+def find_and_config_device_mult_stream(types_of_streams_saved) -> Any:
     pipeline = rs.pipeline()
     
     config = rs.config()
-    if type_of_tracking == 'infrared':
+    if types_of_streams_saved == 'id':
         config.enable_stream(rs.stream.depth, 848 , 480, rs.format.z16, 90)
         config.enable_stream(rs.stream.infrared, 1, 848, 480, rs.format.y8, 90)
-    elif type_of_tracking == 'id300':
+    elif types_of_streams_saved == 'id300':
             config.enable_stream(rs.stream.depth, 848 , 100, rs.format.z16, 300)
             config.enable_stream(rs.stream.infrared, 1, 848, 100, rs.format.y8, 300)
-    else:
+    else: # (cd)color
         config.enable_stream(rs.stream.depth, 848, 480, rs.format.z16, 60)
         config.enable_stream(rs.stream.color, 848, 480, rs.format.bgr8, 60)
-        if type_of_tracking == 'all':
+        if types_of_streams_saved == 'all':
             config.enable_stream(rs.stream.infrared, 1, 848, 480, rs.format.y8, 60)
 
     # If you want to use multiple cameras in the future this is useful
@@ -82,24 +82,24 @@ def find_and_config_device_mult_stream(type_of_tracking) -> Any:
     return pipeline, config
 
 
-def record_bag_file(data_output_folder_path, type_of_tracking):
+def record_bag_file(data_output_folder_path, types_of_streams_saved):
 # Record Images from pipeline
 # DOESN't Work as it cannot open the bag file for some reason
 # For now, just use the Intel Real Sense View if you installed it
 # https://www.intelrealsense.com/sdk-2/
     filepath_bag = os.path.abspath(os.path.join(data_output_folder_path, 'bag.bag'))
-    pipeline, config = find_and_config_device_mult_stream(type_of_tracking)
+    pipeline, config = find_and_config_device_mult_stream(types_of_streams_saved)
     config.enable_record_to_file(filepath_bag)
     pipeline.start(config)
     warm_up_camera(pipeline)
-
-    #wait_to_start = input('Hit enter to start and stop recording')
-    print('recording')
     time.sleep(1)
+    #wait_to_start = input('Hit enter to start and stop recording')
+    print('still recording')
+    
     time_to_record = 6 # seconds
-    if type_of_tracking == 'color': frames_to_record = time_to_record * 60
-    elif type_of_tracking == 'id300': frames_to_record = time_to_record * 300
-    elif type_of_tracking == 'infrared': frames_to_record = time_to_record * 90
+    if types_of_streams_saved == 'cd': frames_to_record = time_to_record * 60
+    elif types_of_streams_saved == 'id300': frames_to_record = time_to_record * 300
+    elif types_of_streams_saved == 'id': frames_to_record = time_to_record * 90
 
     # TODO Change this to while true and break at space bar when done testing
     for _ in range(frames_to_record):
@@ -109,7 +109,7 @@ def record_bag_file(data_output_folder_path, type_of_tracking):
         #    print('end')
         #    break
     pipeline.stop()
-    read_bag_file_and_config(type_of_tracking, data_output_folder_path, 'bag', filepath_bag)
+    read_bag_file_and_config(types_of_streams_saved, data_output_folder_path, 'bag', filepath_bag)
     print('done recording')
 
 def get_all_frames_color(rs_pipeline) -> Optional[Tuple[Tuple[Any, Any, Any], Any]]:
@@ -139,6 +139,26 @@ def get_all_frames_color(rs_pipeline) -> Optional[Tuple[Tuple[Any, Any, Any], An
     # Calculate elapsed time from start_datetime, if applicable  
     return (cv_color, rs_color, rs_depth), timestamp
 
+def get_all_frames_infrared(rs_pipeline) -> Optional[Tuple[Tuple[Any, Any, Any], Any]]:
+    '''
+    Returns a tuple containing the OpenCV color and (aligned) RealSense
+    depth/color frames, as well as the timestamp of the frames. If either frame
+    doesn't exist, returns `False` instead.
+    '''  
+    # Get & align RealSense frames
+    rs_frames = rs_pipeline.wait_for_frames()
+    timestamp = rs_frames.get_timestamp()
+
+    # Extract color/depth frames
+    rs_infrared1 = rs_frames.get_infrared_frame()
+    rs_depth = rs_frames.get_depth_frame().as_depth_frame()
+
+    # Check that both frames are valid & return false if they aren't
+    if not rs_depth:
+        return None
+
+    # Calculate elapsed time from start_datetime, if applicable  
+    return (rs_depth, rs_infrared1), timestamp
 
 
 def select_clipping_distance(frame, rs_depth) -> Tuple[Any, float, float]:
@@ -302,7 +322,7 @@ def read_bag_file_and_config(types_of_streams_saved, data_output_folder_path, fo
         rs.config.disable_all_streams(config)
         rs.config.enable_device_from_file(config, bag_folder_path, repeat_playback=False)
         pipeline = rs.pipeline()        
-        if types_of_streams_saved == 'infrared':
+        if types_of_streams_saved == 'id':
             config.enable_stream(rs.stream.depth)       #, 848, 480, rs.format.z16, 90)
             config.enable_stream(rs.stream.infrared)    #, 1, 848, 480, rs.format.y8, 90)
         elif types_of_streams_saved == 'id300':
@@ -317,9 +337,9 @@ def read_bag_file_and_config(types_of_streams_saved, data_output_folder_path, fo
 
         #pipeline.start(config)
         profile = pipeline.start(config)
-        
-        playback = profile.get_device().as_playback()
         print('reading bag file')
+        time.sleep(1)
+        playback = profile.get_device().as_playback()
         playback.set_real_time(False)
         time.sleep(2)
 

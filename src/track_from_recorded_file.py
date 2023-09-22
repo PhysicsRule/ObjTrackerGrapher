@@ -65,7 +65,7 @@ if 'all' in types_of_streams_saved:
 elif 'cd' in types_of_streams_saved:
     type_of_tracking = input('(c)olor \n(deep) Learning \n ')
     input_folder = 'color_o'
-elif 'infrared' in types_of_streams_saved:
+elif 'id' in types_of_streams_saved:
     input_folder = 'infrared_o'
     type_of_tracking = input('(obj_tracker) track by shape \n (deep) Learning \n(backd)ground subtraction with depth \n(back)ground subtraction with infrared?')
 elif 'id300' in types_of_streams_saved:
@@ -179,7 +179,7 @@ if not end_program:
         # Make files to store data and put a header on the first row
         make_csv_files(object_ranges, data_output_folder_path)
         wall, depth, clipping_distance = select_clipping_distance(cv_color, rs_depth)
-    elif 'infrared' in types_of_streams_saved:
+    elif 'id' in types_of_streams_saved:
         file_type, data_output, object_ranges, min_radius_of_object, max_num_point = set_up_id()
         # Make files to store data and put a header on the first row
         

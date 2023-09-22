@@ -44,7 +44,7 @@ class tracking:
     """  
     def __init__(self, types_of_streams_saved, type_of_tracking, input_folder, output_folder):
         self.types_of_streams_saved = types_of_streams_saved    # cd: color, id: infrared or id300
-        self.type_of_tracking = type_of_tracking                # color or infrared
+        self.type_of_tracking = type_of_tracking                # color or obj_tracker  (infrared??)
         self.input_folder = input_folder                        # example: color_i
         self.output_folder = output_folder                      # example: color_o
 class image_option:
@@ -363,7 +363,7 @@ class MyGUI(QMainWindow):
 
 
     def color_button_pressed(self):
-        self.tracking_info = tracking(types_of_streams_saved = 'color',
+        self.tracking_info = tracking(types_of_streams_saved = 'cd',
                                          type_of_tracking = 'color',
                                          input_folder = 'color_i',
                                          output_folder = 'color_o')
@@ -381,7 +381,7 @@ class MyGUI(QMainWindow):
 
     def infrared_90_button_pressed(self):
         # Define the the folders that will be used
-        self.tracking_info = tracking(types_of_streams_saved ='infrared',
+        self.tracking_info = tracking(types_of_streams_saved ='id',
                                          type_of_tracking = 'obj_tracker',
                                          input_folder = 'infrared_i',
                                          output_folder = 'infrared_o')
@@ -859,13 +859,13 @@ class MyGUI(QMainWindow):
     def record_bag(self):
         print('recording video')
         image, color_ranges, min_radius_object, data_output_folder_path  = self.get_settings()
-        record_bag_file(data_output_folder_path, self.tracking_info.type_of_tracking)
+        record_bag_file(data_output_folder_path, self.tracking_info.types_of_streams_saved)
 
     def track_from_bag(self):
         print('Tracking from a previously recorded bag file.')
         image, color_ranges, min_radius_object, data_output_folder_path  = self.get_settings()
         #config by opening pipeline from bag)
-        types_of_streams_saved = 'color' #or 'infrared' at 90 fps or 'id300' at 300 fps
+       
         ## TODO make this selectable
         # type_of_tracking = 'obj_tracker'
         data_output_folder = self.folder_name.text()
@@ -875,8 +875,11 @@ class MyGUI(QMainWindow):
             ## TODO erase existing folders in default
         bag_file = 'bag.bag'
         bag_folder_path =  os.path.abspath(os.path.join(data_output_folder_path + "/" + bag_file))
-        pipeline = read_bag_file_and_config(types_of_streams_saved, data_output_folder_path, data_output_folder , bag_folder_path)
+        pipeline = read_bag_file_and_config(self.tracking_info.types_of_streams_saved, data_output_folder_path, data_output_folder , bag_folder_path)
+        #if self.tracking_info.types_of_streams_saved =="cd":
         GUI_tracking(pipeline, image, color_ranges, min_radius_object, data_output_folder_path, self.tracking_info)
+        #elif "id" in self.tracking_info.types_of_streams_saved:
+        #    GUI_tracking_object(pipeline, image, color_ranges, min_radius_object, data_output_folder_path, self.tracking_info)
 
     def toggle_window(self, window):
         if window.isVisible():
