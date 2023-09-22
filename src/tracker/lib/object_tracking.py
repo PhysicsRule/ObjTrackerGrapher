@@ -6,7 +6,7 @@ import pyrealsense2 as rs
 import imutils
 import time
 
-from tracker.lib.intel_realsense_D435i import get_all_frames_color
+from tracker.lib.intel_realsense_D435i import get_all_frames_color, get_all_frames_infrared
 from tracker.lib.user_input import select_object_tracker_method
 
 def GUI_select_bounding_box(pipeline):
@@ -27,6 +27,30 @@ def GUI_select_bounding_box(pipeline):
         # Select the object to track
         print('select object')
         bbox = cv2.selectROI('ROI Selection', color_image, False)          
+        ret = tracker.init(depth_colormap, bbox)
+        print(bbox)
+        cv2.destroyWindow('ROI Selection')
+        check_no_selection = False
+    return bbox, ret, tracker
+
+def GUI_select_bounding_box_infrared(pipeline):
+    print('select bounding box')
+    check_no_selection = True
+    while check_no_selection:
+        frame_result = get_all_frames_infrared(pipeline)
+        if not frame_result:
+            continue
+        (rs_depth, rs_infrared1), _ = frame_result
+        
+        ## TODO use rs_infrared to see infrared from camera 1
+        depth_image = np.asanyarray(rs_depth.get_data())
+        infrared_image = np.asanyarray(rs_infrared1.get_data())
+        depth_colormap = cv2.applyColorMap(cv2.convertScaleAbs(depth_image, alpha=0.10), cv2.COLORMAP_HSV)# Create a colormap from the depth data
+        # User inputs the type of tracking used
+        tracker = select_object_tracker_method()
+        # Select the object to track
+        print('select object')
+        bbox = cv2.selectROI('ROI Selection', infrared_image, False)          
         ret = tracker.init(depth_colormap, bbox)
         print(bbox)
         cv2.destroyWindow('ROI Selection')
