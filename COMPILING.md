@@ -3,7 +3,7 @@
 
 ```bash
 pip install pyinstaller
-1. pyinstaller --specpath build/ --add-data '../src/tracker/lib/GUI_Base.ui:.\src\tracker\lib' -D src/GUI_Tracker.py
+1. pyinstaller --specpath build/ --add-data '../src/tracker/lib/GUI_Base.ui:.\src\tracker\lib' -D src/GUI_main_program.py
 
 2. copy the dist into a folder on a flash drive with a main folder 3D
 3. copy the data folder with color_i, color_o and some example files into the drive
