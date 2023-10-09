@@ -397,16 +397,18 @@ class MyGUI(QMainWindow):
         print('infrared with object tracking')
         
     def set_folder_to_other(self):
-        type_of_tracking = 'other'
-        input_folder = 'other_i'
-        data_output = 'other_o' 
+        self.tracking_info = tracking(types_of_streams_saved = 'sk',
+                                         type_of_tracking = 'other',
+                                         input_folder = 'other_i',
+                                         output_folder = 'other_o')
+
         # Select the color from a list, use a predefined preset, or create a new one.
         self.hide_color_radiobuttons(True)
         self.table_widget_objects.setHidden(False)
         self.hide_folder_details(False)
         self.hide_graph_options(False)     
         self.define_objects_shown()
-        self.list_folders(data_output)
+        self.list_folders(self.tracking_info.output_folder)
 
     def skeletal_tracker_pressed(self):
         self.set_folder_to_other()
