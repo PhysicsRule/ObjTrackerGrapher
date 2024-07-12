@@ -1,9 +1,10 @@
 # Packaging python into standalone executable
 (When reading this document, replace MY_PROGRAM with the name of your program)
 
+<!-- if '../LICENSE:.' doesn't work use '../LICENSE:.\' -->
 ```bash
 pip install pyinstaller
-1. pyinstaller --specpath build/ --add-data '../src/tracker/lib/GUI_Base.ui:.\src\tracker\lib' -D src/GUI_main_program.py
+1. pyinstaller --specpath build/ --add-data '../src/tracker/lib/GUI_Base.ui:.\src\tracker\lib' --add-data '../LICENSE:.' -D src/GUI_main_program.py
 
 2. copy the dist into a folder on a flash drive with a main folder 3D
 3. copy the data folder with color_i, color_o and some example files into the drive
