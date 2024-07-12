@@ -49,6 +49,14 @@ def GUI_creates_an_array_of_csv_files (data_output_folder_path):
             num_files +=1
     return file_array
 
+def save_video_file(image_file_path, video_img_array, type_of_image, size):
+    # Saves the images in a video
+    video_file_path = os.path.abspath(os.path.join(image_file_path + type_of_image))  
+    out = cv2.VideoWriter(video_file_path +'.mp4',cv2.VideoWriter_fourcc(*'mp4v'), 15, size)
+    for i in range(len(video_img_array)):
+        out.write(video_img_array[i])
+    out.release()
+
 def open_the_video(src):
     video = cv2.VideoCapture(src) # change num based on local machine
 

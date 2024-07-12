@@ -480,7 +480,6 @@
      <property name="font">
       <font>
        <pointsize>10</pointsize>
-       <weight>75</weight>
        <bold>true</bold>
       </font>
      </property>
@@ -524,10 +523,10 @@ Select the additional variables you would like graphed</string>
      <attribute name="horizontalHeaderMinimumSectionSize">
       <number>10</number>
      </attribute>
-     <attribute name="verticalHeaderDefaultSectionSize">
+     <attribute name="verticalHeaderMinimumSectionSize">
       <number>20</number>
      </attribute>
-     <attribute name="verticalHeaderMinimumSectionSize">
+     <attribute name="verticalHeaderDefaultSectionSize">
       <number>20</number>
      </attribute>
      <column>
@@ -706,20 +705,20 @@ highest fps</string>
      <attribute name="horizontalHeaderVisible">
       <bool>false</bool>
      </attribute>
-     <attribute name="horizontalHeaderDefaultSectionSize">
-      <number>150</number>
-     </attribute>
      <attribute name="horizontalHeaderMinimumSectionSize">
       <number>50</number>
+     </attribute>
+     <attribute name="horizontalHeaderDefaultSectionSize">
+      <number>150</number>
      </attribute>
      <attribute name="verticalHeaderVisible">
       <bool>true</bool>
      </attribute>
-     <attribute name="verticalHeaderDefaultSectionSize">
-      <number>20</number>
-     </attribute>
      <attribute name="verticalHeaderMinimumSectionSize">
       <number>10</number>
+     </attribute>
+     <attribute name="verticalHeaderDefaultSectionSize">
+      <number>20</number>
      </attribute>
      <row/>
      <row/>
@@ -1037,7 +1036,7 @@ Object tracking
     <widget class="QCheckBox" name="save_depth_check">
      <property name="geometry">
       <rect>
-       <x>270</x>
+       <x>430</x>
        <y>630</y>
        <width>211</width>
        <height>20</height>
@@ -1050,7 +1049,7 @@ Object tracking
       <string notr="true">color: rgb(20,0,0);</string>
      </property>
      <property name="text">
-      <string>Save Depth</string>
+      <string>Save Depth Video *mp4</string>
      </property>
      <property name="checkable">
       <bool>true</bool>
@@ -1060,8 +1059,8 @@ Object tracking
      <property name="geometry">
       <rect>
        <x>270</x>
-       <y>650</y>
-       <width>231</width>
+       <y>610</y>
+       <width>121</width>
        <height>20</height>
       </rect>
      </property>
@@ -1069,7 +1068,7 @@ Object tracking
       <string notr="true">color: rgb(20,0,0);</string>
      </property>
      <property name="text">
-      <string>Save Image</string>
+      <string>Save Images</string>
      </property>
      <property name="checkable">
       <bool>true</bool>
@@ -1145,7 +1144,7 @@ Object tracking
      <property name="geometry">
       <rect>
        <x>270</x>
-       <y>610</y>
+       <y>650</y>
        <width>171</width>
        <height>20</height>
       </rect>
@@ -1196,6 +1195,15 @@ Object tracking
           </color>
          </brush>
         </colorrole>
+        <colorrole role="PlaceholderText">
+         <brush brushstyle="SolidPattern">
+          <color alpha="128">
+           <red>20</red>
+           <green>0</green>
+           <blue>0</blue>
+          </color>
+         </brush>
+        </colorrole>
        </active>
        <inactive>
         <colorrole role="WindowText">
@@ -1219,6 +1227,15 @@ Object tracking
         <colorrole role="ButtonText">
          <brush brushstyle="SolidPattern">
           <color alpha="255">
+           <red>20</red>
+           <green>0</green>
+           <blue>0</blue>
+          </color>
+         </brush>
+        </colorrole>
+        <colorrole role="PlaceholderText">
+         <brush brushstyle="SolidPattern">
+          <color alpha="128">
            <red>20</red>
            <green>0</green>
            <blue>0</blue>
@@ -1254,6 +1271,15 @@ Object tracking
           </color>
          </brush>
         </colorrole>
+        <colorrole role="PlaceholderText">
+         <brush brushstyle="SolidPattern">
+          <color alpha="128">
+           <red>20</red>
+           <green>0</green>
+           <blue>0</blue>
+          </color>
+         </brush>
+        </colorrole>
        </disabled>
       </palette>
      </property>
@@ -1264,7 +1290,7 @@ Object tracking
       <string notr="true">color: rgb(20,0,0);</string>
      </property>
      <property name="text">
-      <string>Save Video *.mp4</string>
+      <string>Save Images Video *.mp4</string>
      </property>
      <property name="checked">
       <bool>true</bool>
@@ -1397,10 +1423,10 @@ Object Tracking
      <attribute name="horizontalHeaderMinimumSectionSize">
       <number>10</number>
      </attribute>
-     <attribute name="verticalHeaderDefaultSectionSize">
+     <attribute name="verticalHeaderMinimumSectionSize">
       <number>20</number>
      </attribute>
-     <attribute name="verticalHeaderMinimumSectionSize">
+     <attribute name="verticalHeaderDefaultSectionSize">
       <number>20</number>
      </attribute>
      <column>
@@ -1583,7 +1609,6 @@ for output</string>
      <property name="font">
       <font>
        <pointsize>10</pointsize>
-       <weight>75</weight>
        <bold>true</bold>
       </font>
      </property>
@@ -1612,7 +1637,6 @@ for output</string>
      <property name="font">
       <font>
        <pointsize>10</pointsize>
-       <weight>75</weight>
        <bold>true</bold>
       </font>
      </property>
@@ -1650,7 +1674,6 @@ for output</string>
      <property name="font">
       <font>
        <pointsize>10</pointsize>
-       <weight>75</weight>
        <bold>true</bold>
       </font>
      </property>
@@ -1679,7 +1702,6 @@ for output</string>
      <property name="font">
       <font>
        <pointsize>10</pointsize>
-       <weight>75</weight>
        <bold>true</bold>
       </font>
      </property>
@@ -1721,7 +1743,6 @@ They all slow down the process except for saving video</string>
      <property name="font">
       <font>
        <pointsize>10</pointsize>
-       <weight>75</weight>
        <bold>true</bold>
       </font>
      </property>
@@ -1754,7 +1775,6 @@ They all slow down the process except for saving video</string>
      <property name="font">
       <font>
        <pointsize>10</pointsize>
-       <weight>75</weight>
        <bold>true</bold>
       </font>
      </property>
@@ -1801,10 +1821,10 @@ then see it in 3D or find trendlines</string>
      <attribute name="horizontalHeaderMinimumSectionSize">
       <number>10</number>
      </attribute>
-     <attribute name="verticalHeaderDefaultSectionSize">
+     <attribute name="verticalHeaderMinimumSectionSize">
       <number>20</number>
      </attribute>
-     <attribute name="verticalHeaderMinimumSectionSize">
+     <attribute name="verticalHeaderDefaultSectionSize">
       <number>20</number>
      </attribute>
      <column>
@@ -1902,7 +1922,7 @@ then see it in 3D or find trendlines</string>
      <x>0</x>
      <y>0</y>
      <width>1637</width>
-     <height>21</height>
+     <height>22</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuFile">
