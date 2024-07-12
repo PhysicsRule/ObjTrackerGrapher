@@ -11,7 +11,7 @@ import numpy as np
 from tracker.lib.setup_files import set_up_color, make_csv_files
 from tracker.lib.intel_realsense_D435i import get_all_frames_color, get_all_frames_infrared, get_depth_meters, find_and_config_device, select_furthest_distance_color, select_furthest_distance_infrared, warm_up_camera
 from tracker.lib.color import make_color_hsv, find_object_by_color
-from tracker.lib.general import open_the_video 
+from tracker.lib.general import open_the_video, save_video_file 
 from tracker.lib.color import GUI_find_hsv_bounds
 from tracker.lib.object_tracking import GUI_select_bounding_box, GUI_select_bounding_box_infrared, find_xy_using_tracking_method, draw_bounding_box
 
@@ -47,9 +47,10 @@ def what_to_do_with_images(i, x_pixel, y_pixel, radius,image,depth_colormap,cv_c
     if image.save_RGB:
         color_file_path = os.path.abspath(os.path.join(data_output_folder_path, 'color'+  str(i) + '.jpg'))   
         cv2.imwrite(color_file_path,cv_color)
+    '''Saving Depth is now just saving the video
     if image.save_depth:
         depth_file_path = os.path.abspath(os.path.join(data_output_folder_path, 'depth'+  str(i) + '.jpg'))   
-        cv2.imwrite(depth_file_path, depth_colormap)
+        cv2.imwrite(depth_file_path, depth_colormap)'''
     if image.save_mask:
         mask_file_path = os.path.abspath(os.path.join(data_output_folder_path, 'mask'+  str(i) + '.jpg'))   
         cv2.imwrite(mask_file_path, mask)
@@ -75,7 +76,8 @@ def GUI_tracking(pipeline, image, color_ranges, min_radius_object, data_output_f
     # Now that everything is setup, track the objects
     first_time_check = True
     image_file_path = os.path.abspath(os.path.join(data_output_folder_path + '/video/'))  
-    video_img_array = []
+    video_RGB_array = []
+    video_depth_array = []
     start_time = 0 # It should get a time the first round through
     i=0
 
@@ -93,8 +95,10 @@ def GUI_tracking(pipeline, image, color_ranges, min_radius_object, data_output_f
 
         for (lower,upper, color_name, radius_meters, mass) in color_ranges:
             # Find location of the object in x,y pixels using color masks
+            mask = None
             if tracking_info.type_of_tracking == 'color':
-                x_pixel, y_pixel, radius, mask = find_object_by_color(cv_color,hsv, lower,upper, color_name, radius_meters, mass, min_radius_object, max_num_point)     
+                x_pixel, y_pixel, radius, mask_limited_array = find_object_by_color(cv_color,hsv, lower,upper, color_name, radius_meters, mass, min_radius_object, max_num_point)     
+                mask =np.array(mask_limited_array)
             elif tracking_info.type_of_tracking == 'obj_tracker':
                 cv_image= depth_colormap
                 radius = 0 # showing if tracker is not working
@@ -126,18 +130,20 @@ def GUI_tracking(pipeline, image, color_ranges, min_radius_object, data_output_f
                 data_to_file.write(f'{relative_timestamp},{x_coord},{y_coord},{z_coord}\n')      
 
             if color_name == color_ranges[0][2]:
-                cv2.putText(cv_color, 'Time: ' + str(relative_timestamp), (0,20), cv2.FONT_HERSHEY_SIMPLEX, 0.75, (50,170,50), 2)
-                cv2.putText(cv_color, 'X coordinate: ' + str(x_coord), (0,40), cv2.FONT_HERSHEY_SIMPLEX, 0.75, (50,170,50), 2)
-                cv2.putText(cv_color, 'Y coordinate: ' + str(y_coord), (0,60), cv2.FONT_HERSHEY_SIMPLEX, 0.75, (50,170,50), 2)
-                cv2.putText(cv_color, 'Z coordinate: ' + str(z_coord), (0,80), cv2.FONT_HERSHEY_SIMPLEX, 0.75, (50,170,50), 2)
+                for image_to_show in (cv_color,depth_colormap, mask):
+                    cv2.putText(image_to_show, 'Time: ' + str(relative_timestamp), (0,20), cv2.FONT_HERSHEY_SIMPLEX, 0.75, (50,170,50), 2)
+                    cv2.putText(image_to_show, 'X coordinate: ' + str(x_coord), (0,40), cv2.FONT_HERSHEY_SIMPLEX, 0.75, (50,170,50), 2)
+                    cv2.putText(image_to_show, 'Y coordinate: ' + str(y_coord), (0,60), cv2.FONT_HERSHEY_SIMPLEX, 0.75, (50,170,50), 2)
+                    cv2.putText(image_to_show, 'Z coordinate: ' + str(z_coord), (0,80), cv2.FONT_HERSHEY_SIMPLEX, 0.75, (50,170,50), 2)
             
         what_to_do_with_images(i, x_pixel, y_pixel, radius,image,depth_colormap,cv_color,mask,data_output_folder_path)
         
         # saves the images into an array to convert to a movie when stopped
         if image.save_video:
-            height, width, layers = cv_color.shape
-            size = (width,height)
-            video_img_array.append(cv_color)
+            video_RGB_array.append(cv_color)
+        if image.save_depth:
+            video_depth_array.append(depth_colormap)
+
         i +=1
 
         # exit if spacebar or esc is pressed
@@ -145,11 +151,17 @@ def GUI_tracking(pipeline, image, color_ranges, min_radius_object, data_output_f
         if k == 27 or k == 32:
             print('end')
             # Close all OpenCV windows
+
             if image.save_video:
-                out = cv2.VideoWriter(image_file_path +'.mp4',cv2.VideoWriter_fourcc(*'mp4v'), 15, size)
-                for i in range(len(video_img_array)):
-                    out.write(video_img_array[i])
-                out.release()
+                height, width, layers = cv_color.shape
+                size = (width,height)
+                save_video_file(image_file_path, video_RGB_array,'RGB', size)
+
+            if image.save_depth:
+                height, width, layers = depth_colormap.shape
+                size = (width,height)
+                save_video_file(image_file_path, video_depth_array, 'Depth', size)
+            
             cv2.destroyAllWindows()
             break
 
@@ -182,6 +194,7 @@ def GUI_obj_tracking(pipeline, image, color_ranges, min_radius_object, data_outp
     first_time_check = True
     image_file_path = os.path.abspath(os.path.join(data_output_folder_path + '/video/'))  
     video_img_array = []
+    video_depth_array = []
     start_time = 0 # It should get a time the first round through
     i=0
 
@@ -194,7 +207,7 @@ def GUI_obj_tracking(pipeline, image, color_ranges, min_radius_object, data_outp
         
         ## TODO use rs_infrared to see infrared from camera 1
         depth_image = np.asanyarray(rs_depth.get_data())
-        infrared_image = np.asanyarray(rs_infrared.get_data())
+        infrared_image = np.array(rs_infrared.get_data())
         depth_colormap = cv2.applyColorMap(cv2.convertScaleAbs(depth_image, alpha=0.10), cv2.COLORMAP_HSV)# Create a colormap from the depth data
         # image the user sees as if it were color
         cv_color = infrared_image    
@@ -230,18 +243,19 @@ def GUI_obj_tracking(pipeline, image, color_ranges, min_radius_object, data_outp
                 data_to_file.write(f'{relative_timestamp},{x_coord},{y_coord},{z_coord}\n')      
 
             if color_name == color_ranges[0][2]:
-                cv2.putText(cv_color, 'Time: ' + str(relative_timestamp), (0,20), cv2.FONT_HERSHEY_SIMPLEX, 0.75, (50,170,50), 2)
-                cv2.putText(cv_color, 'X coordinate: ' + str(x_coord), (0,40), cv2.FONT_HERSHEY_SIMPLEX, 0.75, (50,170,50), 2)
-                cv2.putText(cv_color, 'Y coordinate: ' + str(y_coord), (0,60), cv2.FONT_HERSHEY_SIMPLEX, 0.75, (50,170,50), 2)
-                cv2.putText(cv_color, 'Z coordinate: ' + str(z_coord), (0,80), cv2.FONT_HERSHEY_SIMPLEX, 0.75, (50,170,50), 2)
+                for image_to_show in (cv_color,depth_colormap):
+                    cv2.putText(image_to_show, 'Time: ' + str(relative_timestamp), (0,20), cv2.FONT_HERSHEY_SIMPLEX, 0.75, (50,170,50), 2)
+                    cv2.putText(image_to_show, 'X coordinate: ' + str(x_coord), (0,40), cv2.FONT_HERSHEY_SIMPLEX, 0.75, (50,170,50), 2)
+                    cv2.putText(image_to_show, 'Y coordinate: ' + str(y_coord), (0,60), cv2.FONT_HERSHEY_SIMPLEX, 0.75, (50,170,50), 2)
+                    cv2.putText(image_to_show, 'Z coordinate: ' + str(z_coord), (0,80), cv2.FONT_HERSHEY_SIMPLEX, 0.75, (50,170,50), 2)
                 # draw_bounding_box(cv_color, bbox)
         what_to_do_with_images(i, x_pixel, y_pixel, radius,image,depth_colormap,cv_color,mask,data_output_folder_path)
         
         # saves the images into an array to convert to a movie when stopped
         if image.save_video:
-            height, width = cv_color.shape
-            size = (width,height)
             video_img_array.append(cv_color)
+        if image.save_depth:
+            video_depth_array.append(depth_colormap)
         i +=1
 
         # exit if spacebar or esc is pressed
@@ -250,10 +264,16 @@ def GUI_obj_tracking(pipeline, image, color_ranges, min_radius_object, data_outp
             print('end')
             # Close all OpenCV windows
             if image.save_video:
-                out = cv2.VideoWriter(image_file_path +'.mp4',cv2.VideoWriter_fourcc(*'mp4v'), 15, size)
-                for i in range(len(video_img_array)):
-                    out.write(video_img_array[i])
-                out.release()
+                # Since cv_color is really an infrared image it does not have layers
+                height, width = cv_color.shape
+                size = (width, height)
+                save_video_file(image_file_path, video_img_array,'img', size)
+
+            if image.save_depth:
+                height, width, layers = depth_colormap.shape
+                size = (width,height)
+                save_video_file(image_file_path, video_depth_array, 'Depth', size)
+                
             cv2.destroyAllWindows()
             break
 
