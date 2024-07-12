@@ -220,14 +220,15 @@ def GUI_real_time_color_tracking(image ,color_ranges , min_radius_object, data_o
                     data_to_file.write(f'{relative_timestamp},{x_coord},{y_coord},{z_coord}\n')      
 
                 # Create a colormap from the depth data
-                if image.show_depth:
+                if image.show_depth or image.save_depth:
                     depth_image = np.asanyarray(rs_depth.get_data())
                     depth_colormap = cv2.applyColorMap(cv2.convertScaleAbs(depth_image, alpha=0.10), cv2.COLORMAP_HSV)
                     cv2.putText(depth_colormap, 'Time: ' + str(relative_timestamp), (0,20), cv2.FONT_HERSHEY_SIMPLEX, 0.75, (50,170,50), 2)
                     cv2.circle(depth_colormap, (int(x_pixel), int(y_pixel)), int(radius), (255, 255, 255), 2)
                     # Show depth colormap & color feed
-                    cv2.imshow('depth', depth_colormap)
-                    cv2.moveWindow('depth',850,0)
+                    if image.show_depth:
+                        cv2.imshow('depth', depth_colormap)
+                        cv2.moveWindow('depth',850,0)
 
                 if image.show_RGB:
                     cv2.putText(cv_color, 'Time: ' + str(relative_timestamp), (0,20), cv2.FONT_HERSHEY_SIMPLEX, 0.75, (50,170,50), 2)
@@ -248,7 +249,7 @@ def GUI_real_time_color_tracking(image ,color_ranges , min_radius_object, data_o
                 if image.save_RGB:
                     color_file_path = os.path.abspath(os.path.join(data_output_folder_path, 'color'+  str(i) + '.jpg'))   
                     cv2.imwrite(color_file_path,cv_color)
-                if image.show_depth:
+                if image.save_depth:
                     height, width, layers = depth_colormap.shape
                     size = (width,height)
                     video_depth_array.append(depth_colormap)
@@ -289,7 +290,7 @@ def GUI_real_time_color_tracking(image ,color_ranges , min_radius_object, data_o
                 size = (width,height)
                 save_video_file(image_file_path, video_RGB_array,'RGB', size)
 
-            if image.show_depth:
+            if image.save_depth:
                 height, width, layers = depth_colormap.shape
                 size = (width,height)
                 save_video_file(image_file_path, video_depth_array, 'Depth', size)
