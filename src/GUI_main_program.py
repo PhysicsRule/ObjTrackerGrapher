@@ -377,6 +377,11 @@ class MyGUI(QMainWindow):
         self.hide_folder_details(False)
         self.hide_graph_options(False)
         self.list_folders(self.tracking_info.output_folder)
+        self.real_time_button.setHidden(False)
+        self.save_video.setHidden(False)
+        self.show_tracking_mask_check.setHidden(False)
+        self.save_tracking_mask_check.setHidden(False)
+        self.save_video.setChecked(True)
 
 
     def infrared_90_button_pressed(self):
@@ -394,6 +399,11 @@ class MyGUI(QMainWindow):
         self.lineEdit_define_color_name.setHidden(False)
         self.show_depth_check.setChecked(True)
         self.list_folders(self.tracking_info.output_folder)
+        self.real_time_button.setHidden(True)
+        self.save_video.setHidden(True)
+        self.show_tracking_mask_check.setHidden(True)
+        self.save_tracking_mask_check.setHidden(True)
+        self.save_video.setChecked(False)
         print('infrared with object tracking')
         
     def set_folder_to_other(self):
@@ -860,6 +870,8 @@ class MyGUI(QMainWindow):
             pipeline = find_and_config_device()
             GUI_tracking(pipeline, image, color_ranges, min_radius_object, data_output_folder_path, self.tracking_info)
         else: 
+        # self.tracking_info.types_of_streams_saved =='id'
+            
         # The infrared and depth streams are already aligned
         # object tracking at either 90 or 300 frames per second with infrared
             pipeline, config = find_and_config_device_mult_stream(self.tracking_info.types_of_streams_saved)
