@@ -229,45 +229,40 @@ def GUI_real_time_color_tracking(image ,color_ranges , min_radius_object, data_o
                     if image.show_depth:
                         cv2.imshow('depth', depth_colormap)
                         cv2.moveWindow('depth',850,0)
+                    if image.save_depth:
+                        video_depth_array.append(depth_colormap)
+                        ''' To Save individual images...
+                        depth_file_path = os.path.abspath(os.path.join(data_output_folder_path, 'depth'+  str(i) + '.jpg'))   
+                        cv2.imwrite(depth_file_path, depth_colormap)'''
 
-                if image.show_RGB:
+                if image.show_RGB or image.save_RGB or image.save_video:
                     cv2.putText(cv_color, 'Time: ' + str(relative_timestamp), (0,20), cv2.FONT_HERSHEY_SIMPLEX, 0.75, (50,170,50), 2)
                     cv2.putText(cv_color, 'X coordinate: ' + str(x_coord), (0,40), cv2.FONT_HERSHEY_SIMPLEX, 0.75, (50,170,50), 2)
                     cv2.putText(cv_color, 'Y coordinate: ' + str(y_coord), (0,60), cv2.FONT_HERSHEY_SIMPLEX, 0.75, (50,170,50), 2)
                     cv2.putText(cv_color, 'Z coordinate: ' + str(z_coord), (0,80), cv2.FONT_HERSHEY_SIMPLEX, 0.75, (50,170,50), 2)
                     cv2.circle(cv_color, (int(x_pixel), int(y_pixel)), int(radius), (255, 255, 255), 2)
-                    cv2.imshow('Tracking', cv_color)
-                    cv2.moveWindow('Tracking',0,0)
+                    if image.show_RGB:
+                        cv2.imshow('Tracking', cv_color)
+                        cv2.moveWindow('Tracking',0,0)
+                    if image.save_RGB:
+                        color_file_path = os.path.abspath(os.path.join(data_output_folder_path, 'color'+  str(i) + '.jpg'))   
+                        cv2.imwrite(color_file_path,cv_color)
+                    if image.save_video:
+                        video_RGB_array.append(cv_color)
                 
-                if image.show_mask and mask is not None:
+                if (image.show_mask or image.save_mask) and mask is not None:
                     cv2.putText(mask, 'Time: ' + str(relative_timestamp), (0,20), cv2.FONT_HERSHEY_SIMPLEX, 0.75, (50,170,50), 2)
-                    cv2.imshow('mask', mask)
-                    cv2.moveWindow('mask',0,500)
-                
-
-                # Save the RGB and depth images to view later if you want, but it does slow the tracking down a bit.
-                if image.save_RGB:
-                    color_file_path = os.path.abspath(os.path.join(data_output_folder_path, 'color'+  str(i) + '.jpg'))   
-                    cv2.imwrite(color_file_path,cv_color)
-                if image.save_depth:
-                    height, width, layers = depth_colormap.shape
-                    size = (width,height)
-                    video_depth_array.append(depth_colormap)
-                    ''' To Save individual images...
-                    depth_file_path = os.path.abspath(os.path.join(data_output_folder_path, 'depth'+  str(i) + '.jpg'))   
-                    cv2.imwrite(depth_file_path, depth_colormap)'''
-                if image.save_mask:
-                    mask_file_path = os.path.abspath(os.path.join(data_output_folder_path, 'mask'+  str(i) + '.jpg'))   
-                    cv2.imwrite(mask_file_path, mask)
-                    ### TODO Save Mask images as a video
-                    ''' To Save video of mask images but it is now working right now...
-                    height, width = mask.shape
-                    size = (width,height)
-                    video_mask_array.append(mask)'''
-                if image.save_video:
-                    height, width, layers = cv_color.shape
-                    size = (width,height)
-                    video_RGB_array.append(cv_color)
+                    if image.show_mask:
+                        cv2.imshow('mask', mask)
+                        cv2.moveWindow('mask',0,500)
+                    if image.save_mask:
+                        mask_file_path = os.path.abspath(os.path.join(data_output_folder_path, 'mask'+  str(i) + '.jpg'))   
+                        cv2.imwrite(mask_file_path, mask)
+                        ### TODO Save Mask images as a video
+                        ''' To Save video of mask images but it is now working right now...
+                        height, width = mask.shape
+                        size = (width,height)
+                        video_mask_array.append(mask)'''        
                 i +=1
                 
                 self.new_data.emit((x_coord, y_coord, z_coord, relative_timestamp))
