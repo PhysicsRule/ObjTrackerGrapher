@@ -97,6 +97,19 @@ class mlpcanvas(FigureCanvasQTAgg):
 
         super(mlpcanvas_3D, self).__init__(fig_3D)
     '''       
+class CustomDialog(QDialog):
+    def __init__(self, recoding_message, parent=None):
+        super(CustomDialog, self).__init__(parent)
+        
+        self.setWindowFlags(self.windowFlags() & ~QtCore.Qt.WindowContextHelpButtonHint)
+        self.setWindowTitle(recoding_message)
+        self.setGeometry(100, 900, 250, 20)
+        layout = QVBoxLayout()
+
+        self.label = QLabel("Done", self)
+        layout.addWidget(self.label)
+
+        self.setLayout(layout)
 
 class MyGUI(QMainWindow):
     """
@@ -138,7 +151,6 @@ class MyGUI(QMainWindow):
         # Setting the bounds for the trendlines and the output equations / functions
         self.trendline_table_widget.setHidden(True)
         self.find_trendlines_button.setHidden(True)
-
         # GUI shows up
         self.show()
         
@@ -160,6 +172,12 @@ class MyGUI(QMainWindow):
         self.tracker_button.clicked.connect(self.run_tracker)
         self.record_bag_button.clicked.connect(self.record_bag)
         self.track_from_bag_button.clicked.connect(self.track_from_bag)
+        # Alewrt for the Bag File recording
+
+        self.recording_Dialog = CustomDialog('Currently Recording Bag File')
+        self.tracking_Dialog = CustomDialog('Retrieving Bag file')
+        self.graphing_Dialog = CustomDialog('Setting up the graph')
+
         
         # Buttons Graphing
         # Radio Button: 3rd variable graphed
@@ -224,7 +242,23 @@ class MyGUI(QMainWindow):
             os.remove(f"{cwd}/cam_img_1.png")
         if os.path.isfile(f"{cwd}/cam_img_2.png"):
             os.remove(f"{cwd}/cam_img_2.png")
-'''
+        '''
+    # alerts so that people know something is happening
+    def show_recording_alert(self):
+        self.recording_Dialog.show()
+    def hide_recording_alert(self):
+        self.recording_Dialog.hide()
+
+    def show_tracking_alert(self):
+        self.tracking_Dialog.show()
+    def hide_tracking_alert(self):
+        self.tracking_Dialog.hide()
+
+    def show_graphing_alert(self):
+        self.graphing_Dialog.show()
+    def hide_graphing_alert(self):
+        self.graphing_Dialog.hide()
+
     def hide_default_colors(self, hide_default):
         # If hide_____ is false, we show all default info
         self.table_widget_color.setHidden(hide_default)
@@ -731,7 +765,8 @@ class MyGUI(QMainWindow):
     def run_graph(self, data_output_folder_path):
         
         # The folder that will be graphed
-        print('graphing')
+        self.show_graphing_alert()
+
         # What variable is to be graphed for the 3rd graph. It always graphs position and velocity
         
         # TODO if this is needed put back in
@@ -802,7 +837,7 @@ class MyGUI(QMainWindow):
         self.graph_widget.draw()
         self.Button3DGraph.setHidden(False)
         self.setup_trendline_table(self.trendline_table_widget, csv_files_array, self.tracking_info.output_folder, self.folder_name.text(), data_output_folder_path, trendline_folder_path)
-        
+        self.hide_graphing_alert()
 
         #plt.tight_layout()
 
@@ -881,12 +916,13 @@ class MyGUI(QMainWindow):
     
 
     def record_bag(self):
-        print('recording video')
         image, color_ranges, min_radius_object, data_output_folder_path  = self.get_settings()
+        self.show_recording_alert()
         record_bag_file(data_output_folder_path, self.tracking_info.types_of_streams_saved)
+        self.hide_recording_alert()
 
     def track_from_bag(self):
-        print('Tracking from a previously recorded bag file.')
+        self.show_tracking_alert()
         image, color_ranges, min_radius_object, data_output_folder_path  = self.get_settings()
         #config by opening pipeline from bag)
        
@@ -904,6 +940,7 @@ class MyGUI(QMainWindow):
             GUI_tracking(pipeline, image, color_ranges, min_radius_object, data_output_folder_path, self.tracking_info)
         elif "id" in self.tracking_info.types_of_streams_saved:
             GUI_obj_tracking(pipeline, image, color_ranges, min_radius_object, data_output_folder_path, self.tracking_info)
+        self.hide_tracking_alert()
 
     def toggle_window(self, window):
         if window.isVisible():
