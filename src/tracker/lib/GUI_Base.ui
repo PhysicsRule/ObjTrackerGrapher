@@ -911,7 +911,7 @@ Low fps</string>
        <x>100</x>
        <y>40</y>
        <width>130</width>
-       <height>50</height>
+       <height>55</height>
       </rect>
      </property>
      <property name="text">
@@ -925,7 +925,7 @@ Low fps</string>
        <x>240</x>
        <y>40</y>
        <width>130</width>
-       <height>50</height>
+       <height>55</height>
       </rect>
      </property>
      <property name="focusPolicy">
@@ -934,7 +934,7 @@ Low fps</string>
      <property name="text">
       <string>Infrared
 Object tracking
-90 fps</string>
+22 or 90 fps</string>
      </property>
     </widget>
     <widget class="QLineEdit" name="folder_name">
@@ -1131,7 +1131,7 @@ Object tracking
        <x>100</x>
        <y>150</y>
        <width>381</width>
-       <height>161</height>
+       <height>141</height>
       </rect>
      </property>
      <item>
@@ -1302,7 +1302,7 @@ Object tracking
        <x>380</x>
        <y>40</y>
        <width>130</width>
-       <height>50</height>
+       <height>55</height>
       </rect>
      </property>
      <property name="maximumSize">
@@ -1554,7 +1554,7 @@ Time, x,y, z (Skeletal Tracker)</string>
        <x>650</x>
        <y>40</y>
        <width>130</width>
-       <height>50</height>
+       <height>55</height>
       </rect>
      </property>
      <property name="font">
@@ -1566,8 +1566,9 @@ Time, x,y, z (Skeletal Tracker)</string>
       <enum>Qt::NoFocus</enum>
      </property>
      <property name="text">
-      <string>Link to
-Skeletal Tracker</string>
+      <string>Link to Skeletal Tracker
+Copy data into other_o
+and graph</string>
      </property>
     </widget>
     <widget class="QPushButton" name="other_folder">
@@ -1576,12 +1577,13 @@ Skeletal Tracker</string>
        <x>520</x>
        <y>40</y>
        <width>120</width>
-       <height>50</height>
+       <height>55</height>
       </rect>
      </property>
      <property name="text">
-      <string>Use other_o folder
-for output</string>
+      <string>Put you own data
+into other_o folder
+and graph</string>
      </property>
     </widget>
     <widget class="QPushButton" name="find_trendlines_button">
@@ -1629,9 +1631,9 @@ for output</string>
      <property name="geometry">
       <rect>
        <x>100</x>
-       <y>310</y>
+       <y>290</y>
        <width>571</width>
-       <height>21</height>
+       <height>41</height>
       </rect>
      </property>
      <property name="font">
@@ -1650,7 +1652,8 @@ for output</string>
       <enum>QFrame::StyledPanel</enum>
      </property>
      <property name="text">
-      <string>Step 3: If using color tracker... choose how you want to determine colors to track.</string>
+      <string>Step 3: If using color tracker... choose how you want to determine colors to track.
+Don't forget to enter the mass if you want momentum graphs.</string>
      </property>
      <property name="textFormat">
       <enum>Qt::PlainText</enum>
@@ -1756,8 +1759,7 @@ They all slow down the process except for saving video</string>
       <number>-5</number>
      </property>
      <property name="text">
-      <string>Step 5: If tracking with 3D camera...Choose the type of tracking. 
-(Recording bag file, then tracking from it is most precise, but not necessary.</string>
+      <string>Step 5: If tracking with D435i 3D camera...Choose the type of tracking.</string>
      </property>
      <property name="textFormat">
       <enum>Qt::PlainText</enum>
@@ -1894,14 +1896,15 @@ then see it in 3D or find trendlines</string>
        <x>370</x>
        <y>770</y>
        <width>251</width>
-       <height>16</height>
+       <height>31</height>
       </rect>
      </property>
      <property name="styleSheet">
       <string notr="true">color: rgb(255, 255, 255);</string>
      </property>
      <property name="text">
-      <string>New bag files need new names or errors occur</string>
+      <string>New bag files need new names or errors occur
+Will record for a few seconds and stop</string>
      </property>
     </widget>
    </widget>
