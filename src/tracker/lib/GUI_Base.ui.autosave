@@ -1316,8 +1316,8 @@ Object tracking
      </property>
      <property name="text">
       <string>Infrared(Future)
-Object Tracking
-300 fps (thin)</string>
+background subtraction
+90 fps</string>
      </property>
     </widget>
     <widget class="QPushButton" name="track_from_bag_button">
@@ -1621,7 +1621,7 @@ and graph</string>
       <string notr="true">color: rgb(255, 255, 255);</string>
      </property>
      <property name="text">
-      <string>Step 1: Choose Location/Type of Data to Track (location for color is in data/color_o for example)</string>
+      <string>Step 1: Choose Tracking Method (location for color is in 3D/data/color_o)</string>
      </property>
      <property name="textFormat">
       <enum>Qt::PlainText</enum>
@@ -1652,7 +1652,7 @@ and graph</string>
       <enum>QFrame::StyledPanel</enum>
      </property>
      <property name="text">
-      <string>Step 3: If using color tracker... choose how you want to determine colors to track.
+      <string>Step 3: Choose objects to track.
 Don't forget to enter the mass if you want momentum graphs.</string>
      </property>
      <property name="textFormat">
