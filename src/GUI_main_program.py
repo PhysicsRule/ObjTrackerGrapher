@@ -111,6 +111,43 @@ class CustomDialog(QDialog):
 
         self.setLayout(layout)
 
+class HelpWindow(QWidget):
+    def __init__(self):
+        super().__init__()
+        self.setWindowTitle("Help")
+        self.setGeometry(700, 100, 800, 1000)
+        
+        layout = QVBoxLayout()
+        
+        self.search_box = QLineEdit()
+        self.search_box.setPlaceholderText("Search...")
+        self.search_box.textChanged.connect(self.search_text)
+        layout.addWidget(self.search_box)
+
+        self.text_browser = QTextBrowser()
+        # Determine the path to help.html within your library
+        base_path = os.getcwd()
+        help_file_path = os.path.abspath(os.path.join(base_path, 'src', 'tracker' , 'lib', 'help1.html'))
+        with open(help_file_path, 'r') as help_file:
+            self.text_browser.setHtml(help_file.read())
+        layout.addWidget(self.text_browser)
+        
+        self.setLayout(layout)
+    
+    def search_text(self):
+        # Implement search functionality within the HTML content if needed
+        # QTextBrowser has limited search capabilities compared to QWebEngineView
+        pass
+
+    '''Search is different when using QTextBrowser as is used above
+    def search_text(self):
+        query = self.search_box.text()
+        if query:
+            cursor = self.text_edit.document().find(query)
+            if cursor.isNull():
+                return
+            self.text_edit.setTextCursor(cursor)
+            '''
 class MyGUI(QMainWindow):
     """
     MAIN DISPLAY that shows every object, qwidget
@@ -122,6 +159,16 @@ class MyGUI(QMainWindow):
         uic.loadUi(GUI_file_path, self)
         # Toolbar for graph not showing yet
         self.toolbar=False
+
+        # Menubar for help and future functions
+        menu_bar = self.menuBar()
+        # Create the Help menu
+        help_menu = menu_bar.addMenu("Help")
+        # Create the Help action
+        help_action = QAction("Open Help", self)
+        help_menu.addAction(help_action)
+        help_action.triggered.connect(self.open_help_window)
+        
         # Folder Options Hidden
         self.folder_list.setHidden(True)        # List of folders to put the data into
         self.folder_name.setHidden(True) 
@@ -243,6 +290,11 @@ class MyGUI(QMainWindow):
         if os.path.isfile(f"{cwd}/cam_img_2.png"):
             os.remove(f"{cwd}/cam_img_2.png")
         '''
+    
+    def open_help_window(self):
+        self.help_window = HelpWindow()
+        self.help_window.show()
+
     # alerts so that people know something is happening
     def show_recording_alert(self):
         self.recording_Dialog.show()
