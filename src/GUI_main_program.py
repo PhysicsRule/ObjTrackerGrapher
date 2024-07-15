@@ -127,9 +127,12 @@ class HelpWindow(QWidget):
         self.text_browser = QTextBrowser()
         # Determine the path to help.html within your library
         base_path = os.getcwd()
-        help_file_path = os.path.abspath(os.path.join(base_path, 'src', 'tracker' , 'lib', 'help1.html'))
-        with open(help_file_path, 'r') as help_file:
-            self.text_browser.setHtml(help_file.read())
+        base_path_html = os.path.abspath(os.path.join(base_path, 'src', 'tracker' , 'lib'))
+        base_url = QUrl.fromLocalFile(base_path_html + "/")                            
+        self.text_browser.setSource(QUrl.fromLocalFile(base_path_html + "/help1.html"))
+        self.text_browser.setSearchPaths([base_path_html])  # This helps with loading relative resources
+
+        self.text_browser.show()
         layout.addWidget(self.text_browser)
         
         self.setLayout(layout)
