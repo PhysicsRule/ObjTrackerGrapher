@@ -201,6 +201,7 @@ class MyGUI(QMainWindow):
         # Setting the bounds for the trendlines and the output equations / functions
         self.trendline_table_widget.setHidden(True)
         self.find_trendlines_button.setHidden(True)
+        self.id300_button.setHidden(True)
         # GUI shows up
         self.show()
         
