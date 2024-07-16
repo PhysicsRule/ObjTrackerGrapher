@@ -103,7 +103,7 @@ class CustomDialog(QDialog):
         
         self.setWindowFlags(self.windowFlags() & ~QtCore.Qt.WindowContextHelpButtonHint)
         self.setWindowTitle(recoding_message)
-        self.setGeometry(100, 900, 250, 20)
+        self.setGeometry(100, 900, 350, 20)
         layout = QVBoxLayout()
 
         self.label = QLabel("Done", self)
@@ -201,6 +201,7 @@ class MyGUI(QMainWindow):
         # Setting the bounds for the trendlines and the output equations / functions
         self.trendline_table_widget.setHidden(True)
         self.find_trendlines_button.setHidden(True)
+
         self.id300_button.setHidden(True)
         # GUI shows up
         self.show()
@@ -225,7 +226,7 @@ class MyGUI(QMainWindow):
         self.track_from_bag_button.clicked.connect(self.track_from_bag)
         # Alewrt for the Bag File recording
 
-        self.recording_Dialog = CustomDialog('Currently Recording Bag File')
+        self.recording_Dialog = CustomDialog('Currently Recording Bag File (Image not shown)')
         self.tracking_Dialog = CustomDialog('Retrieving Bag file')
         self.graphing_Dialog = CustomDialog('Setting up the graph')
 
