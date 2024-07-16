@@ -1525,9 +1525,9 @@ Object Tracking
     <widget class="QCheckBox" name="data_in_other">
      <property name="geometry">
       <rect>
-       <x>790</x>
+       <x>799</x>
        <y>40</y>
-       <width>200</width>
+       <width>191</width>
        <height>50</height>
       </rect>
      </property>
@@ -1553,7 +1553,7 @@ Time, x,y, z (Skeletal Tracker)</string>
       <rect>
        <x>650</x>
        <y>40</y>
-       <width>130</width>
+       <width>141</width>
        <height>55</height>
       </rect>
      </property>
