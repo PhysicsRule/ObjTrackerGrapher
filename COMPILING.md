@@ -4,11 +4,11 @@
 <!-- if '../LICENSE:.' doesn't work use '../LICENSE:.\' -->
 ```bash
 pip install pyinstaller
-1. pyinstaller --specpath build/ --add-data '../src/tracker/lib/GUI_Base.ui:.\src\tracker\lib' --add-data '../LICENSE:.' -D src/GUI_main_program.py
+1. pyinstaller --specpath build/ --add-data '..\src\tracker\lib\GUI_Base.ui;.\src\tracker\lib' --add-data '..\LICENSE;.' --add-data '../data;.\data' -D src/GUI_main_program.py
 
 2. copy the dist into a folder on a flash drive with a main folder 3D
-3. copy the data folder with color_i, color_o and some example files into the drive
-4. copy the videos onto the drive as well outside the 3D folder
+3. make sure the data folder has the following folders, if not add: color_i, color_o, infrared_i, infrared_o, other_i, other_o
+
 
 For example when trying to run 
 
@@ -22,7 +22,8 @@ Check the dist folder for a file called `MY_PROGRAM.exe`
 
 ### Data directory
 In your current directory a folder named `data` MUST exist. 
-You may need color_i and color_o folders as well.
+You need the following folders in the data folder: color_i, color_o, infrared_i, infrared_o, other_i, other_o
+
 
 Double clicking works, but if you need to see an error:
 - open a terminal in the project root (the directory this file is in)
