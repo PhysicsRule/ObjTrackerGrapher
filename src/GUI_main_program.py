@@ -30,7 +30,7 @@ from mpl_toolkits import mplot3d
 from tracker.lib.general import find_objects_to_graph
 from tracker.lib.GUI_tracker import GUI_tracking, GUI_obj_tracking
 from tracker.lib.GUI_real_time_color_tracker import GUI_real_time_color_tracking
-from tracker.lib.GUI_graphing_trendlines import GUI_graph, GUI_graph_trendline, plot_style_color, GUI_show_equations_on_table
+from tracker.lib.GUI_graphing_trendlines import GUI_graph, GUI_graph_trendline, plot_style_color, GUI_show_equations_on_table, objects_graphed_in_their_color
 from tracker.lib.graphing import GUI_graph_setup, three_D_graphs, plot_graphs, GUI_trim, parameters
 from tracker.lib.intel_realsense_D435i import record_bag_file, find_and_config_device, read_bag_file_and_config, find_and_config_device_mult_stream
 # from tracker.lib.GUI_library import reload_table
@@ -757,21 +757,22 @@ class MyGUI(QMainWindow):
         return self.image, self.color_ranges, min_radius_object, data_output_folder_path
 
 
-    def setup_trendline_table(self, title_of_table,csv_files_array, data_output, folder_name, data_output_folder_path, trendline_folder_path):
+    def setup_trendline_table(self, title_of_table,csv_files_array, data_output, folder_name, data_output_folder_path, trendline_folder_path, line_color_array):
         which_parameter_to_plot = parameters(self.select_acceleration.isChecked(), self.select_momentum.isChecked(), self.select_energy.isChecked())
         self.trendline_table_widget.setHidden(False)
         self.find_trendlines_button.setHidden(False)
         title_of_table.setColumnCount(len(csv_files_array))
         title_of_table.setRowCount(30)
         
-        title_of_table.setVerticalHeaderItem(0, QTableWidgetItem('object name'))
+        title_of_table.setVerticalHeaderItem(0, QTableWidgetItem('object name(color)'))
         title_of_table.setVerticalHeaderItem(1, QTableWidgetItem('mass (kg)'))
         title_of_table.setVerticalHeaderItem(2, QTableWidgetItem('Minimum time'))
         title_of_table.setVerticalHeaderItem(3, QTableWidgetItem('Maximum time'))
         
         column = 0
         for (__, file_name, mass) in csv_files_array:
-            title_of_table.setItem(0,column, QTableWidgetItem(file_name))
+            name_and_color = file_name + "("+ line_color_array[column] + ")"
+            title_of_table.setItem(0,column, QTableWidgetItem(name_and_color))
             title_of_table.setItem(1,column, QTableWidgetItem(str(mass)))
             
             for i,var in enumerate(['x','y','z']):
@@ -847,8 +848,11 @@ class MyGUI(QMainWindow):
         graph_color_ranges, csv_files_array = find_objects_to_graph (data_output_folder_path)
 
         # self.grid_layout.addWidget(self.graph_widget_3D, 0, 1, alignment=Qt.Alignment())
-
+        
+        # Use Default color order unless the name of the objects have a color in them
         line_style_array, line_color_array, marker_shape_array, show_legend = plot_style_color()
+        
+
         self.graph_widget.clear()
         which_parameter_to_plot = parameters(self.select_acceleration.isChecked(), self.select_momentum.isChecked(), self.select_energy.isChecked())
         self.graph_widget, points_to_smooth = GUI_graph_setup(self.graph_widget, which_parameter_to_plot)
@@ -857,6 +861,7 @@ class MyGUI(QMainWindow):
         i_object=0
                
         for (file_path, file_name, mass) in csv_files_array:
+            line_color_array[i_object] = objects_graphed_in_their_color(line_color_array[i_object],file_name)
             file_name_dataframe = file_name  + "sheet.csv"
             file_name_dataframe_path = os.path.abspath(os.path.join(trendline_folder_path + '/' + file_name_dataframe + '/' ))     
             smooth_data_to_graph = pd.read_csv(file_name_dataframe_path, header=0)
@@ -893,7 +898,7 @@ class MyGUI(QMainWindow):
 
         self.graph_widget.draw()
         self.Button3DGraph.setHidden(False)
-        self.setup_trendline_table(self.trendline_table_widget, csv_files_array, self.tracking_info.output_folder, self.folder_name.text(), data_output_folder_path, trendline_folder_path)
+        self.setup_trendline_table(self.trendline_table_widget, csv_files_array, self.tracking_info.output_folder, self.folder_name.text(), data_output_folder_path, trendline_folder_path, line_color_array)
         self.hide_graphing_alert()
 
         #plt.tight_layout()
@@ -934,7 +939,9 @@ class MyGUI(QMainWindow):
             graph_data = pd.read_csv(path_to_file, header=0, names = header_list)           
             # Trim
             graph_data_window = graph_data[graph_data["Time"]>self.xmin]
-            graph_data_window = graph_data_window[graph_data_window["Time"]<self.xmax]            
+            graph_data_window = graph_data_window[graph_data_window["Time"]<self.xmax] 
+
+            line_color_array[i_object]= objects_graphed_in_their_color(line_color_array[i], file_name)           
             axes_3D.plot3D(graph_data_window['x'],graph_data_window['z'], graph_data_window['y'], line_color_array[i_object], linestyle= line_style_array[i_object], markersize = 3, marker = marker_shape_array[i_object])
             axes_3D.scatter3D(graph_data_window['x'],graph_data_window['z'], graph_data_window['y'], c=line_color_array[i_object], cmap=line_color_array[i_object], marker = marker_shape_array[i_object])
             i_object +=1

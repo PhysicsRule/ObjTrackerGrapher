@@ -30,19 +30,26 @@ from tracker.lib.graphing import plot_graphs, GUI_trim, trim_from_collision, thr
 from mpl_toolkits import mplot3d
 
 def plot_style_color():
+    # Defaults for colors and shapes of lines for graph
     show_legend =  True
-    line_style_array = ("solid", "dashed", "dotted", "dashdot")
-    line_color_array = ("red", "blue", "green", "cyan", "magenta")
-    marker_shape_array = ("^","s","o","*","X")
-
-    # Setup the graph and determine the filepaths for the files
-    print("We can graph up to 5 objects unless you want to add to the line styles")
-    print(
-        "The graphs will be color coded, if doing colored object select them in the following order:"
-    )
-    print(line_color_array)
-    print(line_style_array)
+    line_style_array = ["solid", "dashed", "dotted", "dashdot"]
+    line_color_array = ["red", "blue", "green", "cyan", "magenta"]
+    marker_shape_array = ["^","s","o","*","X"]
     return line_style_array, line_color_array, marker_shape_array, show_legend
+
+def objects_graphed_in_their_color(default_color, file_name):
+    # Overrides the default colors if the names of the objects are a color
+    recognized_colors = ('red', 'green', 'blue', 'orange', 'purple', 'yellow', 'cyan', 'magenta', 'black', 'white')
+    
+    # Convert the filename to lowercase to make the search case-insensitive
+    filename_lower = file_name.lower()
+    
+    # Search for each color in the filename
+    for color in recognized_colors:
+        if color in filename_lower:
+            return color  # Return the first found color
+    
+    return default_color  # Return the original default color if no color is found
 
 #TODO input_folder has the radius and mass of the object so it can be used later for momentum
 def GUI_graph (which_parameter_to_plot, data_output_folder_path, graph_color_ranges, csv_files_array, points_to_smooth ):
@@ -411,6 +418,9 @@ def GUI_graph_trendline (title_of_table, graph_widget):
         graph_data_window = GUI_trim(graph_dataZoomed, calc_file_name_path, x_min, x_max)
         with open(calc_file_name_path, 'a') as calcs_to_file:
             calcs_to_file.write(f'mass, {mass}, kg\n') 
+
+        # If graphing a color, use its color on the graph
+        line_color_array[i]= objects_graphed_in_their_color(line_color_array[i], name)
 
         # Find trendlines and graph
         graph_data_window = best_fit_fun_graph(fig, axes, graph_data_window, line_style_array[i], line_color_array[i], which_parameter_to_plot, mass,file_name_dataframe_path, calc_file_name_path, trendline_type)
