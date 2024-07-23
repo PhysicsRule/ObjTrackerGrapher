@@ -30,7 +30,7 @@ from mpl_toolkits import mplot3d
 from tracker.lib.general import find_objects_to_graph
 from tracker.lib.GUI_tracker import GUI_tracking, GUI_obj_tracking
 from tracker.lib.GUI_real_time_color_tracker import GUI_real_time_color_tracking
-from tracker.lib.GUI_graphing_trendlines import GUI_graph, GUI_graph_trendline, plot_style_color, GUI_show_equations_on_table
+from tracker.lib.GUI_graphing_trendlines import GUI_graph, GUI_graph_trendline, plot_style_color, GUI_show_equations_on_table, objects_graphed_in_their_color
 from tracker.lib.graphing import GUI_graph_setup, three_D_graphs, plot_graphs, GUI_trim, parameters
 from tracker.lib.intel_realsense_D435i import record_bag_file, find_and_config_device, read_bag_file_and_config, find_and_config_device_mult_stream
 # from tracker.lib.GUI_library import reload_table
@@ -847,8 +847,11 @@ class MyGUI(QMainWindow):
         graph_color_ranges, csv_files_array = find_objects_to_graph (data_output_folder_path)
 
         # self.grid_layout.addWidget(self.graph_widget_3D, 0, 1, alignment=Qt.Alignment())
-
+        
+        # Use Default color order unless the name of the objects have a color in them
         line_style_array, line_color_array, marker_shape_array, show_legend = plot_style_color()
+        
+
         self.graph_widget.clear()
         which_parameter_to_plot = parameters(self.select_acceleration.isChecked(), self.select_momentum.isChecked(), self.select_energy.isChecked())
         self.graph_widget, points_to_smooth = GUI_graph_setup(self.graph_widget, which_parameter_to_plot)
@@ -857,6 +860,7 @@ class MyGUI(QMainWindow):
         i_object=0
                
         for (file_path, file_name, mass) in csv_files_array:
+            line_color_array[i_object] = objects_graphed_in_their_color(line_color_array[i_object],file_name)
             file_name_dataframe = file_name  + "sheet.csv"
             file_name_dataframe_path = os.path.abspath(os.path.join(trendline_folder_path + '/' + file_name_dataframe + '/' ))     
             smooth_data_to_graph = pd.read_csv(file_name_dataframe_path, header=0)
