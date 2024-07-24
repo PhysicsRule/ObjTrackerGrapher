@@ -756,7 +756,6 @@ class MyGUI(QMainWindow):
         ## TODO use a different value if needed to use src
         return self.image, self.color_ranges, min_radius_object, data_output_folder_path
 
-
     def setup_trendline_table(self, title_of_table,csv_files_array, data_output, folder_name, data_output_folder_path, trendline_folder_path, line_color_array):
         which_parameter_to_plot = parameters(self.select_acceleration.isChecked(), self.select_momentum.isChecked(), self.select_energy.isChecked())
         self.trendline_table_widget.setHidden(False)
@@ -816,9 +815,6 @@ class MyGUI(QMainWindow):
         title_of_table.setItem(24,column,QTableWidgetItem( which_parameter_to_plot ))
         title_of_table.setVerticalHeaderItem(25,QTableWidgetItem( 'trendline_folder_path' ))
         title_of_table.setItem(25,column,QTableWidgetItem( str(trendline_folder_path) ))
-
-        
-
 
     def run_graph(self, data_output_folder_path):
         
