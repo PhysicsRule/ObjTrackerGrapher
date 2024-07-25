@@ -387,7 +387,17 @@ def GUI_graph_trendline (title_of_table, graph_widget):
     num_objects = title_of_table.columnCount()
     for column in range(num_objects):
         trendline_type = []
+        
+        # Extract the name from the table without getting the color
         name = title_of_table.item(0,column).text()
+        start_idx = name.find('(')
+        end_idx = name.find(')')
+        if start_idx != -1 and end_idx != -1:
+            name_without_parentheses = name[:start_idx] + name[end_idx + 1:]
+        else:
+            name_without_parentheses = name.strip()
+        name = name_without_parentheses
+
         mass = float(title_of_table.item(1,column).text())
         
         try: x_min = float(title_of_table.item(2,column).text())
