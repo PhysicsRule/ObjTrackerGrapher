@@ -88,6 +88,15 @@ def GUI_tracking(pipeline, image, color_ranges, min_radius_object, data_output_f
         if not frame_result:
             continue        
         (cv_color, rs_color, rs_depth), timestamp = frame_result
+
+        # Start the timer
+        if first_time_check:
+            start_time = timestamp
+            # we might want this later and compare with start that has milliseconds
+            first_time_check = False
+
+            # Converts time from milliseconds to seconds
+        relative_timestamp = (timestamp - start_time) / 1000
             
         ## Color Tracking by making a mask for each color tracked
         hsv = make_color_hsv(cv_color)
@@ -118,15 +127,6 @@ def GUI_tracking(pipeline, image, color_ranges, min_radius_object, data_output_f
             if x_coord == -1 or y_coord == -1:
                 continue
             # Append to the file until there is an error at which it will close
-
-            # Start the timer
-            if first_time_check:
-                start_time = timestamp
-                # we might want this later and compare with start that has milliseconds
-                first_time_check = False
-
-            # Converts time from milliseconds to seconds
-            relative_timestamp = (timestamp - start_time) / 1000
 
             # Writes the coordinates to each colored object
             csv_file_path = os.path.abspath(os.path.join(data_output_folder_path, color_name + '.csv'))   
@@ -210,6 +210,15 @@ def GUI_obj_tracking(pipeline, image, color_ranges, min_radius_object, data_outp
             continue        
         (rs_depth, rs_infrared), timestamp = frame_result
         
+        # Start the timer
+        if first_time_check:
+            start_time = timestamp
+            # we might want this later and compare with start that has milliseconds
+            first_time_check = False
+
+        # Converts time from milliseconds to seconds
+        relative_timestamp = (timestamp - start_time) / 1000
+        
         ## TODO use rs_infrared to see infrared from camera 1
         depth_image = np.asanyarray(rs_depth.get_data())
         infrared_image = np.array(rs_infrared.get_data())
@@ -232,15 +241,6 @@ def GUI_obj_tracking(pipeline, image, color_ranges, min_radius_object, data_outp
             if x_coord == -1:
                 continue
             # Append to the file until there is an error at which it will close
-
-            # Start the timer
-            if first_time_check:
-                start_time = timestamp
-                # we might want this later and compare with start that has milliseconds
-                first_time_check = False
-
-            # Converts time from milliseconds to seconds
-            relative_timestamp = (timestamp - start_time) / 1000
 
             # Writes the coordinates to each colored object
             csv_file_path = os.path.abspath(os.path.join(data_output_folder_path, color_name + '.csv'))   

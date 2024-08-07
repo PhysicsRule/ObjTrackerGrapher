@@ -207,12 +207,16 @@ def GUI_real_time_color_tracking(image ,color_ranges , min_radius_object, data_o
                 #from https://github.com/IntelRealSense/librealsense/issues/2204#issuecomment-414497056 
 
                 hsv = make_color_hsv(cv_color) 
+                
+                x_pixel, y_pixel, x_coord, y_coord, z_coord, radius  = -1, -1, -1, -1, -1, 0
                 x_pixel, y_pixel, radius, mask = find_object_by_color(cv_color,hsv, self.lower,self.upper, self.color, self.radius_meters, self.mass, min_radius_object, self.max_num_point)    
-                if x_pixel is None:
+                if mask is None:
+                    continue
+                if x_pixel == -1:
                     continue
                 # get.distance is a little slower so only use if necessarycenter = round(aligned_depth_frame.get_distance(int(x),int(y)),4)
                 x_coord, y_coord, z_coord = get_depth_meters(x_pixel, y_pixel, self.radius_meters, rs_depth, rs_color, self.zeroed_x, self.zeroed_y, self.zeroed_z, self.z)
-                if x_coord is None:
+                if x_coord == -1:
                     continue
                 
                 csv_file_path = os.path.abspath(os.path.join(data_output_folder_path, self.color + '.csv'))   
