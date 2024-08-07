@@ -201,6 +201,7 @@ def GUI_obj_tracking(pipeline, image, color_ranges, min_radius_object, data_outp
     video_depth_array = []
     start_time = 0 # It should get a time the first round through
     i=0
+    x_pixel, y_pixel, x_coord, y_coord, z_coord, radius  = -1, -1, -1, -1, -1, 0
 
     while True:
         # Get frames if valid
@@ -219,16 +220,16 @@ def GUI_obj_tracking(pipeline, image, color_ranges, min_radius_object, data_outp
 
         for (lower,upper, color_name, radius_meters, mass) in color_ranges:
         # tracking_info.type_of_tracking = 'obj_tracker'
-            radius = 0 # showing if tracker is not working
+            x_pixel, y_pixel, x_coord, y_coord, z_coord, radius  = -1, -1, -1, -1, -1, 0
             mask = None
             x_pixel, y_pixel, bbox, radius = find_xy_using_tracking_method(tracker, bbox, depth_colormap)
             
-            if x_pixel is None:
+            if x_pixel == -1:
                 continue
             # get.distance is a little slower so only use if necessarycenter = round(aligned_depth_frame.get_distance(int(x),int(y)),4)
 
             x_coord, y_coord, z_coord = get_depth_meters(x_pixel, y_pixel, radius_meters, rs_depth, rs_infrared, zeroed_x, zeroed_y, zeroed_z, clipping_distance)
-            if x_coord is None:
+            if x_coord == -1:
                 continue
             # Append to the file until there is an error at which it will close
 

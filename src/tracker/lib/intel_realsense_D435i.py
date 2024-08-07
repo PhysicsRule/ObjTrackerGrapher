@@ -199,13 +199,13 @@ def get_depth_meters(x_pixel, y_pixel, radius_meters, rs_depth, rs_frame, zeroed
         depth = round(rs_depth.get_distance(int(x_pixel),int(y_pixel)),4) 
         if (depth - radius_meters) < 0.1:
             print('too close', depth)
-            return None, None, None
+            return -1, -1, -1
         elif depth > clipping_distance:
             print('too far  ', depth)
-            return None, None, None
+            return -1, -1, -1
     except:
         print('error in getting depth')
-        return None, None, None
+        return -1, -1, -1
     
     # Given the location in pixels for x,y and the depth, find the coordinates in meters
     frame_point = get_coordinates_meters(rs_frame, rs_depth, x_pixel,  y_pixel, depth)

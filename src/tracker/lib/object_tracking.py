@@ -74,7 +74,7 @@ def find_xy_using_tracking_method(tracker, bbox, cv_image):
         y_pixel = int(bbox[1]+bbox[3]/2)
         radius_of_bbox = int(bbox[2]/2) # plots a circle around object instead of a box
     else:
-        return None, None, None, None 
+        return -1, -1, None, 0 
         print('no object found')
     return x_pixel, y_pixel, bbox, radius_of_bbox 
 
