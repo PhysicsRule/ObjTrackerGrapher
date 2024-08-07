@@ -260,11 +260,13 @@ def find_object_by_color(frame, hsv, lower,upper, color_name, radius_meters, mas
         max_index = contour_areas.argsort()[::-1][0]
         largest_contour = contours[max_index]
         ((x, y), pixel_radius) = cv2.minEnclosingCircle(largest_contour)
-            
+        if x is None: 
+            x=-1
+            pixel_radius = 0    
         # Draw a circle around the contour it found then print the mask
         # This is for testing what you found. 
-        cv2.circle(mask, (int(x), int(y)), int(pixel_radius+5), (255,255,255), 2)
-
+        if x != -1:
+            cv2.circle(mask, (int(x), int(y)), int(pixel_radius+5), (255,255,255), 2)
 
         # only proceed if the radius meets a minimum size
         if pixel_radius > min_radius_of_object:
@@ -276,7 +278,7 @@ def find_object_by_color(frame, hsv, lower,upper, color_name, radius_meters, mas
 
         return x, y, pixel_radius, mask
     else:
-        return None, None, None, None
+        return -1, -1, 0, None
 
 def find_object_by_color_with_red(cv_color, color, color_ranges) -> Tuple[Optional[float], Optional[float], Optional[float], Optional[Any]]:
 

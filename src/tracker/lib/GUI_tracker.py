@@ -81,6 +81,7 @@ def GUI_tracking(pipeline, image, color_ranges, min_radius_object, data_output_f
     start_time = 0 # It should get a time the first round through
     i=0
 
+    x_pixel, y_pixel, x_coord, y_coord, z_coord, radius  = -1, -1, -1, -1, -1, 0
     while True:
         # Get frames if valid
         frame_result = get_all_frames_color(pipeline)
@@ -96,8 +97,11 @@ def GUI_tracking(pipeline, image, color_ranges, min_radius_object, data_output_f
         for (lower,upper, color_name, radius_meters, mass) in color_ranges:
             # Find location of the object in x,y pixels using color masks
             mask = None
+            x_pixel, y_pixel, x_coord, y_coord, z_coord, radius  = -1, -1, -1, -1, -1, 0
             if tracking_info.type_of_tracking == 'color':
                 x_pixel, y_pixel, radius, mask_limited_array = find_object_by_color(cv_color,hsv, lower,upper, color_name, radius_meters, mass, min_radius_object, max_num_point)     
+                if mask_limited_array is None:
+                    continue
                 mask =np.array(mask_limited_array)
             elif tracking_info.type_of_tracking == 'obj_tracker':
                 cv_image= depth_colormap
@@ -106,12 +110,12 @@ def GUI_tracking(pipeline, image, color_ranges, min_radius_object, data_output_f
                 x_pixel, y_pixel, bbox, radius = find_xy_using_tracking_method(tracker, bbox, cv_image)
                 draw_bounding_box(cv_image, bbox)
 
-            if x_pixel is None:
+            if x_pixel == -1 or y_pixel == -1:
                 continue
             # get.distance is a little slower so only use if necessarycenter = round(aligned_depth_frame.get_distance(int(x),int(y)),4)
 
             x_coord, y_coord, z_coord = get_depth_meters(x_pixel, y_pixel, radius_meters, rs_depth, rs_color, zeroed_x, zeroed_y, zeroed_z, clipping_distance)
-            if x_coord is None:
+            if x_coord == -1 or y_coord == -1:
                 continue
             # Append to the file until there is an error at which it will close
 
@@ -151,16 +155,6 @@ def GUI_tracking(pipeline, image, color_ranges, min_radius_object, data_output_f
         if k == 27 or k == 32:
             print('end')
             # Close all OpenCV windows
-
-            if image.save_video:
-                height, width, layers = cv_color.shape
-                size = (width,height)
-                save_video_file(image_file_path, video_RGB_array,'RGB', size)
-
-            if image.save_depth:
-                height, width, layers = depth_colormap.shape
-                size = (width,height)
-                save_video_file(image_file_path, video_depth_array, 'Depth', size)
             
             cv2.destroyAllWindows()
             break
@@ -171,6 +165,16 @@ def GUI_tracking(pipeline, image, color_ranges, min_radius_object, data_output_f
 
     pipeline.stop()
 
+    if image.save_video:
+        height, width, layers = cv_color.shape
+        size = (width,height)
+        save_video_file(image_file_path, video_RGB_array,'RGB', size)
+
+    if image.save_depth:
+        height, width, layers = depth_colormap.shape
+        size = (width,height)
+        save_video_file(image_file_path, video_depth_array, 'Depth', size)
+    
     # Close all OpenCV windows
     cv2.destroyAllWindows()
 
@@ -263,16 +267,7 @@ def GUI_obj_tracking(pipeline, image, color_ranges, min_radius_object, data_outp
         if k == 27 or k == 32:
             print('end')
             # Close all OpenCV windows
-            if image.save_video:
-                # Since cv_color is really an infrared image it does not have layers
-                height, width = cv_color.shape
-                size = (width, height)
-                save_video_file(image_file_path, video_img_array,'img', size)
-
-            if image.save_depth:
-                height, width, layers = depth_colormap.shape
-                size = (width,height)
-                save_video_file(image_file_path, video_depth_array, 'Depth', size)
+            
                 
             cv2.destroyAllWindows()
             break
@@ -282,6 +277,16 @@ def GUI_obj_tracking(pipeline, image, color_ranges, min_radius_object, data_outp
     # Stop OpenCV/RealSense video
 
     pipeline.stop()
+    if image.save_video:
+        # Since cv_color is really an infrared image it does not have layers
+        height, width = cv_color.shape
+        size = (width, height)
+        save_video_file(image_file_path, video_img_array,'img', size)
+
+    if image.save_depth:
+        height, width, layers = depth_colormap.shape
+        size = (width,height)
+        save_video_file(image_file_path, video_depth_array, 'Depth', size)
 
     # Close all OpenCV windows
     cv2.destroyAllWindows()
