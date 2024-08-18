@@ -113,7 +113,7 @@ def GUI_find_hsv_bounds(the_array, src) -> Optional[np.ndarray]:
         if key == ord('s'):
             lower_tuple = (l_h, l_s, l_v)
             upper_tuple = (u_h, u_s, u_v)
-            output = np.array( [((lower_tuple),(upper_tuple),color,(radius_meters),(mass))])
+            output = np.array( [((lower_tuple),(upper_tuple),color,(radius_meters),(mass))], dtype=object)
             break
 
     # Release the camera & destroy the windows.

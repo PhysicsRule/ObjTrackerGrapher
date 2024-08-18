@@ -707,7 +707,9 @@ class MyGUI(QMainWindow):
                 # You have modified your own colors and color names to suit your situation. 
                 # They will be saved and you can name them
                     title_of_table = self.table_widget_color_2
-                    color_ranges_text  = self.lineEdit_define_color_name.text()
+                    color_ranges_text = self.lineEdit_define_color_name.text()
+                    if color_ranges_text =='':
+                        color_ranges_text  = 'default'
                 
                 # Read the colors from one of the 2 tables above
                 self.color_ranges = load_ranges(title_of_table)
