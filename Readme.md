@@ -16,5 +16,13 @@ To avoid having to add all of the python libraries individually, add the require
   1. Add the python environment 3.7
   2. Right click on the python 3.7 environment and install from requirements.txt for each program or do it with a virtual environment.(Ctrl+Shift+P), start typing the Python: Create Environment command to search, and then select the command.
  
- # To download the *.exe and associated files to quickly run:
- 1. Read Compiling.md
+ # To download the *.exe and associated files to quickly run off of a flash drive:
+ 1. Download python (version 2 if you might want to mofidy the code) 
+    a. Check : Add python in the PATH
+    b. Disable path length limit
+ 2. in VSCode: 
+    a. Download Python extension
+      i. Create virtual environment : `venv`
+      ii. restart the terminal
+  
+ Read Compiling.md
