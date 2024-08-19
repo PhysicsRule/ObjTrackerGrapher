@@ -3,11 +3,6 @@
 ##
 ## Get latest from https://github.com/github/gitignore/blob/master/VisualStudio.gitignore
 
-<<<<<<< HEAD
-
-
-=======
->>>>>>> ea9373d (Add .gitignore and .gitattributes.)
 # User-specific files
 *.rsuser
 *.suo
@@ -18,16 +13,6 @@
 # User-specific files (MonoDevelop/Xamarin Studio)
 *.userprefs
 
-<<<<<<< HEAD
-Graphing3D/env/
-Graphing3D/python3_7_32bit/
-.venv
-
-
-
-
-=======
->>>>>>> ea9373d (Add .gitignore and .gitattributes.)
 # Build results
 [Dd]ebug/
 [Dd]ebugPublic/
@@ -102,10 +87,6 @@ StyleCopReport.xml
 *.pidb
 *.svclog
 *.scc
-<<<<<<< HEAD
-*.csv
-=======
->>>>>>> ea9373d (Add .gitignore and .gitattributes.)
 
 # Chutzpah Test files
 _Chutzpah*
@@ -356,16 +337,21 @@ ASALocalRun/
 .localhistory/
 
 # BeatPulse healthcheck temp database
-<<<<<<< HEAD
 healthchecksdb
+
+## BEGIN custom section
 
 # Ignore data files
 /data/
 
+# Ignore VSCode settings so each user can set their own
+# Not used to VSCode...
+# You may not want to ignore this for quick setup
 .vscode/settings.json
 
+# Ignore build files
 /build/
 /dist/
-=======
-healthchecksdb
->>>>>>> ea9373d (Add .gitignore and .gitattributes.)
+
+# Ignore python virtual environment
+/.venv/
