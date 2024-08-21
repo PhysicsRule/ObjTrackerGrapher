@@ -220,7 +220,7 @@ def get_depth_meters(x_pixel, y_pixel, radius_meters, rs_depth, rs_frame, zeroed
     # The origin in the z axis is the wall in the back you used for clipping distance
     # TODO if you want to use the zeroed_z as the reference point replace 0 with zeroed_z: (zeroed_z-(z+radiusmeters), 5)  
     z_coord =round(0 - (depth + radius_meters) , 5)  
-    return x_coord, y_coord, z_coord
+    return round(x_coord,3), round(y_coord,3), round(z_coord,3)
 
 
 def set_the_origin(point) -> Tuple[float, float, float]:
