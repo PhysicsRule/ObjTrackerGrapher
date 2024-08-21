@@ -467,9 +467,10 @@ def GUI_show_equations_on_table(title_of_table, calc_file_name_path ):
             
             if (row_calc_file < first_row):
                     continue
-            if (row_calc_file-4)%13 == 0:
-                row_table -=12
+            if (row_calc_file)%17 == 0:
+                row_table -=16
                 column += 1
+                continue
 
             ##if  'mean square error' in cell:
             ##    cell = data[1]
