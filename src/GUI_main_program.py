@@ -203,6 +203,7 @@ class MyGUI(QMainWindow):
         self.find_trendlines_button.setHidden(True)
 
         self.id300_button.setHidden(True)
+        self.data_in_other.setHidden(True)
         # GUI shows up
         self.show()
         
@@ -832,6 +833,7 @@ class MyGUI(QMainWindow):
         # else : which_parameter_to_plot = 'a'
 
         # if self.data_in_other.isChecked(): 
+        
         #     data_output = 'color_o'
         #     self.select_momentum.isHidden(True)
         #     self.select_energy.isHidden(True)
