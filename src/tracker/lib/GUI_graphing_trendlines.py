@@ -476,7 +476,11 @@ def GUI_show_equations_on_table(title_of_table, calc_file_name_path ):
             if '=' in row[0]:
                 equation = row[0].split(',')[0]
             else:
-                equation = row[0]
+                if 'mean' in row[0]:
+                    equation = row[0].split(',')[1]
+                    equation = round(float(equation), 4)
+                else:
+                    equation = row[0]
 
             title_of_table.setItem(row_table ,column, QTableWidgetItem(str(equation)))
 
