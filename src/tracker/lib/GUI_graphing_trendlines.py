@@ -471,10 +471,14 @@ def GUI_show_equations_on_table(title_of_table, calc_file_name_path ):
                 row_table -=16
                 column += 1
                 continue
+            
+            # Just display the equations, not the coefficients
+            if '=' in row[0]:
+                equation = row[0].split(',')[0]
+            else:
+                equation = row[0]
 
-            ##if  'mean square error' in cell:
-            ##    cell = data[1]
-            title_of_table.setItem(row_table ,column, QTableWidgetItem(str(row)))
+            title_of_table.setItem(row_table ,column, QTableWidgetItem(str(equation)))
 
             
             
