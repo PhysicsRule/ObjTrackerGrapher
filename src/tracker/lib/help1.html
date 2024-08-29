@@ -473,7 +473,9 @@ font-weight:normal'>
     <p style='margin-left:48px;text-indent:-24px'>
       <![if !supportLists]><span><span>2.<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
           </span></span></span>
-      <![endif]><span class=SpellE>Obj_Tracking</span> will track based on <o:p></o:p>
+      <![endif]><span class=SpellE>Obj_Tracking</span> will track based on AI from <a
+        href="https://pyimagesearch.com/2018/07/30/opencv-object-tracking/">opencv CSRT</a>
+      <o:p></o:p>
     </p>
 
     <h1 id=section2><span>Step 2:
@@ -484,12 +486,12 @@ font-weight:normal'>
     </p>
 
     <p style='margin-left:48px'>Type in the folder you want to track to or graph from. Then hit
-      ENTER.is the content of Step 2.<o:p></o:p>
+      ENTER.<o:p></o:p>
     </p>
 
     <p style='margin-left:48px'>The list of folders is provided for you so that you can keep track of
-      existing folders you have already used. Folders are not selectable since most
-      of the time people are collecting new data and we want to use new names for the
+      existing folders you have already used. Folders are NOT selectable since most
+      of the time people are collecting new data and will want to use new names for the
       folders. <o:p></o:p>
     </p>
 
@@ -497,7 +499,7 @@ font-weight:normal'>
       generate a name for you depending on the time. For <span class=GramE>example</span>
       if it is 8:40 then the folder name will be &#8216;minute 40&#8217;. Therefore,
       if you collect another set of data at 8:42, your new folder name will be
-      &#8216;minute 42&#8217;.<o:p></o:p>
+      &#8216;minute 42&#8217;. This speeds up the data collection process, but it is not descriptive.<o:p></o:p>
     </p>
 
     <h1 id=section3><span>Step 3: Choose objects to <span class=GramE>Track</span>
@@ -516,7 +518,7 @@ font-weight:normal'>
 
     <h5 style='margin-left:48px'>Use default colors (The colors match the <a
         href="https://www.amazon.com/AppleRound-8-5-inch-Dodgeball-Playground-Official/dp/B09JYZGYWD?th=1">playground
-        ball colors from <span class=SpellE>AppleRound</span>)</a>.<o:p></o:p>
+        ball colors from <span class=SpellE>AppleRound</span>)</a> under florescent lights.<o:p></o:p>
     </h5>
 
     <p style='margin-left:96px'><span><!--[if gte vml 1]><v:shapetype id="_x0000_t75"
@@ -601,7 +603,10 @@ font-weight:normal'>
         <o:p></o:p>
       </span></p>
 
-    <p style='margin-left:96px'>If you hit the &#8216;Modify Colors <span class=SpellE>OnScreen</span>&#8217;
+      <p style='margin-left:96px'>Check the left boxes that are closest to the ones you are using.<o:p></o:p>
+    </p>
+    
+    <p style='margin-left:96px'>Check the boxes on the right to adjust the color. When you hit the &#8216;Modify Colors <span class=SpellE>OnScreen</span>&#8217;
       (button), in the top right, you modify the
       mask to include the <span class=GramE>target colored</span> object with current
       lighting conditions. <o:p></o:p>
@@ -611,9 +616,9 @@ font-weight:normal'>
       indicate the current (hue, saturation, value) of targeted colored object. <o:p></o:p>
     </p>
 
-    <p style='margin-left:96px'>Originally, the yellow ball and the brown
-      tabletop looked the same to the camera with these lighting conditions. The
-      yellow ball is not the largest object within the bounds.<o:p></o:p>
+    <p style='margin-left:96px'>Below, the yellow ball and the brown table top originally
+      looked the same to the camera under the lighting conditions. The
+      yellow ball is not the largest object within view.<o:p></o:p>
     </p>
 
     <p style='margin-left:96px'><span><!--[if gte vml 1]><v:shape id="Picture_x0020_4"
@@ -628,7 +633,7 @@ font-weight:normal'>
       </span></p>
 
     <p style='margin-top:0px;margin-right:0px;margin-bottom:0px;margin-left:96px'>Left
-      Image: The white is the color that will be tracked.<o:p></o:p>
+      Image: The program will track the largest object that is white.<o:p></o:p>
     </p>
 
     <p style='margin-top:0px;margin-right:0px;margin-bottom:0px;margin-left:96px'>Center
@@ -660,10 +665,10 @@ font-weight:normal'>
         <o:p></o:p>
       </span></p>
 
-    <p style='margin-left:96px'>As the object moves, the light hitting the
-      object will vary, so you may want to see the object at various points along its
+    <p style='margin-left:96px'>When collecting data, the light affects the ball differently
+       when the object moves, so you may want to see the object at various points along its
       path of motion. Note, an open window will affect the lighting if you live in a
-      place where clouds roll by constantly as we do in the great pacific northwest.<o:p></o:p>
+      place where clouds roll by constantly as we do in The Great Pacific Northwest.<o:p></o:p>
     </p>
 
     <p style='margin-left:96px'>When done: Press (s) to save as the header
@@ -691,7 +696,8 @@ font-weight:normal'>
       <o:p></o:p>
     </p>
 
-    <p style='margin-left:48px'></p><h2>Object Tracking:</h2>
+    <p style='margin-left:48px'></p>
+    <h2>Object Tracking:</h2>
 
     <p style='margin-left:96px'><span><!--[if gte vml 1]><v:shape id="Picture_x0020_3"
  o:spid="_x0000_i1040" type="#_x0000_t75" style='width:303.75pt;height:145.5pt;
@@ -704,8 +710,8 @@ font-weight:normal'>
         <o:p></o:p>
       </span></p>
 
-    <p style='margin-left:96px'>For object tracking, currently, we only track
-      one object.<o:p></o:p>
+    <p style='margin-left:96px'>For object tracking, the program only tracks
+      one object at the moment.<o:p></o:p>
     </p>
 
     <p style='margin-left:96px'><span><!--[if gte vml 1]><v:shape id="Picture_x0020_8"
@@ -736,7 +742,7 @@ font-weight:normal'>
 
     <p style='margin-left:48px'>If you are just saving your own data from a spreadsheet as a *.csv in
       the data/<span class=SpellE>other_o</span>/<span class=SpellE>your_folder_name</span>/your_file_name.csv,
-      then skip steps 4&amp;5 and graph your data.<o:p></o:p>
+      then skip steps 4&amp;5 and graph your data. If you still need to track your object continue.<o:p></o:p>
     </p>
 
     <p style='margin-left:48px'><span><!--[if gte vml 1]><v:shape
@@ -752,8 +758,8 @@ font-weight:normal'>
 
     <p style='margin-left:48px'>If you show the images as you track, the frame capture rate does slow
       down a bit, but is useful to see what you are doing as the images are being
-      recorded, and to verify extraneous objects are not causing noise in the data.
-      The white on the colored tracking mask shows which color is tracked.<o:p></o:p>
+      recorded on a test run to verify extraneous objects are not causing noise in the data.
+      The largest shape in white on the colored tracking mask shows which color is tracked.<o:p></o:p>
     </p>
 
     <p style='margin-left:48px'>Saving will also slow the data rate a bit.<o:p></o:p>
@@ -768,7 +774,8 @@ font-weight:normal'>
       <o:p></o:p>
     </p>
 
-    <p style='margin-left:48px'>If tracking with D435i 3D camera...Choose the type of <span class=GramE>tracking</span> you would like to use.
+    <p style='margin-left:48px'>If tracking with an Intel Realsense D435i 3D camera...Choose the type of <span class=GramE>tracking</span>
+      you would like to use.
       <o:p></o:p>
     </p>
 
@@ -783,10 +790,10 @@ font-weight:normal'>
         <o:p></o:p>
       </span></p>
 
-      <p style='margin-left:48px'>If you are just saving your own data from a spreadsheet as a *.csv in
-      the data/<span class=SpellE>other_o</span>/<span class=SpellE>your_folder_name</span>/your_file_name.csv,
-      then skip steps 4&amp;5 and graph your data.<o:p></o:p>
-    </p>
+    <p style='margin-left:48px'>If you are just saving your own data from a spreadsheet as a *.csv in<br>
+              <strong>the data/<span class=SpellE>other_o</span>/<span class=SpellE>your_folder_name</span>/your_file_name.csv</strong>,<br>
+              then skip steps 4&amp;5 and graph your data.<o:p></o:p>
+            </p>
 
     <p style='margin-left:48px'>For all types of tracking from the program:<o:p></o:p>
     </p>
@@ -877,7 +884,7 @@ font-weight:normal'>
       in the folder you created:<o:p></o:p>
     </p>
 
-    <p style='margin-left:96px'>Color tracking: 3D/data/<span class=SpellE>color_o</span>/<span
+    <p style='margin-left:144px'>Color tracking: 3D/data/<span class=SpellE>color_o</span>/<span
         class=SpellE>your_folder</span>
       <o:p></o:p>
     </p>
@@ -889,12 +896,12 @@ font-weight:normal'>
       method chosen. Afterwards, the data, images, and videos are located: <o:p></o:p>
     </p>
 
-    <p style='margin-left:96px'>Color tracking: 3D/data/<span class=SpellE>color_o</span>/<span
+    <p style='margin-left:144px'>Color tracking: 3D/data/<span class=SpellE>color_o</span>/<span
         class=SpellE>your_folder</span>
       <o:p></o:p>
     </p>
 
-    <p style='margin-left:96px'>Object tracking: 3D/data/<span class=SpellE>infrared_o</span>/<span
+    <p style='margin-left:144px'>Object tracking: 3D/data/<span class=SpellE>infrared_o</span>/<span
         class=SpellE>your_folder</span>
       <o:p></o:p>
     </p>
@@ -921,7 +928,7 @@ font-weight:normal'>
 
     <p style='margin-left:96px'>NOTE: When you are not showing images, it is
       hard to know you are <span class=GramE>actually recording</span>. See the popup
-      window.<o:p></o:p>
+      window indicating recording is in progress.<o:p></o:p>
     </p>
 
     <p style='margin-left:96px'>Record Bag will not track the object, just
@@ -929,12 +936,12 @@ font-weight:normal'>
       images, and videos are located: <o:p></o:p>
     </p>
 
-    <p style='margin-left:96px'>Color tracking: 3D/data/<span class=SpellE>color_o</span>/<span
+    <p style='margin-left:144px'>Color tracking: 3D/data/<span class=SpellE>color_o</span>/<span
         class=SpellE>your_folder</span>
       <o:p></o:p>
     </p>
 
-    <p style='margin-left:96px'>Object tracking: 3D/data/<span class=SpellE>infrared_o</span>/<span
+    <p style='margin-left:144px'>Object tracking: 3D/data/<span class=SpellE>infrared_o</span>/<span
         class=SpellE>your_folder</span>
       <o:p></o:p>
     </p>
@@ -1076,11 +1083,11 @@ font-weight:normal'>
     <p style='margin-left:96px'><span>Reviewing
         the object that was tracked in the video, the ball&#8217;s center was not
         exactly in the center, but air drag is negligible, so the acceleration should
-        be 9.8 m/s/s. The acceleration&#8217;s error rate is 5.7%.<o:p></o:p></span></p>
+        be 9.8 m/s/s. The acceleration&#8217;was measured at 9.23 m/s/s, therefore the percent error rate is 5.7%.<o:p></o:p></span></p>
 
     <p style='margin-left:96px'><span>Zooming
-        in on each graph shows the values even more clearly without need for trendlines
-        for rough estimates:<o:p></o:p></span></p>
+        in on each graph shows the values more clearly without need for trendlines
+        for rough estimates of smooth data:<o:p></o:p></span></p>
 
     <p style='margin-left:96px'><span><!--[if gte vml 1]><v:shape
  id="Picture_x0020_21" o:spid="_x0000_i1029" type="#_x0000_t75" style='width:404.25pt;
