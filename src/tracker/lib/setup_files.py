@@ -9,17 +9,12 @@ from shutil import copyfile
 from tracker.lib.user_input import show_files, select_what_to_do_with_files, select_pixel_radius, make_new_folder
 from tracker.lib.general import create_data_file
 from tracker.lib.color import choose_or_create_color_range
-from tracker.lib.infrared import choose_or_create_objects
-
 
 
 def create_calc_file(file_path):
     # Creates a file to put trendlines
     with open(file_path, "w") as f:
         f.write("Calculations\n")
-
-
-
 
     # Make a new folder to save all of the files int 
 

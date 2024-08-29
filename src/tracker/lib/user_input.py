@@ -2,8 +2,6 @@
 # This does not include selecting the color file as it is too specific to the color program
 
 import os
-import sys
-import time
 import numpy as np
 import cv2
 import matplotlib.image as mpimg  # Reads images from a folder
@@ -14,7 +12,6 @@ from matplotlib import style
 from scipy.signal import lfilter
 from scipy.optimize import least_squares
 from scipy.optimize import curve_fit
-from mpl_toolkits import mplot3d
 
 def temp_GUI_select_multiple_files (input_folder):
 # select mulitple files is useful when you want to graph many objects

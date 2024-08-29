@@ -4,14 +4,13 @@
 ## Infrared tracking by subtracting the original scene was done in the past, so components of these features are still present.
 
 import os
-import argparse
 import cv2
 import numpy as np
 
 from tracker.lib.setup_files import set_up_color, make_csv_files
 from tracker.lib.intel_realsense_D435i import get_all_frames_color, get_all_frames_infrared, get_depth_meters, find_and_config_device, select_furthest_distance_color, select_furthest_distance_infrared, warm_up_camera
 from tracker.lib.color import make_color_hsv, find_object_by_color
-from tracker.lib.general import open_the_video, save_video_file 
+from tracker.lib.general import save_video_file 
 from tracker.lib.color import GUI_find_hsv_bounds
 from tracker.lib.object_tracking import GUI_select_bounding_box, GUI_select_bounding_box_infrared, find_xy_using_tracking_method, draw_bounding_box
 
@@ -53,7 +52,11 @@ def what_to_do_with_images(i, x_pixel, y_pixel, radius,image,depth_colormap,cv_c
         cv2.imwrite(depth_file_path, depth_colormap)'''
     if image.save_mask:
         mask_file_path = os.path.abspath(os.path.join(data_output_folder_path, 'mask'+  str(i) + '.jpg'))   
-        cv2.imwrite(mask_file_path, mask)
+        img_mask = cv2.imread(mask)
+        if img_mask is None:
+            print("Error: Image not loaded correctly")
+        else:
+            cv2.imwrite(mask_file_path, mask)
     
 
 

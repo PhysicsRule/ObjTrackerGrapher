@@ -18,11 +18,9 @@ from scipy import *
 import os
 import time
 
-import numpy as np
-
 from tracker.lib.user_input import select_type_of_tracking, select_multiple_files
-from tracker.lib.graphing import graph_setup, slopes, FindVelandAcc, FindMom, FindKE, FindTotalEnergy, plot_graphs, trim, best_fit_fun, three_D_graphs
-from mpl_toolkits import mplot3d
+from tracker.lib.graphing import graph_setup, FindVelandAcc, FindMom, FindKE, FindTotalEnergy, plot_graphs, trim, best_fit_fun, three_D_graphs
+
 
 #### MAIN PROGRAM ####
 # Setup graph legend
