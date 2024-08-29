@@ -7,24 +7,17 @@
 
        
         {
-            "name": "Graphs of trendlines",
-            "type": "python",
-            "request": "launch",
-            "program": "src/graph_of_trendlines.py",
-            "console": "integratedTerminal"
-        },
-        {
-            "name": "Color Tracker",
-            "type": "python",
-            "request": "launch",
-            "program": "src/color_tracker.py",
-            "console": "integratedTerminal"
-        },
-        {
             "name": "Python: Current File",
             "type": "python",
             "request": "launch",
             "program": "${file}",
+            "console": "integratedTerminal"
+        },
+        {
+            "name": "GUI Tracker",
+            "type": "python",
+            "request": "launch",
+            "program": "src/GUI_main_program.py",
             "console": "integratedTerminal"
         },
         {

@@ -21,12 +21,10 @@ from pyqtgraph.Qt import QtGui, QtCore
 import pyqtgraph as pg          # In the future we should have the pyqtgraph locally stored. see discord redources
 import time
 
-from tracker.lib.setup_files import set_up_color, make_csv_files
-from tracker.lib.user_input import make_new_folder
+from tracker.lib.setup_files import make_csv_files
 from tracker.lib.intel_realsense_D435i import get_all_frames_color, get_depth_meters, find_and_config_device, select_furthest_distance_color 
-from tracker.lib.color import make_color_hsv, find_object_by_color_with_red, find_object_by_color
-from tracker.lib.general import open_the_video, create_data_file, make_default_folder, save_video_file
-from tracker.lib.graphs_right_after import nine_graphs
+from tracker.lib.color import make_color_hsv, find_object_by_color
+from tracker.lib.general import save_video_file
 
 def GUI_real_time_color_tracking(image ,color_ranges , min_radius_object, data_output_folder_path, tracking_info):
     """

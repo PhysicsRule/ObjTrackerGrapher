@@ -2,9 +2,6 @@ import os
 
 import cv2
 import numpy as np
-import pyrealsense2 as rs
-import imutils
-import time
 
 from tracker.lib.intel_realsense_D435i import get_all_frames_color, get_all_frames_infrared
 from tracker.lib.user_input import select_object_tracker_method

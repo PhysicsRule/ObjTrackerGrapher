@@ -25,16 +25,14 @@ import matplotlib.pyplot as plt
 import matplotlib.image as mpimg
 from matplotlib.figure import Figure
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg, NavigationToolbar2QT 
-from mpl_toolkits import mplot3d
 
 from tracker.lib.general import find_objects_to_graph
 from tracker.lib.GUI_tracker import GUI_tracking, GUI_obj_tracking
 from tracker.lib.GUI_real_time_color_tracker import GUI_real_time_color_tracking
 from tracker.lib.GUI_graphing_trendlines import GUI_graph, GUI_graph_trendline, plot_style_color, GUI_show_equations_on_table, objects_graphed_in_their_color
-from tracker.lib.graphing import GUI_graph_setup, three_D_graphs, plot_graphs, GUI_trim, parameters
+from tracker.lib.graphing import GUI_graph_setup, parameters
 from tracker.lib.intel_realsense_D435i import record_bag_file, find_and_config_device, read_bag_file_and_config, find_and_config_device_mult_stream
 # from tracker.lib.GUI_library import reload_table
-from tracker.lib.color import choose_or_create_color_range
 from tracker.lib.GUI_tables import load_ranges, load_object_ranges, load_data, load_data_objects, reload_table
 
 ## TODO possibly use this instead of passing each individual piece

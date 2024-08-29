@@ -9,6 +9,7 @@
 
 import matplotlib.pyplot as plt
 import matplotlib.animation as animation
+from mpl_toolkits import mplot3d
 
 import pandas as pd
 from scipy import *
@@ -23,11 +24,9 @@ from PyQt5.QtWidgets import *
 import numpy as np
 import csv
 
-from tracker.lib.general import GUI_creates_an_array_of_csv_files
 from tracker.lib.setup_files import create_new_folder, create_calc_file
-from tracker.lib.user_input import select_type_of_tracking, select_multiple_files
-from tracker.lib.graphing import plot_graphs, GUI_trim, trim_from_collision, three_D_graphs, FindVelandAccTrend, FindMom, FindKE, FindTotalEnergy
-from mpl_toolkits import mplot3d
+from tracker.lib.graphing import GUI_trim, FindVelandAccTrend, FindMom, FindKE, FindTotalEnergy
+
 
 def plot_style_color():
     # Defaults for colors and shapes of lines for graph
