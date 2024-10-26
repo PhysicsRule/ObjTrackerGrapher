@@ -354,5 +354,5 @@ healthchecksdb
 /dist/
 
 # Ignore python virtual environment
-/.venv/
+/.venv*/
 /venv/

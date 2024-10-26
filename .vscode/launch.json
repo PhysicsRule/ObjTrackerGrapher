@@ -8,24 +8,18 @@
        
         {
             "name": "Python: Current File",
-            "type": "python",
+            "type": "debugpy",
             "request": "launch",
             "program": "${file}",
             "console": "integratedTerminal"
         },
         {
             "name": "GUI Tracker",
-            "type": "python",
+            "type": "debugpy",
             "request": "launch",
             "program": "src/GUI_main_program.py",
             "console": "integratedTerminal"
         },
-        {
-            "name": "GUI Tracker",
-            "type": "python",
-            "request": "launch",
-            "program": "src/GUI_main_program.py",
-            "console": "integratedTerminal"
-        }
+
     ]
 }
