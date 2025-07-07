@@ -10,7 +10,7 @@ from PyQt5.QtCore import *
 
 from pyqtgraph.Qt import QtGui, QtCore
 import pyqtgraph as pg          # In the future we should have the pyqtgraph locally stored. see discord redources
-from pyqtgraph.ptime import time
+# from pyqtgraph.ptime import time
 
 import webbrowser
 import ast
@@ -662,7 +662,7 @@ class MyGUI(QMainWindow):
             type_of_tracking = 'color'
             self.image = image_option(True,False,False,False,False,False,False)
             # This is the green color range
-            self.color_ranges=np.array([([32, 70, 68], [ 64, 194, 227], 'green', 0.1, 0.)],dtype=np.dtype([('lower', np.int32, (3,)), ('upper', np.int32, (3,)), ('name', np.unicode_, 16), ('radius_meters', np.float32), ('mass', np.float32)]))
+            self.color_ranges=np.array([([32, 70, 68], [ 64, 194, 227], 'green', 0.1, 0.)],dtype=np.dtype([('lower', np.int32, (3,)), ('upper', np.int32, (3,)), ('name', np.str_, 16), ('radius_meters', np.float32), ('mass', np.float32)]))
             min_radius_object=5
             # XXX need dataoutput folder path after 169
             data_output_folder_path=self.get_output_folder_path(base_path, '169')
@@ -690,7 +690,7 @@ class MyGUI(QMainWindow):
 
         # Store the array of colors to track in the output directory
         # color choice
-        dt = np.dtype([('lower', np.int32, (3,)),('upper', np.int32, (3,)), ('name', np.unicode_, 16), ('radius_meters', np.float32),('mass', np.float32)])
+        dt = np.dtype([('lower', np.int32, (3,)),('upper', np.int32, (3,)), ('name', np.str_, 16), ('radius_meters', np.float32),('mass', np.float32)])
 
         num_objects = 0
         # object count

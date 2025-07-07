@@ -13,7 +13,7 @@ from tracker.lib.GUI_tracker import find_lower_upper_bounds_on_screen
 
 def load_ranges(title_of_table):
     # Load a table that was created
-    dt = np.dtype([('lower', np.int32, (3,)),('upper', np.int32, (3,)), ('name', np.unicode_, 16), ('radius_meters', np.float32),('mass', np.float32)])
+    dt = np.dtype([('lower', np.int32, (3,)),('upper', np.int32, (3,)), ('name', np.str_, 16), ('radius_meters', np.float32),('mass', np.float32)])
     i = 0
     name_of_array = ''
     for row in range(title_of_table.rowCount()):
@@ -36,7 +36,7 @@ def load_ranges(title_of_table):
 def load_object_ranges(title_of_table):
     # Load a table that was created from objects
     ## TODO make all table loading and reading json
-    dt_obj = np.dtype([('lower', np.unicode_, 16),('upper', np.unicode_, 16), ('name', np.unicode_, 16), ('radius_meters', np.float32),('mass', np.float32)])
+    dt_obj = np.dtype([('lower', np.str_, 16),('upper', np.str_, 16), ('name', np.str_, 16), ('radius_meters', np.float32),('mass', np.float32)])
     # note, upper and lower not used, but could be for background subtraction
     i = 0
     for row in range(title_of_table.rowCount()):
@@ -89,7 +89,7 @@ def load_data(type_of_tracking, input_folder, title_of_table):
 
 def reload_table (title_of_table):
 # after adjusting the upper and lower bounds modify the table
-    dt = np.dtype([('lower', np.int32, (3,)),('upper', np.int32, (3,)), ('name', np.unicode_, 16), ('radius_meters', np.float32),('mass', np.float32)])
+    dt = np.dtype([('lower', np.int32, (3,)),('upper', np.int32, (3,)), ('name', np.str_, 16), ('radius_meters', np.float32),('mass', np.float32)])
     for row in range(title_of_table.rowCount()):
         if title_of_table.item(row,6).checkState() == Qt.CheckState.Checked:
             item = QTableWidgetItem(''.format(row, 1))
