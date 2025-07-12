@@ -168,7 +168,8 @@ def select_clipping_distance(frame, rs_depth) -> Tuple[Any, float, float]:
     # Note that it is reduced slightly to allow some room for error (*0.95)
     print('Select a box at a distance further than points will be collected.')
     print('Any colored object beyond that point will not be tracked, but may slow down the data collection')
-    wall = cv2.selectROI('Select an object/wall behind the movement to remove unwanted data. Then ENTER. Then SPACEBAR', frame, False)
+    wall = cv2.selectROI('ROI Selection', frame, False)
+    #wall = cv2.selectROI('Select an object/wall behind the movement to remove unwanted data. Then ENTER. Then SPACEBAR', frame, False)
     depth = round(rs_depth.get_distance(wall[0], wall[1]), 4)
     clipping_distance =  depth  * 0.99
     return wall, depth, clipping_distance
@@ -261,9 +262,9 @@ def select_furthest_distance_color(pipeline) -> Tuple[float, float, float, float
     print('Hit space bar to start and stop recording.')
     space = 0
     while space != 32:
-        space = cv2.waitKey(1) & 0xff
+         space = cv2.waitKey(1) & 0xff
     # Remove ROI selection window, as it is no longer necessary
-    cv2.destroyWindow('Select an object/wall behind the movement to remove unwanted data. Then ENTER. Then SPACEBAR')
+    cv2.destroyWindow('ROI Selection')
     #cv2.destroyWindow('ROI Selection')
 
     return zeroed_x, zeroed_y, zeroed_z, clipping_distance 

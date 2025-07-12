@@ -52,13 +52,14 @@ def what_to_do_with_images(i, x_pixel, y_pixel, radius,image,depth_colormap,cv_c
         cv2.imwrite(depth_file_path, depth_colormap)'''
     if image.save_mask:
         mask_file_path = os.path.abspath(os.path.join(data_output_folder_path, 'mask'+  str(i) + '.jpg'))   
-        img_mask = cv2.imread(mask)
-        if img_mask is None:
-            print("Error: Image not loaded correctly")
-        else:
+        
+        if mask is not None:
+            #img_mask= cv2.imread(mask)
             cv2.imwrite(mask_file_path, mask)
+        else:
+            print("Error: Image not loaded correctly")
+            
     
-
 
 
 def GUI_tracking(pipeline, image, color_ranges, min_radius_object, data_output_folder_path, tracking_info):
@@ -80,6 +81,7 @@ def GUI_tracking(pipeline, image, color_ranges, min_radius_object, data_output_f
     first_time_check = True
     image_file_path = os.path.abspath(os.path.join(data_output_folder_path + '/video/'))  
     video_RGB_array = []
+    mask_array = []
     video_depth_array = []
     start_time = 0 # It should get a time the first round through
     i=0
@@ -148,6 +150,8 @@ def GUI_tracking(pipeline, image, color_ranges, min_radius_object, data_output_f
         # saves the images into an array to convert to a movie when stopped
         if image.save_video:
             video_RGB_array.append(cv_color)
+        if image.save_mask:
+            mask_array.append(mask)
         if image.save_depth:
             video_depth_array.append(depth_colormap)
 
@@ -172,10 +176,25 @@ def GUI_tracking(pipeline, image, color_ranges, min_radius_object, data_output_f
         height, width, layers = cv_color.shape
         size = (width,height)
         save_video_file(image_file_path, video_RGB_array,'RGB', size)
+    
+    if image.save_mask:
+        if len(mask.shape) == 3:
+            height, width, layers = mask.shape
+        else:
+            height, width = mask.shape
+        layers = 1
+        size = (width,height)
+        mask_array = [cv2.cvtColor(m, cv2.COLOR_GRAY2BGR) if len(m.shape) == 2 else m for m in mask_array]
+        save_video_file(image_file_path, mask_array,'mask',size)
 
     if image.save_depth:
-        height, width, layers = depth_colormap.shape
+        if len(depth_colormap.shape) == 3:
+            height, width, layers = depth_colormap.shape
+        else:
+            height, width = depth_colormap.shape
+        layers = 1
         size = (width,height)
+        video_depth_array = [cv2.cvtColor(m, cv2.COLOR_GRAY2BGR) if len(m.shape) == 2 else m for m in video_depth_array]
         save_video_file(image_file_path, video_depth_array, 'Depth', size)
     
     # Close all OpenCV windows
