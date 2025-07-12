@@ -263,7 +263,7 @@ def select_furthest_distance_color(pipeline) -> Tuple[float, float, float, float
     while space != 32:
         space = cv2.waitKey(1) & 0xff
     # Remove ROI selection window, as it is no longer necessary
-    cv2.destroyWindow('Select a clipping distance. Is will be the upper left of box')
+    cv2.destroyWindow('Select an object/wall behind the movement to remove unwanted data. Then ENTER. Then SPACEBAR')
     #cv2.destroyWindow('ROI Selection')
 
     return zeroed_x, zeroed_y, zeroed_z, clipping_distance 
@@ -295,11 +295,11 @@ def select_furthest_distance_infrared(pipeline):
         zeroed_x, zeroed_y, zeroed_z = set_the_origin (depth_point)
 
     ## TODO add this back in if we use background subtraction again
-    '''print('Hit space bar to start and stop recording')
+    print('Hit space bar to start and stop recording')
     space = 0
     while space != 32:
         space = cv2.waitKey(1) & 0xff
-    '''
+    
     # Remove ROI selection window, as it is no longer necessary
     cv2.destroyWindow('ROI Selection')
 
