@@ -213,7 +213,8 @@ def GUI_obj_tracking(pipeline, image, color_ranges, min_radius_object, data_outp
     max_num_point=len(color_ranges)
     warm_up_camera(pipeline)
     zeroed_x, zeroed_y, zeroed_z, clipping_distance = select_furthest_distance_infrared(pipeline)
-    print('select bounding box')
+    print('select bounding box.')
+    print('Only one image will be tracked. If you want to track multiple objects, save the bag file and track the 2nd object.')
     bbox, ret, tracker = GUI_select_bounding_box_infrared(pipeline)    
 
     # Now that everything is setup, track the objects
