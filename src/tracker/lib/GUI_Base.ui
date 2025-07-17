@@ -481,8 +481,8 @@
     <widget class="QLabel" name="step6_label_6">
      <property name="geometry">
       <rect>
-       <x>670</x>
-       <y>86</y>
+       <x>680</x>
+       <y>110</y>
        <width>461</width>
        <height>61</height>
       </rect>
@@ -594,7 +594,7 @@ Select the additional variables you would like graphed</string>
      <property name="geometry">
       <rect>
        <x>100</x>
-       <y>330</y>
+       <y>350</y>
        <width>101</width>
        <height>20</height>
       </rect>
@@ -610,7 +610,7 @@ Select the additional variables you would like graphed</string>
      <property name="geometry">
       <rect>
        <x>200</x>
-       <y>330</y>
+       <y>350</y>
        <width>131</width>
        <height>20</height>
       </rect>
@@ -623,7 +623,7 @@ Select the additional variables you would like graphed</string>
      <property name="geometry">
       <rect>
        <x>100</x>
-       <y>360</y>
+       <y>380</y>
        <width>431</width>
        <height>21</height>
       </rect>
@@ -929,7 +929,7 @@ Low fps</string>
      <property name="geometry">
       <rect>
        <x>100</x>
-       <y>40</y>
+       <y>60</y>
        <width>120</width>
        <height>55</height>
       </rect>
@@ -943,7 +943,7 @@ Low fps</string>
      <property name="geometry">
       <rect>
        <x>230</x>
-       <y>40</y>
+       <y>60</y>
        <width>120</width>
        <height>55</height>
       </rect>
@@ -961,7 +961,7 @@ Object tracking
      <property name="geometry">
       <rect>
        <x>100</x>
-       <y>120</y>
+       <y>140</y>
        <width>381</width>
        <height>22</height>
       </rect>
@@ -1057,7 +1057,7 @@ Object tracking
      <property name="geometry">
       <rect>
        <x>430</x>
-       <y>630</y>
+       <y>650</y>
        <width>211</width>
        <height>20</height>
       </rect>
@@ -1079,7 +1079,7 @@ Object tracking
      <property name="geometry">
       <rect>
        <x>270</x>
-       <y>610</y>
+       <y>630</y>
        <width>121</width>
        <height>20</height>
       </rect>
@@ -1098,7 +1098,7 @@ Object tracking
      <property name="geometry">
       <rect>
        <x>120</x>
-       <y>650</y>
+       <y>670</y>
        <width>191</width>
        <height>20</height>
       </rect>
@@ -1114,7 +1114,7 @@ Object tracking
      <property name="geometry">
       <rect>
        <x>120</x>
-       <y>610</y>
+       <y>630</y>
        <width>131</width>
        <height>20</height>
       </rect>
@@ -1133,7 +1133,7 @@ Object tracking
      <property name="geometry">
       <rect>
        <x>120</x>
-       <y>630</y>
+       <y>650</y>
        <width>171</width>
        <height>20</height>
       </rect>
@@ -1149,7 +1149,7 @@ Object tracking
      <property name="geometry">
       <rect>
        <x>100</x>
-       <y>150</y>
+       <y>170</y>
        <width>381</width>
        <height>141</height>
       </rect>
@@ -1164,7 +1164,7 @@ Object tracking
      <property name="geometry">
       <rect>
        <x>270</x>
-       <y>650</y>
+       <y>670</y>
        <width>171</width>
        <height>20</height>
       </rect>
@@ -1180,7 +1180,7 @@ Object tracking
      <property name="geometry">
       <rect>
        <x>430</x>
-       <y>610</y>
+       <y>630</y>
        <width>141</width>
        <height>20</height>
       </rect>
@@ -1320,7 +1320,7 @@ Object tracking
      <property name="geometry">
       <rect>
        <x>360</x>
-       <y>40</y>
+       <y>60</y>
        <width>120</width>
        <height>55</height>
       </rect>
@@ -1363,7 +1363,7 @@ Object Tracking
      <property name="geometry">
       <rect>
        <x>680</x>
-       <y>140</y>
+       <y>160</y>
        <width>95</width>
        <height>20</height>
       </rect>
@@ -1392,7 +1392,7 @@ Object Tracking
      <property name="geometry">
       <rect>
        <x>680</x>
-       <y>170</y>
+       <y>180</y>
        <width>95</width>
        <height>20</height>
       </rect>
@@ -1405,7 +1405,7 @@ Object Tracking
      <property name="geometry">
       <rect>
        <x>340</x>
-       <y>330</y>
+       <y>350</y>
        <width>141</width>
        <height>17</height>
       </rect>
@@ -1421,7 +1421,7 @@ Object Tracking
      <property name="geometry">
       <rect>
        <x>100</x>
-       <y>380</y>
+       <y>400</y>
        <width>431</width>
        <height>181</height>
       </rect>
@@ -1514,7 +1514,7 @@ Object Tracking
      <property name="geometry">
       <rect>
        <x>100</x>
-       <y>360</y>
+       <y>380</y>
        <width>101</width>
        <height>21</height>
       </rect>
@@ -1533,7 +1533,7 @@ Object Tracking
      <property name="geometry">
       <rect>
        <x>380</x>
-       <y>360</y>
+       <y>380</y>
        <width>151</width>
        <height>23</height>
       </rect>
@@ -1546,7 +1546,7 @@ Object Tracking
      <property name="geometry">
       <rect>
        <x>790</x>
-       <y>40</y>
+       <y>60</y>
        <width>141</width>
        <height>51</height>
       </rect>
@@ -1572,7 +1572,7 @@ Time, x,y, z (Skeletal Tracker)</string>
      <property name="geometry">
       <rect>
        <x>620</x>
-       <y>40</y>
+       <y>60</y>
        <width>151</width>
        <height>55</height>
       </rect>
@@ -1595,7 +1595,7 @@ and graph</string>
      <property name="geometry">
       <rect>
        <x>490</x>
-       <y>40</y>
+       <y>60</y>
        <width>120</width>
        <height>55</height>
       </rect>
@@ -1623,7 +1623,7 @@ and graph</string>
      <property name="geometry">
       <rect>
        <x>100</x>
-       <y>15</y>
+       <y>40</y>
        <width>641</width>
        <height>21</height>
       </rect>
@@ -1641,7 +1641,7 @@ and graph</string>
       <string notr="true">color: rgb(255, 255, 255);</string>
      </property>
      <property name="text">
-      <string>Step 1: Choose Location/Type of Data to Track (location for color is in data/color_o for example)</string>
+      <string>Step 2: Choose Location/Type of Data to Track (location for color is in data/color_o for example)</string>
      </property>
      <property name="textFormat">
       <enum>Qt::PlainText</enum>
@@ -1651,7 +1651,7 @@ and graph</string>
      <property name="geometry">
       <rect>
        <x>100</x>
-       <y>290</y>
+       <y>310</y>
        <width>571</width>
        <height>41</height>
       </rect>
@@ -1672,7 +1672,7 @@ and graph</string>
       <enum>QFrame::StyledPanel</enum>
      </property>
      <property name="text">
-      <string>Step 3: If using color tracker... choose how you want to determine colors to track.
+      <string>Step 4: If using color tracker... choose how you want to determine colors to track.
 Don't forget to enter the mass if you want momentum graphs.</string>
      </property>
      <property name="textFormat">
@@ -1683,7 +1683,7 @@ Don't forget to enter the mass if you want momentum graphs.</string>
      <property name="geometry">
       <rect>
        <x>100</x>
-       <y>100</y>
+       <y>120</y>
        <width>571</width>
        <height>21</height>
       </rect>
@@ -1707,7 +1707,7 @@ Don't forget to enter the mass if you want momentum graphs.</string>
       <string notr="true">color: rgb(255, 255, 255);</string>
      </property>
      <property name="text">
-      <string>Step 2: Type in the folder you want to track to or graph from. Then hit ENTER.</string>
+      <string>Step 3: Type in the folder you want to track to or graph from. Then hit ENTER.</string>
      </property>
      <property name="textFormat">
       <enum>Qt::PlainText</enum>
@@ -1717,7 +1717,7 @@ Don't forget to enter the mass if you want momentum graphs.</string>
      <property name="geometry">
       <rect>
        <x>100</x>
-       <y>570</y>
+       <y>590</y>
        <width>571</width>
        <height>41</height>
       </rect>
@@ -1741,7 +1741,7 @@ Don't forget to enter the mass if you want momentum graphs.</string>
       <enum>QFrame::Sunken</enum>
      </property>
      <property name="text">
-      <string>Step 4: If tracking...choose frames to display/save. 
+      <string>Step 5: If tracking...choose frames to display/save. 
 They all slow down the process except for saving video</string>
      </property>
      <property name="textFormat">
@@ -1752,7 +1752,7 @@ They all slow down the process except for saving video</string>
      <property name="geometry">
       <rect>
        <x>100</x>
-       <y>670</y>
+       <y>690</y>
        <width>571</width>
        <height>41</height>
       </rect>
@@ -1779,7 +1779,7 @@ They all slow down the process except for saving video</string>
       <number>-5</number>
      </property>
      <property name="text">
-      <string>Step 5: If tracking with D435i 3D camera...Choose the type of tracking.</string>
+      <string>Step 6: If tracking with D435i 3D camera...Choose the type of tracking.</string>
      </property>
      <property name="textFormat">
       <enum>Qt::PlainText</enum>
@@ -1818,7 +1818,7 @@ then see it in 3D or find trendlines</string>
      <property name="geometry">
       <rect>
        <x>100</x>
-       <y>380</y>
+       <y>400</y>
        <width>431</width>
        <height>181</height>
       </rect>
@@ -1926,6 +1926,54 @@ then see it in 3D or find trendlines</string>
       <string>New bag files need new names or errors occur
 Will record for a few seconds and stop</string>
      </property>
+    </widget>
+    <widget class="QLabel" name="step1_label_2">
+     <property name="geometry">
+      <rect>
+       <x>100</x>
+       <y>10</y>
+       <width>111</width>
+       <height>21</height>
+      </rect>
+     </property>
+     <property name="font">
+      <font>
+       <pointsize>8</pointsize>
+       <bold>true</bold>
+      </font>
+     </property>
+     <property name="accessibleDescription">
+      <string/>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">color: rgb(255, 255, 255);</string>
+     </property>
+     <property name="text">
+      <string>Step 1: Choose 3D Camera</string>
+     </property>
+     <property name="textFormat">
+      <enum>Qt::PlainText</enum>
+     </property>
+    </widget>
+    <widget class="QComboBox" name="comboBox">
+     <property name="geometry">
+      <rect>
+       <x>100</x>
+       <y>28</y>
+       <width>171</width>
+       <height>18</height>
+      </rect>
+     </property>
+     <item>
+      <property name="text">
+       <string>Intel Real Sense 435i</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>Oak-D Lite</string>
+      </property>
+     </item>
     </widget>
    </widget>
    <widget class="QComboBox" name="combo_test">
