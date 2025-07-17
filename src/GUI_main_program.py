@@ -157,6 +157,8 @@ class MyGUI(QMainWindow):
         super(MyGUI, self).__init__()
         # Open the user interface file we developed with Qt Designer 5.11.1
         base_path = os.getcwd()
+        # Removes the 'src' folder from the path, if it exists
+        base_path = base_path.removesuffix('src')
         GUI_file_path = os.path.abspath(os.path.join(base_path,'src','tracker', 'lib', 'GUI_Base.ui'))
         uic.loadUi(GUI_file_path, self)
         # Toolbar for graph not showing yet
