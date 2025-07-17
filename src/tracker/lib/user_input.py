@@ -151,7 +151,7 @@ def select_multiple_images (type_of_tracking, input_folder, file_type_image):
 def select_multiple_files (input_folder, file_type):
 # select mulitple files is useful when you want to graph many objects
     num_files = 1
-    dt = np.dtype([ ('filepath', np.unicode_, 60), ('filename', np.unicode_, 30)])    
+    dt = np.dtype([ ('filepath', np.str_, 60), ('filename', np.str_, 30)])
     
     
     dir_path = show_folders(input_folder)

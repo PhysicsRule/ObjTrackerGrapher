@@ -33,7 +33,7 @@ def GUI_creates_an_array_of_csv_files (data_output_folder_path):
 # select multiple files is useful when you want to graph many objects
     file_type = '.csv'
     num_files = 1
-    dt = np.dtype([ ('filepath', np.unicode_, 60), ('filename', np.unicode_, 30)])    
+    dt = np.dtype([ ('filepath', np.str_, 60), ('filename', np.str_, 30)])
         
     for file_name in os.listdir(data_output_folder_path):
         if file_name.endswith(file_type):
@@ -76,8 +76,8 @@ def open_the_video(src):
 def find_objects_to_graph (data_output_folder_path):
 # Use the npy file to located the objects or graph each csv file as a different object
 # TODO if using the csv file, allow for user to enter the mass of each object
-    dt_object = np.dtype([ ('filepath', np.unicode_, 60), ('filename', np.unicode_, 30), ('mass', np.float32)])
-    dt_2 = np.dtype([ ('blank1', np.unicode_, 5), ('blank2', np.unicode_, 5), ('filename', np.unicode_, 30), ('blank3', np.unicode_, 5), ('mass', np.float32)])
+    dt_object = np.dtype([ ('filepath', np.dtype('U'), 255), ('filename', np.dtype('U'), 255), ('mass', np.float32)])
+    dt_2 = np.dtype([ ('blank1', np.dtype('U'), 5), ('blank2', np.dtype('U'), 5), ('filename', np.dtype('U'), 255), ('blank3', np.dtype('U'), 5), ('mass', np.float32)])
 
     npy_found = False
     for np_file_name in os.listdir(data_output_folder_path):
@@ -113,12 +113,11 @@ def find_objects_to_graph (data_output_folder_path):
     object_count = 1
     for _,_,name,_,mass in graph_color_ranges:
         if object_count == 1:
-            file_np = np.array([((data_output_folder_path), (name),(mass))], dtype=dt_object)
+            file_np = np.array([(data_output_folder_path, name, mass)], dtype=dt_object)
             csv_files_array = file_np
         else:
             file_np = np.array([((data_output_folder_path), (name),(mass))], dtype=dt_object)
             csv_files_array = np.hstack((csv_files_array,file_np))
             # print('csv_files_array',csv_files_array)
         object_count += 1
-
     return graph_color_ranges, csv_files_array 
