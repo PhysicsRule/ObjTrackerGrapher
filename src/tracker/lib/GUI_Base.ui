@@ -511,7 +511,7 @@ Select the additional variables you would like graphed</string>
      <property name="geometry">
       <rect>
        <x>100</x>
-       <y>380</y>
+       <y>410</y>
        <width>371</width>
        <height>181</height>
       </rect>
@@ -594,7 +594,7 @@ Select the additional variables you would like graphed</string>
      <property name="geometry">
       <rect>
        <x>100</x>
-       <y>350</y>
+       <y>360</y>
        <width>101</width>
        <height>20</height>
       </rect>
@@ -610,7 +610,7 @@ Select the additional variables you would like graphed</string>
      <property name="geometry">
       <rect>
        <x>200</x>
-       <y>350</y>
+       <y>360</y>
        <width>131</width>
        <height>20</height>
       </rect>
@@ -623,7 +623,7 @@ Select the additional variables you would like graphed</string>
      <property name="geometry">
       <rect>
        <x>100</x>
-       <y>380</y>
+       <y>390</y>
        <width>431</width>
        <height>21</height>
       </rect>
@@ -929,7 +929,7 @@ Low fps</string>
      <property name="geometry">
       <rect>
        <x>100</x>
-       <y>60</y>
+       <y>70</y>
        <width>120</width>
        <height>55</height>
       </rect>
@@ -943,7 +943,7 @@ Low fps</string>
      <property name="geometry">
       <rect>
        <x>230</x>
-       <y>60</y>
+       <y>70</y>
        <width>120</width>
        <height>55</height>
       </rect>
@@ -961,7 +961,7 @@ Object tracking
      <property name="geometry">
       <rect>
        <x>100</x>
-       <y>140</y>
+       <y>150</y>
        <width>381</width>
        <height>22</height>
       </rect>
@@ -1149,7 +1149,7 @@ Object tracking
      <property name="geometry">
       <rect>
        <x>100</x>
-       <y>170</y>
+       <y>180</y>
        <width>381</width>
        <height>141</height>
       </rect>
@@ -1320,7 +1320,7 @@ Object tracking
      <property name="geometry">
       <rect>
        <x>360</x>
-       <y>60</y>
+       <y>70</y>
        <width>120</width>
        <height>55</height>
       </rect>
@@ -1405,7 +1405,7 @@ Object Tracking
      <property name="geometry">
       <rect>
        <x>340</x>
-       <y>350</y>
+       <y>360</y>
        <width>141</width>
        <height>17</height>
       </rect>
@@ -1421,7 +1421,7 @@ Object Tracking
      <property name="geometry">
       <rect>
        <x>100</x>
-       <y>400</y>
+       <y>410</y>
        <width>431</width>
        <height>181</height>
       </rect>
@@ -1465,7 +1465,7 @@ Object Tracking
       </property>
       <property name="font">
        <font>
-        <pointsize>8</pointsize>
+        <pointsize>6</pointsize>
        </font>
       </property>
      </column>
@@ -1475,7 +1475,7 @@ Object Tracking
       </property>
       <property name="font">
        <font>
-        <pointsize>8</pointsize>
+        <pointsize>6</pointsize>
        </font>
       </property>
      </column>
@@ -1485,7 +1485,7 @@ Object Tracking
       </property>
       <property name="font">
        <font>
-        <pointsize>8</pointsize>
+        <pointsize>6</pointsize>
        </font>
       </property>
      </column>
@@ -1505,7 +1505,7 @@ Object Tracking
       </property>
       <property name="font">
        <font>
-        <pointsize>8</pointsize>
+        <pointsize>6</pointsize>
        </font>
       </property>
      </column>
@@ -1514,7 +1514,7 @@ Object Tracking
      <property name="geometry">
       <rect>
        <x>100</x>
-       <y>380</y>
+       <y>390</y>
        <width>101</width>
        <height>21</height>
       </rect>
@@ -1533,7 +1533,7 @@ Object Tracking
      <property name="geometry">
       <rect>
        <x>380</x>
-       <y>380</y>
+       <y>390</y>
        <width>151</width>
        <height>23</height>
       </rect>
@@ -1572,7 +1572,7 @@ Time, x,y, z (Skeletal Tracker)</string>
      <property name="geometry">
       <rect>
        <x>620</x>
-       <y>60</y>
+       <y>70</y>
        <width>151</width>
        <height>55</height>
       </rect>
@@ -1595,7 +1595,7 @@ and graph</string>
      <property name="geometry">
       <rect>
        <x>490</x>
-       <y>60</y>
+       <y>70</y>
        <width>120</width>
        <height>55</height>
       </rect>
@@ -1623,7 +1623,7 @@ and graph</string>
      <property name="geometry">
       <rect>
        <x>100</x>
-       <y>40</y>
+       <y>50</y>
        <width>641</width>
        <height>21</height>
       </rect>
@@ -1651,7 +1651,7 @@ and graph</string>
      <property name="geometry">
       <rect>
        <x>100</x>
-       <y>310</y>
+       <y>320</y>
        <width>571</width>
        <height>41</height>
       </rect>
@@ -1683,7 +1683,7 @@ Don't forget to enter the mass if you want momentum graphs.</string>
      <property name="geometry">
       <rect>
        <x>100</x>
-       <y>120</y>
+       <y>130</y>
        <width>571</width>
        <height>21</height>
       </rect>
@@ -1818,7 +1818,7 @@ then see it in 3D or find trendlines</string>
      <property name="geometry">
       <rect>
        <x>100</x>
-       <y>400</y>
+       <y>410</y>
        <width>431</width>
        <height>181</height>
       </rect>
@@ -1955,11 +1955,11 @@ Will record for a few seconds and stop</string>
       <enum>Qt::PlainText</enum>
      </property>
     </widget>
-    <widget class="QComboBox" name="comboBox">
+    <widget class="QComboBox" name="Select3DCamera">
      <property name="geometry">
       <rect>
        <x>100</x>
-       <y>28</y>
+       <y>30</y>
        <width>171</width>
        <height>18</height>
       </rect>
