@@ -99,7 +99,7 @@ def show_folders(input_folder):
     print("These are the folders available =\n", dir_path)
     for f in os.listdir(dir_path):
         print(f)
-    return dir_path
+    return dir_path 
 
 def show_files(input_folder, file_type):
 # Show the user the file options to choose from

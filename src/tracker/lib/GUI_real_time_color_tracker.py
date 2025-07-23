@@ -22,9 +22,10 @@ import pyqtgraph as pg          # In the future we should have the pyqtgraph loc
 import time
 
 from tracker.lib.setup_files import make_csv_files
-from tracker.lib.intel_realsense_D435i import get_all_frames_color, get_depth_meters, find_and_config_device, select_furthest_distance_color 
 from tracker.lib.color import make_color_hsv, find_object_by_color
 from tracker.lib.general import save_video_file
+
+from tracker.lib.cameras.camera_manager import camera
 
 def GUI_real_time_color_tracking(image ,color_ranges , min_radius_object, data_output_folder_path, tracking_info):
     """
@@ -105,7 +106,7 @@ def GUI_real_time_color_tracking(image ,color_ranges , min_radius_object, data_o
         def run(self):
             self.start_time = datetime.datetime.now()
             while not self.is_stopped():
-                frame_result = get_all_frames_color(self.pipeline)
+                frame_result = camera.get_all_frames_color(self.pipeline)
                 if not frame_result:
                     print("didn't find pipeline frame")
                     continue
@@ -127,11 +128,11 @@ def GUI_real_time_color_tracking(image ,color_ranges , min_radius_object, data_o
             self._stop_event = threading.Event()
             make_csv_files(color_ranges, data_output_folder_path)
             # Configure and setup the cameras
-            self.pipeline = find_and_config_device()
+            self.pipeline = camera.find_and_config_device()
             # OpenCV initialization
 
             # Find the furthest distance and in the future find a different origin TODO
-            self.zeroed_x, self.zeroed_y, self.zeroed_z, self.z = select_furthest_distance_color(self.pipeline)
+            self.zeroed_x, self.zeroed_y, self.zeroed_z, self.z = camera.select_furthest_distance_color(self.pipeline)
             self.camera_thread = CameraThread(self.pipeline)
 
             ## self.video_stream = VideoStream(src=0)
@@ -213,7 +214,7 @@ def GUI_real_time_color_tracking(image ,color_ranges , min_radius_object, data_o
                 if x_pixel == -1:
                     continue
                 # get.distance is a little slower so only use if necessarycenter = round(aligned_depth_frame.get_distance(int(x),int(y)),4)
-                x_coord, y_coord, z_coord = get_depth_meters(x_pixel, y_pixel, self.radius_meters, rs_depth, rs_color, self.zeroed_x, self.zeroed_y, self.zeroed_z, self.z)
+                x_coord, y_coord, z_coord = camera.get_depth_meters(x_pixel, y_pixel, self.radius_meters, rs_depth, rs_color, self.zeroed_x, self.zeroed_y, self.zeroed_z, self.z)
                 if x_coord == -1:
                     continue
                 

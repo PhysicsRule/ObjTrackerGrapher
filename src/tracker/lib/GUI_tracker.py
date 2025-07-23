@@ -8,18 +8,19 @@ import cv2
 import numpy as np
 
 from tracker.lib.setup_files import set_up_color, make_csv_files
-from tracker.lib.intel_realsense_D435i import get_all_frames_color, get_all_frames_infrared, get_depth_meters, find_and_config_device, select_furthest_distance_color, select_furthest_distance_infrared, warm_up_camera
 from tracker.lib.color import make_color_hsv, find_object_by_color
 from tracker.lib.general import save_video_file 
 from tracker.lib.color import GUI_find_hsv_bounds
 from tracker.lib.object_tracking import GUI_select_bounding_box, GUI_select_bounding_box_infrared, find_xy_using_tracking_method, draw_bounding_box
 
+from tracker.lib.cameras.camera_manager import camera
+
 
 def find_lower_upper_bounds_on_screen(the_array):
     # selecting your own color boundaries by tweeking the default
-    pipeline = find_and_config_device()
-    warm_up_camera(pipeline)
-    (cv_color, rs_color, rs_depth), timestamp = get_all_frames_color(pipeline)
+    pipeline = camera.find_and_config_device()
+    camera.warm_up_camera(pipeline)
+    (cv_color, rs_color, rs_depth), timestamp = camera.get_all_frames_color(pipeline)
 
     output = GUI_find_hsv_bounds(the_array, cv_color)
     return output
@@ -71,8 +72,8 @@ def GUI_tracking(pipeline, image, color_ranges, min_radius_object, data_output_f
     """ 
     make_csv_files(color_ranges, data_output_folder_path)   
     max_num_point=len(color_ranges)
-    warm_up_camera(pipeline)
-    zeroed_x, zeroed_y, zeroed_z, clipping_distance = select_furthest_distance_color(pipeline)
+    camera.warm_up_camera(pipeline)
+    zeroed_x, zeroed_y, zeroed_z, clipping_distance = camera.select_furthest_distance_color(pipeline)
     if tracking_info.type_of_tracking == 'obj_tracker':
         print('select bounding box')
         bbox, ret, tracker = GUI_select_bounding_box(pipeline)    
@@ -89,7 +90,7 @@ def GUI_tracking(pipeline, image, color_ranges, min_radius_object, data_output_f
     x_pixel, y_pixel, x_coord, y_coord, z_coord, radius  = -1, -1, -1, -1, -1, 0
     while True:
         # Get frames if valid
-        frame_result = get_all_frames_color(pipeline)
+        frame_result = camera.get_all_frames_color(pipeline)
         if not frame_result:
             continue        
         (cv_color, rs_color, rs_depth), timestamp = frame_result
@@ -128,7 +129,7 @@ def GUI_tracking(pipeline, image, color_ranges, min_radius_object, data_output_f
                 continue
             # get.distance is a little slower so only use if necessarycenter = round(aligned_depth_frame.get_distance(int(x),int(y)),4)
 
-            x_coord, y_coord, z_coord = get_depth_meters(x_pixel, y_pixel, radius_meters, rs_depth, rs_color, zeroed_x, zeroed_y, zeroed_z, clipping_distance)
+            x_coord, y_coord, z_coord = camera.get_depth_meters(x_pixel, y_pixel, radius_meters, rs_depth, rs_color, zeroed_x, zeroed_y, zeroed_z, clipping_distance)
             if x_coord == -1 or y_coord == -1:
                 continue
             # Append to the file until there is an error at which it will close
@@ -211,8 +212,8 @@ def GUI_obj_tracking(pipeline, image, color_ranges, min_radius_object, data_outp
     """ 
     make_csv_files(color_ranges, data_output_folder_path)   
     max_num_point=len(color_ranges)
-    warm_up_camera(pipeline)
-    zeroed_x, zeroed_y, zeroed_z, clipping_distance = select_furthest_distance_infrared(pipeline)
+    camera.warm_up_camera(pipeline)
+    zeroed_x, zeroed_y, zeroed_z, clipping_distance = camera.select_furthest_distance_infrared(pipeline)
     print('select bounding box.')
     print('Only one image will be tracked. If you want to track multiple objects, save the bag file and track the 2nd object.')
     bbox, ret, tracker = GUI_select_bounding_box_infrared(pipeline)    
@@ -228,7 +229,7 @@ def GUI_obj_tracking(pipeline, image, color_ranges, min_radius_object, data_outp
 
     while True:
         # Get frames if valid
-        frame_result = get_all_frames_infrared(pipeline)
+        frame_result = camera.get_all_frames_infrared(pipeline)
         if not frame_result:
             continue        
         (rs_depth, rs_infrared), timestamp = frame_result
@@ -260,7 +261,7 @@ def GUI_obj_tracking(pipeline, image, color_ranges, min_radius_object, data_outp
                 continue
             # get.distance is a little slower so only use if necessarycenter = round(aligned_depth_frame.get_distance(int(x),int(y)),4)
 
-            x_coord, y_coord, z_coord = get_depth_meters(x_pixel, y_pixel, radius_meters, rs_depth, rs_infrared, zeroed_x, zeroed_y, zeroed_z, clipping_distance)
+            x_coord, y_coord, z_coord = camera.get_depth_meters(x_pixel, y_pixel, radius_meters, rs_depth, rs_infrared, zeroed_x, zeroed_y, zeroed_z, clipping_distance)
             if x_coord == -1:
                 continue
             # Append to the file until there is an error at which it will close

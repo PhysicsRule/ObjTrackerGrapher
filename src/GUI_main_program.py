@@ -3,26 +3,21 @@
 ## Put the *exe in a folder. with Data folder containing color_i and color_o folders
 ## Used QtDesigner app
 
-from typing import List, Optional, Tuple
+from typing import List, Tuple
 from PyQt5.QtWidgets import *
-from PyQt5 import uic, QtGui
+from PyQt5 import uic
 from PyQt5.QtCore import *
 
-from pyqtgraph.Qt import QtGui, QtCore
-import pyqtgraph as pg          # In the future we should have the pyqtgraph locally stored. see discord redources
+from pyqtgraph.Qt import QtCore
 # from pyqtgraph.ptime import time
 
 import webbrowser
-import ast
 import os
-import sys
 import time
-from matplotlib.axes import Axes
 import numpy as np
 import pandas as pd
 import cv2
 import matplotlib.pyplot as plt
-import matplotlib.image as mpimg
 from matplotlib.figure import Figure
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg, NavigationToolbar2QT 
 
@@ -31,9 +26,10 @@ from tracker.lib.GUI_tracker import GUI_tracking, GUI_obj_tracking
 from tracker.lib.GUI_real_time_color_tracker import GUI_real_time_color_tracking
 from tracker.lib.GUI_graphing_trendlines import GUI_graph, GUI_graph_trendline, plot_style_color, GUI_show_equations_on_table, objects_graphed_in_their_color
 from tracker.lib.graphing import GUI_graph_setup, parameters
-from tracker.lib.intel_realsense_D435i import record_bag_file, find_and_config_device, read_bag_file_and_config, find_and_config_device_mult_stream
 # from tracker.lib.GUI_library import reload_table
 from tracker.lib.GUI_tables import load_ranges, load_object_ranges, load_data, load_data_objects, reload_table
+
+from tracker.lib.cameras.camera_manager import camera
 
 ## TODO possibly use this instead of passing each individual piece
 class tracking:
@@ -967,14 +963,14 @@ class MyGUI(QMainWindow):
         # find output folder here instead of 
         if self.tracking_info.types_of_streams_saved =='cd':
         # The color and depth streams need to be aligned for each frame slowing the tracking down
-            pipeline = find_and_config_device()
+            pipeline = camera.find_and_config_device()
             GUI_tracking(pipeline, image, color_ranges, min_radius_object, data_output_folder_path, self.tracking_info)
         else: 
         # self.tracking_info.types_of_streams_saved =='id'
             
         # The infrared and depth streams are already aligned
         # object tracking at either 90 or 300 frames per second with infrared
-            pipeline, config = find_and_config_device_mult_stream(self.tracking_info.types_of_streams_saved)
+            pipeline, config = camera.find_and_config_device_mult_stream(self.tracking_info.types_of_streams_saved)
             pipeline.start(config)
             GUI_obj_tracking(pipeline, image, color_ranges, min_radius_object, data_output_folder_path, self.tracking_info)
 
@@ -983,7 +979,7 @@ class MyGUI(QMainWindow):
     def record_bag(self):
         image, color_ranges, min_radius_object, data_output_folder_path  = self.get_settings()
         self.show_recording_alert()
-        record_bag_file(data_output_folder_path, self.tracking_info.types_of_streams_saved)
+        camera.record_bag_file(data_output_folder_path, self.tracking_info.types_of_streams_saved)
         self.hide_recording_alert()
 
     def track_from_bag(self):
@@ -1000,7 +996,7 @@ class MyGUI(QMainWindow):
             ## TODO erase existing folders in default
         bag_file = 'bag.bag'
         bag_folder_path =  os.path.abspath(os.path.join(data_output_folder_path + "/" + bag_file))
-        pipeline = read_bag_file_and_config(self.tracking_info.types_of_streams_saved, data_output_folder_path, data_output_folder , bag_folder_path)
+        pipeline = camera.read_bag_file_and_config(self.tracking_info.types_of_streams_saved, data_output_folder_path, data_output_folder , bag_folder_path)
         if self.tracking_info.types_of_streams_saved =="cd":
             GUI_tracking(pipeline, image, color_ranges, min_radius_object, data_output_folder_path, self.tracking_info)
         elif "id" in self.tracking_info.types_of_streams_saved:

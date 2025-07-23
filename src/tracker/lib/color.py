@@ -14,7 +14,7 @@ import time
 from math import floor
 from typing import Tuple, Optional, Any
 
-from tracker.lib.intel_realsense_D435i import get_depth_meters
+from tracker.lib.cameras.camera_manager import camera
 
 def nothing(x):
     pass
@@ -143,7 +143,7 @@ def read_hsv_bounds(src):
 
         mass = input("What is the mass of the object? enter 0.0 if you don't care \n")
         
-        thearray = find_hsv_bounds(object_name, radius_meters, mass, src)
+        thearray = camera.find_hsv_bounds(object_name, radius_meters, mass, src)
         if i==0:
             new_color_ranges = thearray
         else:
@@ -336,7 +336,7 @@ def find_Time_x_y_z_from_rs_frames(i,save_image, show_image, cv_color, rs_color,
         # Get the distance using the points around the center of the object
         depth_near_center = []
         for pixel_count in range(-1,2):
-            _, _, z_coord = get_depth_meters(x_pixel+pixel_count, y_pixel+pixel_count, radius_meters, rs_depth, rs_color, zeroed_x, zeroed_y, zeroed_z, clipping_distance)
+            _, _, z_coord = camera.get_depth_meters(x_pixel+pixel_count, y_pixel+pixel_count, radius_meters, rs_depth, rs_color, zeroed_x, zeroed_y, zeroed_z, clipping_distance)
             if z_coord is not None:
                 depth_near_center.append(z_coord)
         # Median for our 5 points
@@ -346,7 +346,7 @@ def find_Time_x_y_z_from_rs_frames(i,save_image, show_image, cv_color, rs_color,
             continue
         
         # Get the x and y_coord at the exact center of the object
-        x_coord, y_coord, _ = get_depth_meters(x_pixel, y_pixel, radius_meters, rs_depth, rs_color, zeroed_x, zeroed_y, zeroed_z, clipping_distance)
+        x_coord, y_coord, _ = camera.get_depth_meters(x_pixel, y_pixel, radius_meters, rs_depth, rs_color, zeroed_x, zeroed_y, zeroed_z, clipping_distance)
 
         z_coord = depth_near_center[floor((len(depth_near_center)-1)/2)]
 
