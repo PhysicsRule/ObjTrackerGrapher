@@ -7,11 +7,11 @@ from tracker.lib.user_input import select_object_tracker_method
 
 from tracker.lib.cameras.camera_manager import camera
 
-def GUI_select_bounding_box(pipeline):
+def GUI_select_bounding_box():
     print('select bounding box')
     check_no_selection = True
     while check_no_selection:
-        frame_result = camera.get_all_frames_color(pipeline)
+        frame_result = camera.get_all_frames_color()
         if not frame_result:
             continue
         (cv_color, rs_color, rs_depth), _ = frame_result
@@ -31,11 +31,11 @@ def GUI_select_bounding_box(pipeline):
         check_no_selection = False
     return bbox, ret, tracker
 
-def GUI_select_bounding_box_infrared(pipeline):
+def GUI_select_bounding_box_infrared():
     print('select bounding box')
     check_no_selection = True
     while check_no_selection:
-        frame_result = camera.get_all_frames_infrared(pipeline)
+        frame_result = camera.get_all_frames_infrared()
         if not frame_result:
             continue
         (rs_depth, rs_infrared1), _ = frame_result

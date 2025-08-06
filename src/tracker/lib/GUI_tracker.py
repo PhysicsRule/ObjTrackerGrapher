@@ -18,9 +18,9 @@ from tracker.lib.cameras.camera_manager import camera
 
 def find_lower_upper_bounds_on_screen(the_array):
     # selecting your own color boundaries by tweeking the default
-    pipeline = camera.find_and_config_device()
-    camera.warm_up_camera(pipeline)
-    (cv_color, rs_color, rs_depth), timestamp = camera.get_all_frames_color(pipeline)
+    camera.find_and_config_device()
+    camera.warm_up_camera()
+    (cv_color, rs_color, rs_depth), timestamp = camera.get_all_frames_color()
 
     output = GUI_find_hsv_bounds(the_array, cv_color)
     return output
@@ -63,7 +63,7 @@ def what_to_do_with_images(i, x_pixel, y_pixel, radius,image,depth_colormap,cv_c
     
 
 
-def GUI_tracking(pipeline, image, color_ranges, min_radius_object, data_output_folder_path, tracking_info):
+def GUI_tracking(image, color_ranges, min_radius_object, data_output_folder_path, tracking_info):
     """
     Track as you record
     use color or obj_tracking
@@ -72,11 +72,11 @@ def GUI_tracking(pipeline, image, color_ranges, min_radius_object, data_output_f
     """ 
     make_csv_files(color_ranges, data_output_folder_path)   
     max_num_point=len(color_ranges)
-    camera.warm_up_camera(pipeline)
-    zeroed_x, zeroed_y, zeroed_z, clipping_distance = camera.select_furthest_distance_color(pipeline)
+    camera.warm_up_camera()
+    zeroed_x, zeroed_y, zeroed_z, clipping_distance = camera.select_furthest_distance_color()
     if tracking_info.type_of_tracking == 'obj_tracker':
         print('select bounding box')
-        bbox, ret, tracker = GUI_select_bounding_box(pipeline)    
+        bbox, ret, tracker = GUI_select_bounding_box()
 
     # Now that everything is setup, track the objects
     first_time_check = True
@@ -90,7 +90,7 @@ def GUI_tracking(pipeline, image, color_ranges, min_radius_object, data_output_f
     x_pixel, y_pixel, x_coord, y_coord, z_coord, radius  = -1, -1, -1, -1, -1, 0
     while True:
         # Get frames if valid
-        frame_result = camera.get_all_frames_color(pipeline)
+        frame_result = camera.get_all_frames_color()
         if not frame_result:
             continue        
         (cv_color, rs_color, rs_depth), timestamp = frame_result
@@ -171,7 +171,7 @@ def GUI_tracking(pipeline, image, color_ranges, min_radius_object, data_output_f
 
     # Stop OpenCV/RealSense video
 
-    pipeline.stop()
+    camera.pipeline.stop()
 
     if image.save_video:
         height, width, layers = cv_color.shape
@@ -202,7 +202,7 @@ def GUI_tracking(pipeline, image, color_ranges, min_radius_object, data_output_f
     cv2.destroyAllWindows()
 
 
-def GUI_obj_tracking(pipeline, image, color_ranges, min_radius_object, data_output_folder_path, tracking_info):
+def GUI_obj_tracking(image, color_ranges, min_radius_object, data_output_folder_path, tracking_info):
     """
     Track as you record
     use obj_tracking
@@ -212,11 +212,11 @@ def GUI_obj_tracking(pipeline, image, color_ranges, min_radius_object, data_outp
     """ 
     make_csv_files(color_ranges, data_output_folder_path)   
     max_num_point=len(color_ranges)
-    camera.warm_up_camera(pipeline)
-    zeroed_x, zeroed_y, zeroed_z, clipping_distance = camera.select_furthest_distance_infrared(pipeline)
+    camera.warm_up_camera()
+    zeroed_x, zeroed_y, zeroed_z, clipping_distance = camera.select_furthest_distance_infrared()
     print('select bounding box.')
     print('Only one image will be tracked. If you want to track multiple objects, save the bag file and track the 2nd object.')
-    bbox, ret, tracker = GUI_select_bounding_box_infrared(pipeline)    
+    bbox, ret, tracker = GUI_select_bounding_box_infrared()
 
     # Now that everything is setup, track the objects
     first_time_check = True
@@ -229,7 +229,7 @@ def GUI_obj_tracking(pipeline, image, color_ranges, min_radius_object, data_outp
 
     while True:
         # Get frames if valid
-        frame_result = camera.get_all_frames_infrared(pipeline)
+        frame_result = camera.get_all_frames_infrared()
         if not frame_result:
             continue        
         (rs_depth, rs_infrared), timestamp = frame_result
@@ -301,7 +301,7 @@ def GUI_obj_tracking(pipeline, image, color_ranges, min_radius_object, data_outp
 
     # Stop OpenCV/RealSense video
 
-    pipeline.stop()
+    camera.pipeline.stop()
     if image.save_video:
         # Since cv_color is really an infrared image it does not have layers
         height, width = cv_color.shape

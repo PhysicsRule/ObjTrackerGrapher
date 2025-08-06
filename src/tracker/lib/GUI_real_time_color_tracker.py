@@ -89,10 +89,9 @@ def GUI_real_time_color_tracking(image ,color_ranges , min_radius_object, data_o
             app.processEvents()
 
     class CameraThread(threading.Thread):
-        def __init__(self,pipeline):
+        def __init__(self):
             super(CameraThread, self).__init__()
             self._stop_event = threading.Event()
-            self.pipeline=pipeline
             self.frame_queue=queue.Queue()
             self.start_time = None
             self.last_timestamp = None
@@ -106,7 +105,7 @@ def GUI_real_time_color_tracking(image ,color_ranges , min_radius_object, data_o
         def run(self):
             self.start_time = datetime.datetime.now()
             while not self.is_stopped():
-                frame_result = camera.get_all_frames_color(self.pipeline)
+                frame_result = camera.get_all_frames_color()
                 if not frame_result:
                     print("didn't find pipeline frame")
                     continue
@@ -128,12 +127,12 @@ def GUI_real_time_color_tracking(image ,color_ranges , min_radius_object, data_o
             self._stop_event = threading.Event()
             make_csv_files(color_ranges, data_output_folder_path)
             # Configure and setup the cameras
-            self.pipeline = camera.find_and_config_device()
+            camera.find_and_config_device()
             # OpenCV initialization
 
             # Find the furthest distance and in the future find a different origin TODO
-            self.zeroed_x, self.zeroed_y, self.zeroed_z, self.z = camera.select_furthest_distance_color(self.pipeline)
-            self.camera_thread = CameraThread(self.pipeline)
+            self.zeroed_x, self.zeroed_y, self.zeroed_z, self.z = camera.select_furthest_distance_color()
+            self.camera_thread = CameraThread()
 
             ## self.video_stream = VideoStream(src=0)
             self.start_time = None

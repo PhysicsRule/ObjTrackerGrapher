@@ -13,7 +13,11 @@ from src.tracker.lib.cameras.camera import Camera
 
 
 class IntelRealSenseD435i(Camera):
-    def warm_up_camera(self, pipeline) -> None:
+    def __init__(self):
+        self.pipeline = None
+        self.config = None
+
+    def warm_up_camera(self) -> None:
         # Read video frame after waiting a bit for the camera to warm up
         # Create a pipeline object. This object configures the streaming camera and owns it's handle
 
@@ -24,36 +28,35 @@ class IntelRealSenseD435i(Camera):
             i += 1
             # Attempted Queue
             # frames = pipeline.wait_for_frame()
-            frames = pipeline.wait_for_frames()
+            frames = self.pipeline.wait_for_frames()
             if not frames:
                 check = False
 
     def find_and_config_device(self):
-        pipeline = rs.pipeline()
-        config = rs.config()
-        config.enable_stream(rs.stream.depth, 848, 480, rs.format.z16, 60)
-        config.enable_stream(rs.stream.color, 848, 480, rs.format.bgr8, 60)
-        profile = pipeline.start(config)
-        self.warm_up_camera(pipeline)
+        self.pipeline = rs.pipeline()
+        self.config = rs.config()
+        self.config.enable_stream(rs.stream.depth, 848, 480, rs.format.z16, 60)
+        self.config.enable_stream(rs.stream.color, 848, 480, rs.format.bgr8, 60)
+        self.pipeline.start(self.config)
+
         # Let the camera run for a few seconds so you do not get dark images
+        self.warm_up_camera()
 
-        return pipeline
+    def find_and_config_device_mult_stream(self, types_of_streams_saved):
+        self.pipeline = rs.pipeline()
 
-    def find_and_config_device_mult_stream(self, types_of_streams_saved) -> Any:
-        pipeline = rs.pipeline()
-
-        config = rs.config()
+        self.config = rs.config()
         if types_of_streams_saved == 'id':
-            config.enable_stream(rs.stream.depth, 848 , 480, rs.format.z16, 90)
-            config.enable_stream(rs.stream.infrared, 1, 848, 480, rs.format.y8, 90)
+            self.config.enable_stream(rs.stream.depth, 848 , 480, rs.format.z16, 90)
+            self.config.enable_stream(rs.stream.infrared, 1, 848, 480, rs.format.y8, 90)
         elif types_of_streams_saved == 'id300':
-                config.enable_stream(rs.stream.depth, 848 , 100, rs.format.z16, 300)
-                config.enable_stream(rs.stream.infrared, 1, 848, 100, rs.format.y8, 300)
+                self.config.enable_stream(rs.stream.depth, 848 , 100, rs.format.z16, 300)
+                self.config.enable_stream(rs.stream.infrared, 1, 848, 100, rs.format.y8, 300)
         else: # (cd)color
-            config.enable_stream(rs.stream.depth, 848, 480, rs.format.z16, 60)
-            config.enable_stream(rs.stream.color, 848, 480, rs.format.bgr8, 60)
+            self.config.enable_stream(rs.stream.depth, 848, 480, rs.format.z16, 60)
+            self.config.enable_stream(rs.stream.color, 848, 480, rs.format.bgr8, 60)
             if types_of_streams_saved == 'all':
-                config.enable_stream(rs.stream.infrared, 1, 848, 480, rs.format.y8, 60)
+                self.config.enable_stream(rs.stream.infrared, 1, 848, 480, rs.format.y8, 60)
 
         # If you want to use multiple cameras in the future this is useful
         #ctx = rs.context()
@@ -83,19 +86,16 @@ class IntelRealSenseD435i(Camera):
                 #ep = sensor.set_option(rs.option.enable_auto_exposure)
         '''
 
-        return pipeline, config
-
-
     def record_bag_file(self, data_output_folder_path, types_of_streams_saved):
     # Record Images from pipeline
     # DOESN't Work as it cannot open the bag file for some reason
     # For now, just use the Intel Real Sense View if you installed it
     # https://www.intelrealsense.com/sdk-2/
         filepath_bag = os.path.abspath(os.path.join(data_output_folder_path, 'bag.bag'))
-        pipeline, config = self.find_and_config_device_mult_stream(types_of_streams_saved)
-        config.enable_record_to_file(filepath_bag)
-        pipeline.start(config)
-        self.warm_up_camera(pipeline)
+        self.find_and_config_device_mult_stream(types_of_streams_saved)
+        self.config.enable_record_to_file(filepath_bag)
+        self.pipeline.start(self.config)
+        self.warm_up_camera()
         time.sleep(1)
         #wait_to_start = input('Hit enter to start and stop recording')
         print('still recording')
@@ -107,23 +107,23 @@ class IntelRealSenseD435i(Camera):
 
         # TODO Change this to while true and break at space bar when done testing
         for _ in range(frames_to_record):
-            frames = pipeline.wait_for_frames()
+            frames = self.pipeline.wait_for_frames()
             # k = cv2.waitKey(1) & 0xff
             # if k == 27 or k == 32:
             #    print('end')
             #    break
-        pipeline.stop()
+        self.pipeline.stop()
         # read_bag_file_and_config(types_of_streams_saved, data_output_folder_path, 'bag', filepath_bag)
         print('done recording')
 
-    def get_all_frames_color(self, rs_pipeline) -> Optional[Tuple[Tuple[Any, Any, Any], Any]]:
+    def get_all_frames_color(self) -> Optional[Tuple[Tuple[Any, Any, Any], Any]]:
         '''
         Returns a tuple containing the OpenCV color and (aligned) RealSense
         depth/color frames, as well as the timestamp of the frames. If either frame
         doesn't exist, returns `False` instead.
         '''
         # Get & align RealSense frames
-        rs_frames = rs_pipeline.wait_for_frames()
+        rs_frames = self.pipeline.wait_for_frames()
         timestamp = rs_frames.get_timestamp()
 
         # Get OpenCV frame (or handle if it isn't read properly)
@@ -143,14 +143,14 @@ class IntelRealSenseD435i(Camera):
         # Calculate elapsed time from start_datetime, if applicable
         return (cv_color, rs_color, rs_depth), timestamp
 
-    def get_all_frames_infrared(self, rs_pipeline) -> Optional[Tuple[Tuple[Any, Any, Any], Any]]:
+    def get_all_frames_infrared(self) -> Optional[Tuple[Tuple[Any, Any, Any], Any]]:
         '''
         Returns a tuple containing the OpenCV color and (aligned) RealSense
         depth/color frames, as well as the timestamp of the frames. If either frame
         doesn't exist, returns `False` instead.
         '''
         # Get & align RealSense frames
-        rs_frames = rs_pipeline.wait_for_frames()
+        rs_frames = self.pipeline.wait_for_frames()
         timestamp = rs_frames.get_timestamp()
 
         # Extract color/depth frames
@@ -240,7 +240,7 @@ class IntelRealSenseD435i(Camera):
 
         return zeroed_x, zeroed_y, zeroed_z
 
-    def select_furthest_distance_color(self, pipeline) -> Tuple[float, float, float, float]:
+    def select_furthest_distance_color(self) -> Tuple[float, float, float, float]:
         # Selects the furthest distance and sets the origin to be the top left corner
         ## TODO add another selection box to say what the x,y,z origin should be after we are confident of z axis
         # OpenCV color frame
@@ -251,7 +251,7 @@ class IntelRealSenseD435i(Camera):
         while clipping_distance < 0.1:
             # Get the OpenCV color/RealSense depth frames & skip iteration if
             # necessary
-            frame_result = self.get_all_frames_color(pipeline)
+            frame_result = self.get_all_frames_color()
             if not frame_result:
                 continue
             (cv_color, rs_color, rs_depth), _ = frame_result
@@ -273,7 +273,7 @@ class IntelRealSenseD435i(Camera):
         return zeroed_x, zeroed_y, zeroed_z, clipping_distance
 
 
-    def select_furthest_distance_infrared(self, pipeline):
+    def select_furthest_distance_infrared(self):
         # Selects the furthest distance and sets the origin to be the top left corner
         ## TODO add another selection box to say what the x,y,z origin should be after we are confident of z axis
         # OpenCV color frame
@@ -283,7 +283,7 @@ class IntelRealSenseD435i(Camera):
         while clipping_distance < 0.1:
             # Get the OpenCV color/RealSense depth frames & skip iteration if
             # necessary
-            frame_result = self.get_all_frames_infrared(pipeline)
+            frame_result = self.get_all_frames_infrared()
             if not frame_result:
                 continue
             (rs_depth, rs_infrared), _ = frame_result
@@ -312,26 +312,26 @@ class IntelRealSenseD435i(Camera):
 
     def read_bag_file_and_config(self, types_of_streams_saved, data_output_folder_path, folder_name , bag_folder_path) -> Any:
         try:
-            config = rs.config()
+            self.config = rs.config()
             #bag_path =  os.path.abspath(os.path.join(bag_folder_path + "/" + bag_file ))
-            rs.config.disable_all_streams(config)
-            rs.config.enable_device_from_file(config, bag_folder_path, repeat_playback=False)
-            pipeline = rs.pipeline()
+            rs.config.disable_all_streams(self.config)
+            rs.config.enable_device_from_file(self.config, bag_folder_path, repeat_playback=False)
+            self.pipeline = rs.pipeline()
             if types_of_streams_saved == 'id':
-                config.enable_stream(rs.stream.depth)       #, 848, 480, rs.format.z16, 90)
-                config.enable_stream(rs.stream.infrared)    #, 1, 848, 480, rs.format.y8, 90)
+                self.config.enable_stream(rs.stream.depth)       #, 848, 480, rs.format.z16, 90)
+                self.config.enable_stream(rs.stream.infrared)    #, 1, 848, 480, rs.format.y8, 90)
             elif types_of_streams_saved == 'id300':
-                config.enable_stream(rs.stream.depth)       #, 848, 480, rs.format.z16, 300)
-                config.enable_stream(rs.stream.infrared)    #, 1, 848, 480, rs.format.y8, 300)
+                self.config.enable_stream(rs.stream.depth)       #, 848, 480, rs.format.z16, 300)
+                self.config.enable_stream(rs.stream.infrared)    #, 1, 848, 480, rs.format.y8, 300)
             else:
                 ## TODO increase to 60 fps and set S2_OPTION_AUTO_EXPOSURE_PRIORITY to 0 to maintain constant fps when recording
-                config.enable_stream(rs.stream.depth)       #, 848, 480, rs.format.z16, 60)
-                config.enable_stream(rs.stream.color)       #, 848, 480, rs.format.bgr8, 60)
+                self.config.enable_stream(rs.stream.depth)       #, 848, 480, rs.format.z16, 60)
+                self.config.enable_stream(rs.stream.color)       #, 848, 480, rs.format.bgr8, 60)
                 if types_of_streams_saved == 'all':
-                    config.enable_stream(rs.stream.infrared) #, 1, 848, 480, rs.format.y8, 60)
+                    self.config.enable_stream(rs.stream.infrared) #, 1, 848, 480, rs.format.y8, 60)
 
             #pipeline.start(config)
-            profile = pipeline.start(config)
+            profile = self.pipeline.start(self.config)
             print('reading bag file')
             time.sleep(1)
             playback = profile.get_device().as_playback()
@@ -381,4 +381,3 @@ class IntelRealSenseD435i(Camera):
             print("There are no more frames left in the .bag file!")
         finally:
             pass
-        return pipeline

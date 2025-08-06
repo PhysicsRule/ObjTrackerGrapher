@@ -4,7 +4,7 @@ from typing import Any, Tuple, Optional
 class Camera(ABC):
 
     @abstractmethod
-    def warm_up_camera(self, pipeline) -> None:
+    def warm_up_camera(self) -> None:
         pass
 
     @abstractmethod
@@ -12,7 +12,7 @@ class Camera(ABC):
         pass
 
     @abstractmethod
-    def find_and_config_device_mult_stream(self, types_of_streams_saved) -> Any:
+    def find_and_config_device_mult_stream(self, types_of_streams_saved):
         pass
 
     @abstractmethod
@@ -20,11 +20,11 @@ class Camera(ABC):
         pass
 
     @abstractmethod
-    def get_all_frames_color(self, rs_pipeline) -> Optional[Tuple[Tuple[Any, Any, Any], Any]]:
+    def get_all_frames_color(self) -> Optional[Tuple[Tuple[Any, Any, Any], Any]]:
         pass
 
     @abstractmethod
-    def get_all_frames_infrared(self, rs_pipeline) -> Optional[Tuple[Tuple[Any, Any, Any], Any]]:
+    def get_all_frames_infrared(self) -> Optional[Tuple[Tuple[Any, Any, Any], Any]]:
         pass
 
     @abstractmethod
@@ -48,11 +48,11 @@ class Camera(ABC):
         pass
 
     @abstractmethod
-    def select_furthest_distance_color(self, pipeline) -> Tuple[float, float, float, float]:
+    def select_furthest_distance_color(self) -> Tuple[float, float, float, float]:
         pass
 
     @abstractmethod
-    def select_furthest_distance_infrared(self, pipeline):
+    def select_furthest_distance_infrared(self):
         pass
 
     @abstractmethod

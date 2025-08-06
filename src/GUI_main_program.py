@@ -963,16 +963,16 @@ class MyGUI(QMainWindow):
         # find output folder here instead of 
         if self.tracking_info.types_of_streams_saved =='cd':
         # The color and depth streams need to be aligned for each frame slowing the tracking down
-            pipeline = camera.find_and_config_device()
-            GUI_tracking(pipeline, image, color_ranges, min_radius_object, data_output_folder_path, self.tracking_info)
+            camera.find_and_config_device()
+            GUI_tracking(image, color_ranges, min_radius_object, data_output_folder_path, self.tracking_info)
         else: 
         # self.tracking_info.types_of_streams_saved =='id'
             
         # The infrared and depth streams are already aligned
         # object tracking at either 90 or 300 frames per second with infrared
-            pipeline, config = camera.find_and_config_device_mult_stream(self.tracking_info.types_of_streams_saved)
-            pipeline.start(config)
-            GUI_obj_tracking(pipeline, image, color_ranges, min_radius_object, data_output_folder_path, self.tracking_info)
+            camera.find_and_config_device_mult_stream(self.tracking_info.types_of_streams_saved)
+            camera.pipeline.start(camera.config)
+            GUI_obj_tracking(image, color_ranges, min_radius_object, data_output_folder_path, self.tracking_info)
 
     
 
@@ -996,11 +996,11 @@ class MyGUI(QMainWindow):
             ## TODO erase existing folders in default
         bag_file = 'bag.bag'
         bag_folder_path =  os.path.abspath(os.path.join(data_output_folder_path + "/" + bag_file))
-        pipeline = camera.read_bag_file_and_config(self.tracking_info.types_of_streams_saved, data_output_folder_path, data_output_folder , bag_folder_path)
+        camera.read_bag_file_and_config(self.tracking_info.types_of_streams_saved, data_output_folder_path, data_output_folder , bag_folder_path)
         if self.tracking_info.types_of_streams_saved =="cd":
-            GUI_tracking(pipeline, image, color_ranges, min_radius_object, data_output_folder_path, self.tracking_info)
+            GUI_tracking(image, color_ranges, min_radius_object, data_output_folder_path, self.tracking_info)
         elif "id" in self.tracking_info.types_of_streams_saved:
-            GUI_obj_tracking(pipeline, image, color_ranges, min_radius_object, data_output_folder_path, self.tracking_info)
+            GUI_obj_tracking(image, color_ranges, min_radius_object, data_output_folder_path, self.tracking_info)
         self.hide_tracking_alert()
 
     def toggle_window(self, window):
