@@ -347,57 +347,46 @@ files = [
 
 [[package]]
 name = "depthai"
-version = "2.30.0.0"
+version = "3.0.0rc4"
 description = "DepthAI Python Library"
 optional = false
 python-versions = ">=3.7"
 groups = ["main"]
 files = [
-    {file = "depthai-2.30.0.0-cp310-cp310-macosx_11_0_arm64.whl", hash = "sha256:1e8f2fb002a95395c398f1c843cf761425b98619737c6c088b110f72382a3597"},
-    {file = "depthai-2.30.0.0-cp310-cp310-macosx_13_0_x86_64.whl", hash = "sha256:dce435678ba01c4396cd9adfdfef7fabeb7c598abcccee0cfe18cf2817f36525"},
-    {file = "depthai-2.30.0.0-cp310-cp310-manylinux_2_28_aarch64.whl", hash = "sha256:2a185107326570cf2681a42bb6a3d952b58813a9e76308c6649ddb40ace79f0e"},
-    {file = "depthai-2.30.0.0-cp310-cp310-manylinux_2_28_x86_64.whl", hash = "sha256:a3bb410e84fa882afe26626c3966f2451faff545e340323bd1ec643f1f1ea8d7"},
-    {file = "depthai-2.30.0.0-cp310-cp310-win32.whl", hash = "sha256:4e32f4d74caa70fbfabf956ba6a059e47918c890c3a009ebc6f69af5da1ac0ba"},
-    {file = "depthai-2.30.0.0-cp310-cp310-win_amd64.whl", hash = "sha256:4f1238e7bb90339a110f48863052dc2a1d3500bd86d4fe053ffa48f58890c840"},
-    {file = "depthai-2.30.0.0-cp311-cp311-linux_armv6l.linux_armv7l.whl", hash = "sha256:d3199fb8a493349cc3f800a8529947aa3206f9cab75554f17ff0eab3a3f3f07f"},
-    {file = "depthai-2.30.0.0-cp311-cp311-macosx_10_9_universal2.whl", hash = "sha256:c228b4babcc54decf7238d066650d1ab3085dc350c80edb4217edd61867f8f61"},
-    {file = "depthai-2.30.0.0-cp311-cp311-macosx_11_0_arm64.whl", hash = "sha256:1e929ad152e5f492087d078471211da92fc9835274fe22569cf0b99437198766"},
-    {file = "depthai-2.30.0.0-cp311-cp311-manylinux_2_28_aarch64.whl", hash = "sha256:28750c2b856120e27df8088ad826b856f64cde42bbf3b7f341e31bfbbe15521c"},
-    {file = "depthai-2.30.0.0-cp311-cp311-manylinux_2_28_x86_64.whl", hash = "sha256:e7c36e9d552049a6d333022234a031a336d8a49aeb51cad667a805eb9fa4bad8"},
-    {file = "depthai-2.30.0.0-cp311-cp311-win32.whl", hash = "sha256:1a2367fdd023d3af01aa67683b6cafc3c53dbb6bcc79ccc234912c69bca51c7d"},
-    {file = "depthai-2.30.0.0-cp311-cp311-win_amd64.whl", hash = "sha256:06d68545eb55abf342a6d0c5df6ed9a16bbaabffaff28800ee8e61895d191028"},
-    {file = "depthai-2.30.0.0-cp312-cp312-macosx_10_13_universal2.whl", hash = "sha256:af64afc5a4f2bed7259df478f971afbae3ce3542567e759065cc35d1e9520c08"},
-    {file = "depthai-2.30.0.0-cp312-cp312-macosx_11_0_arm64.whl", hash = "sha256:aa54948e78f51495301dd131284b125d0023b0235433735e75281dfc42fdc3f7"},
-    {file = "depthai-2.30.0.0-cp312-cp312-manylinux_2_28_aarch64.whl", hash = "sha256:d95531ff0d70720aee7f5de1f698570b6a8b1cbd7b1b79efabd88c49d57868df"},
-    {file = "depthai-2.30.0.0-cp312-cp312-manylinux_2_28_x86_64.whl", hash = "sha256:c4eb4789b8d49e1bdeaedb215f24282924e0634813802c0ea9e599a9c639b492"},
-    {file = "depthai-2.30.0.0-cp312-cp312-win32.whl", hash = "sha256:9bf3eff22d2dc2255a442c2ef6c4aa140789641639dc1f83d211eaada686dd98"},
-    {file = "depthai-2.30.0.0-cp312-cp312-win_amd64.whl", hash = "sha256:850870777c53a332dba50187d5ddbb929c95e7a100730ccedf7b58ae32c70638"},
-    {file = "depthai-2.30.0.0-cp313-cp313-macosx_10_13_universal2.whl", hash = "sha256:869668afb027cfe2c14ca2b81e39a29769846d8e8e7c4b7cbd40a4a261773b1c"},
-    {file = "depthai-2.30.0.0-cp313-cp313-macosx_11_0_arm64.whl", hash = "sha256:278272edbab1437217db633c71f2c2c90ec2b76f20c9c6ee9f6664342f7609eb"},
-    {file = "depthai-2.30.0.0-cp313-cp313-manylinux_2_28_aarch64.whl", hash = "sha256:5675545d9b354d1c51e902cc08d39649fe1a1c2fbe59bc411424687ab5e245da"},
-    {file = "depthai-2.30.0.0-cp313-cp313-manylinux_2_28_x86_64.whl", hash = "sha256:b2ae397de204ba84d00a26a241c94d1c3fbed31386f22ab6fadcd35a74aee347"},
-    {file = "depthai-2.30.0.0-cp313-cp313-win32.whl", hash = "sha256:e98806b3a50322ae7bcea3e0bc085b8ede398e230af2b92f6a81cb5e60c5e4e1"},
-    {file = "depthai-2.30.0.0-cp313-cp313-win_amd64.whl", hash = "sha256:d2f78457f8df21d8b21fff4c9cecc40b7925cae617be8fe9d8e4bcb1a01fd329"},
-    {file = "depthai-2.30.0.0-cp313-cp313t-manylinux_2_28_aarch64.whl", hash = "sha256:1f8261bec4ebb747c6e2c20dc1adc7c86a9025c2a36e16c0adfad468ee86d41d"},
-    {file = "depthai-2.30.0.0-cp313-cp313t-manylinux_2_28_x86_64.whl", hash = "sha256:8c14045e7c5e313b134cc3c10320dad2dda8815f4f2ea9b1c72dc36981f6b71b"},
-    {file = "depthai-2.30.0.0-cp37-cp37m-manylinux_2_28_aarch64.whl", hash = "sha256:bfe84fcd877c0d49ce560fb227edeb528b87134ab1afdc48e6ff1c9c5fc2647d"},
-    {file = "depthai-2.30.0.0-cp37-cp37m-manylinux_2_28_x86_64.whl", hash = "sha256:25bfbef885a63728d96e0cb4e0243ea04e70835c0194cd8b3ae9ad91fd1889aa"},
-    {file = "depthai-2.30.0.0-cp37-cp37m-win32.whl", hash = "sha256:f359b2145c142ca82ca6150e661eb920eb5dcb32eda3024a06413396a0a68804"},
-    {file = "depthai-2.30.0.0-cp37-cp37m-win_amd64.whl", hash = "sha256:ae0e6bf1980c1dea3dee1f523d8463edc1adbb182ea361fcf291696513ff332b"},
-    {file = "depthai-2.30.0.0-cp38-cp38-macosx_11_0_arm64.whl", hash = "sha256:c29cc7908afda2b85e8b1575f858ad99f840e8e8da768e703f344e084d9d7cbe"},
-    {file = "depthai-2.30.0.0-cp38-cp38-macosx_13_0_x86_64.whl", hash = "sha256:181d9f76332b2c28f4746ca7f89962fdbe149682082e99d643197dbb7db7e852"},
-    {file = "depthai-2.30.0.0-cp38-cp38-manylinux_2_28_aarch64.whl", hash = "sha256:a5fc85a92ed17397b5a7a02d01b5b737fa0a434e94540691b16142db0a886315"},
-    {file = "depthai-2.30.0.0-cp38-cp38-manylinux_2_28_x86_64.whl", hash = "sha256:8ffe33ffd4811dcb9f2c8470045822d877a5c9391fe6bda839741eaf46b49f30"},
-    {file = "depthai-2.30.0.0-cp38-cp38-win32.whl", hash = "sha256:ca1b28913366d5b6d5300df4e64e150c38c2df482ad6e442413c376cb8f2ef94"},
-    {file = "depthai-2.30.0.0-cp38-cp38-win_amd64.whl", hash = "sha256:cdadc4bd77745d995872bddfc64cae2c3949e3395aa2fb7ac54695ffb0061a56"},
-    {file = "depthai-2.30.0.0-cp39-cp39-linux_armv6l.linux_armv7l.whl", hash = "sha256:9a4695fe97d5bd63df474157acb01359d9e4b68f896cd5a19c9a56ba18892f88"},
-    {file = "depthai-2.30.0.0-cp39-cp39-macosx_11_0_arm64.whl", hash = "sha256:b6f7c7191284ef768ff99b484eb29acf8c9c110c0efa750de43a3ccbe1685e0d"},
-    {file = "depthai-2.30.0.0-cp39-cp39-macosx_13_0_x86_64.whl", hash = "sha256:a9a2952d2a428242451c58107d378a0ec6ff066ff6006d9684e26634c7bc3e13"},
-    {file = "depthai-2.30.0.0-cp39-cp39-manylinux_2_28_aarch64.whl", hash = "sha256:c32e96fd146ee7f721238c724f5ea2269f1c3596f2875a9cb781cbb7fd91139c"},
-    {file = "depthai-2.30.0.0-cp39-cp39-manylinux_2_28_x86_64.whl", hash = "sha256:a6d533f75d1c5eebea468f7418d6a88ee1fb8c6f497cf854195540fe49961006"},
-    {file = "depthai-2.30.0.0-cp39-cp39-win32.whl", hash = "sha256:958145520f5b7ff31eb9913a5e41f007be6440424e606e1d4292e9e41ea956ff"},
-    {file = "depthai-2.30.0.0-cp39-cp39-win_amd64.whl", hash = "sha256:652d22ce0b444e66f6a29c2278f39adee609027aa4f2b510d56b103072ee6d39"},
-    {file = "depthai-2.30.0.0.tar.gz", hash = "sha256:6f1de5abdca2a615eb29803d82a002da42ebf1d3c6d261187762f0dcc5b2a836"},
+    {file = "depthai-3.0.0rc4-cp310-cp310-macosx_13_0_x86_64.whl", hash = "sha256:42fc33ffe8c4f3e42d1687a7640de3222f8fa1a64543e6e8602602eba3a91233"},
+    {file = "depthai-3.0.0rc4-cp310-cp310-macosx_14_0_arm64.whl", hash = "sha256:930d10d43ddb3d8667181f5b2edd56ebe318dee9dc2d145c014cbae9a1495543"},
+    {file = "depthai-3.0.0rc4-cp310-cp310-manylinux_2_28_aarch64.whl", hash = "sha256:361284f0d84e7999bedb3160d74ad00ded76bcc809c0bd6662f8970da0bcaef0"},
+    {file = "depthai-3.0.0rc4-cp310-cp310-manylinux_2_28_x86_64.whl", hash = "sha256:99172480f5512555a4be40c5827c21ab792cd0a21ae41cff68fc85e9ba2adefd"},
+    {file = "depthai-3.0.0rc4-cp310-cp310-win_amd64.whl", hash = "sha256:c45936056aa2306db5c76b321ffc42690d91b4a8b7c56918d5a53f920b406a4d"},
+    {file = "depthai-3.0.0rc4-cp311-cp311-macosx_13_0_universal2.whl", hash = "sha256:15532e342f7ccb4d4d77baeecab02692f4b368fe3091ae220d31918331611b99"},
+    {file = "depthai-3.0.0rc4-cp311-cp311-macosx_14_0_arm64.whl", hash = "sha256:891735a687fec0063029c8715e2b3f863f3c5578fcba9e2f00bc53c3c91db31c"},
+    {file = "depthai-3.0.0rc4-cp311-cp311-manylinux_2_28_aarch64.whl", hash = "sha256:9f9ed9e21f011763f7da593120087b132c20a6d75c7fbc7e83f2a8897e7fc3c4"},
+    {file = "depthai-3.0.0rc4-cp311-cp311-manylinux_2_28_x86_64.whl", hash = "sha256:f77dd2520c5c0532b018ba468275ec47dfd601d9d02109b742957f04deaf9a8b"},
+    {file = "depthai-3.0.0rc4-cp311-cp311-win_amd64.whl", hash = "sha256:a91801f6d148f06f246a100afc6672d6b8fe346b6a6d33bda2541d09d3e18b57"},
+    {file = "depthai-3.0.0rc4-cp312-cp312-macosx_13_0_universal2.whl", hash = "sha256:07858d57f275e45b7af9a0c1d3cbf460756bbe853e65c5860bda1c3310239063"},
+    {file = "depthai-3.0.0rc4-cp312-cp312-macosx_14_0_arm64.whl", hash = "sha256:6ce40d2cf6ee71dba21a7f145f06220b0f4bb87fc2a313b7d297db98e369ce24"},
+    {file = "depthai-3.0.0rc4-cp312-cp312-manylinux_2_28_aarch64.whl", hash = "sha256:5e5b77778a1cc1cb5b4c3a988d570cf7723ffb5ed79599e502119f0e3bd59ef7"},
+    {file = "depthai-3.0.0rc4-cp312-cp312-manylinux_2_28_x86_64.whl", hash = "sha256:40462a594f389de70eb305e096109287c16868f0f4d452023fc7695c8e090399"},
+    {file = "depthai-3.0.0rc4-cp312-cp312-win_amd64.whl", hash = "sha256:69140cd291f2589f485f685efea79df0ed8b5b711d2c5bbe668fc8865fc2ae1c"},
+    {file = "depthai-3.0.0rc4-cp313-cp313-macosx_13_0_universal2.whl", hash = "sha256:1a956ba406ddca830b5e55d847f3c7cb8d55d8728b6340d232d43eb730896348"},
+    {file = "depthai-3.0.0rc4-cp313-cp313-macosx_14_0_arm64.whl", hash = "sha256:a74a75933ff4b8c7b4296862d84097cf5f7b06b839e8d38d53835ac0f7ea88d3"},
+    {file = "depthai-3.0.0rc4-cp313-cp313-manylinux_2_28_aarch64.whl", hash = "sha256:b28e2cc37bd8f78cf749df6cbe57e7ab88b595aa110e7e5e9d2abc91d9361f04"},
+    {file = "depthai-3.0.0rc4-cp313-cp313-manylinux_2_28_x86_64.whl", hash = "sha256:62d81fd9232f21d3d2927ebf829c370ee249be9f1b0de6179e5483da36f82a0e"},
+    {file = "depthai-3.0.0rc4-cp313-cp313-win_amd64.whl", hash = "sha256:24d4775c2b5c45f997242c0e084c7e63817d69a131b311a56a8d65038bc662c9"},
+    {file = "depthai-3.0.0rc4-cp37-cp37m-manylinux_2_28_aarch64.whl", hash = "sha256:050a9aa027efb433ace0c656e4e3b23a3464d40725c5fa995d39382e4cc957b8"},
+    {file = "depthai-3.0.0rc4-cp37-cp37m-manylinux_2_28_x86_64.whl", hash = "sha256:b5f96077606ec027f6be0a428f2f8801705aee7af7b3ececcf85a9c36a4c0214"},
+    {file = "depthai-3.0.0rc4-cp37-cp37m-win_amd64.whl", hash = "sha256:d3dc1e7be3dc5f01ae9bd75b0606a38fd4b496e8ed84bdacdd15cd5c13db78e8"},
+    {file = "depthai-3.0.0rc4-cp38-cp38-macosx_13_0_x86_64.whl", hash = "sha256:c52f14fa05edf4caa3278c1acf0bc9a6d5149e0e68d45d79f045561f82a045ee"},
+    {file = "depthai-3.0.0rc4-cp38-cp38-macosx_14_0_arm64.whl", hash = "sha256:001668d8dd4d137745430911757a8e00ee6e1e5ebff8247cac9a26533bce463c"},
+    {file = "depthai-3.0.0rc4-cp38-cp38-manylinux_2_28_aarch64.whl", hash = "sha256:7534b1a822fb3a5490449aecd412aa56cf760dd7189280c2e6330b6ee452919b"},
+    {file = "depthai-3.0.0rc4-cp38-cp38-manylinux_2_28_x86_64.whl", hash = "sha256:1bfd8f00687c7d83600fd5181842a472590aaa740c6288c7c6d93c09f76c8a71"},
+    {file = "depthai-3.0.0rc4-cp38-cp38-win_amd64.whl", hash = "sha256:22afc28a732266f99a6ee9438079552f4cccd4d043fdefcd382291636c90cfbc"},
+    {file = "depthai-3.0.0rc4-cp39-cp39-macosx_13_0_x86_64.whl", hash = "sha256:2c297b01fbfc339f0ddf4d1a72902937484e8236397113a5a59abf4b18cbe51d"},
+    {file = "depthai-3.0.0rc4-cp39-cp39-macosx_14_0_arm64.whl", hash = "sha256:6e2f19709ed16d45e5fd8be01978c3965647da2a3394a54e115b66046a82fd97"},
+    {file = "depthai-3.0.0rc4-cp39-cp39-manylinux_2_28_aarch64.whl", hash = "sha256:76c8b12fe89caf928e9c2df2b79fe53da551eeb8d8b9793d995b59ed744beb48"},
+    {file = "depthai-3.0.0rc4-cp39-cp39-manylinux_2_28_x86_64.whl", hash = "sha256:9eedb200257906e89d8bc8dde6a269a8173b4c097c70c490865bc29c5294f6a7"},
+    {file = "depthai-3.0.0rc4-cp39-cp39-win_amd64.whl", hash = "sha256:37fa2994af5c599177977f3546404d8f0bdece6648e893e96a2b237e0dea82cd"},
+    {file = "depthai-3.0.0rc4.tar.gz", hash = "sha256:6ada2b2d441cd7184569f4f110b35800e95178b7a032c520353d3e678f26fac6"},
 ]
 
 [[package]]
@@ -5485,4 +5474,4 @@ type = ["pytest-mypy"]
 [metadata]
 lock-version = "2.1"
 python-versions = "3.11.9"
-content-hash = "f9b03ee1a05adf713503f7bcf9b698a35c49d9845488c6d9260be8815b068e3e"
+content-hash = "2e9eb1346703348a4229f266ec029313680bcc0ec9c01fe3f5dc0e13f659fa0c"
