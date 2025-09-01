@@ -312,16 +312,19 @@ def find_object_by_color_with_red(cv_color, color, color_ranges) -> Tuple[Option
     else:
         return None, None, None, None
 
-def find_Time_x_y_z_from_rs_frames(i,save_image, show_image, cv_color, rs_color, rs_depth, relative_timestamp, data_output_folder_path, color_ranges, zeroed_x, zeroed_y, zeroed_z, clipping_distance, min_radius_of_object, max_num_point):
+def find_Time_x_y_z_from_rs_frames(i,save_image, show_image, frame_result, relative_timestamp, data_output_folder_path, color_ranges, zeroed_x, zeroed_y, zeroed_z, clipping_distance, min_radius_of_object, max_num_point):
     ###TODO setup the trailing image so this will work for other data as well.
+    ## NOT USED
+    
+    (cv_color, npy_depth, rs_color, rs_depth), timestamp= frame_result
+    
     save_trailing_image = False
     if save_trailing_image:
         trailing_color = cv2.imread(data_output_folder_path + '/'+ 'trailing'+'.jpg')
 
     ## TODO change this to save depth image and show depth image
     if save_image:
-        depth_image = np.asanyarray(rs_depth.get_data())
-        depth_colormap = cv2.applyColorMap(cv2.convertScaleAbs(depth_image, alpha=0.10), cv2.COLORMAP_HSV)
+         depth_colormap = cv2.applyColorMap(cv2.convertScaleAbs(npy_depth, alpha=0.10), cv2.COLORMAP_HSV)
 
     hsv = make_color_hsv(cv_color)
     x_pixel = None
@@ -336,7 +339,7 @@ def find_Time_x_y_z_from_rs_frames(i,save_image, show_image, cv_color, rs_color,
         # Get the distance using the points around the center of the object
         depth_near_center = []
         for pixel_count in range(-1,2):
-            _, _, z_coord = get_depth_meters(x_pixel+pixel_count, y_pixel+pixel_count, radius_meters, rs_depth, rs_color, zeroed_x, zeroed_y, zeroed_z, clipping_distance)
+            _, _, z_coord = get_depth_meters(x_pixel+pixel_count, y_pixel+pixel_count, radius_meters, frame_result, zeroed_x, zeroed_y, zeroed_z, clipping_distance)
             if z_coord is not None:
                 depth_near_center.append(z_coord)
         # Median for our 5 points
@@ -346,7 +349,7 @@ def find_Time_x_y_z_from_rs_frames(i,save_image, show_image, cv_color, rs_color,
             continue
         
         # Get the x and y_coord at the exact center of the object
-        x_coord, y_coord, _ = get_depth_meters(x_pixel, y_pixel, radius_meters, rs_depth, rs_color, zeroed_x, zeroed_y, zeroed_z, clipping_distance)
+        x_coord, y_coord, _ = get_depth_meters(x_pixel, y_pixel, radius_meters, frame_result, zeroed_x, zeroed_y, zeroed_z, clipping_distance)
 
         z_coord = depth_near_center[floor((len(depth_near_center)-1)/2)]
 

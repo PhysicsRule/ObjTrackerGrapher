@@ -19,7 +19,7 @@ def find_lower_upper_bounds_on_screen(the_array):
     # selecting your own color boundaries by tweeking the default
     pipeline = find_and_config_device()
     warm_up_camera(pipeline)
-    (cv_color, rs_color, rs_depth), timestamp = get_all_frames_color(pipeline)
+    (cv_color, npy_depth, _, _ ), timestamp = get_all_frames_color(pipeline)
 
     output = GUI_find_hsv_bounds(the_array, cv_color)
     return output
@@ -59,7 +59,6 @@ def what_to_do_with_images(i, x_pixel, y_pixel, radius,image,depth_colormap,cv_c
         else:
             print("Error: Image not loaded correctly")
             
-    
 
 
 def GUI_tracking(pipeline, image, color_ranges, min_radius_object, data_output_folder_path, tracking_info):
@@ -91,8 +90,9 @@ def GUI_tracking(pipeline, image, color_ranges, min_radius_object, data_output_f
         # Get frames if valid
         frame_result = get_all_frames_color(pipeline)
         if not frame_result:
-            continue        
-        (cv_color, rs_color, rs_depth), timestamp = frame_result
+            continue
+
+        (cv_color, npy_depth, _, _), timestamp = frame_result
 
         # Start the timer
         if first_time_check:
@@ -105,8 +105,9 @@ def GUI_tracking(pipeline, image, color_ranges, min_radius_object, data_output_f
             
         ## Color Tracking by making a mask for each color tracked
         hsv = make_color_hsv(cv_color)
-        depth_image = np.asanyarray(rs_depth.get_data())
-        depth_colormap = cv2.applyColorMap(cv2.convertScaleAbs(depth_image, alpha=0.10), cv2.COLORMAP_HSV)# Create a colormap from the depth data
+        # depth_image = np.asanyarray(rs_depth.get_data())
+        depth_colormap = cv2.applyColorMap(cv2.convertScaleAbs(npy_depth, alpha=0.10), cv2.COLORMAP_HSV)# Create a colormap from the depth data
+        
 
         for (lower,upper, color_name, radius_meters, mass) in color_ranges:
             # Find location of the object in x,y pixels using color masks
@@ -128,7 +129,7 @@ def GUI_tracking(pipeline, image, color_ranges, min_radius_object, data_output_f
                 continue
             # get.distance is a little slower so only use if necessarycenter = round(aligned_depth_frame.get_distance(int(x),int(y)),4)
 
-            x_coord, y_coord, z_coord = get_depth_meters(x_pixel, y_pixel, radius_meters, rs_depth, rs_color, zeroed_x, zeroed_y, zeroed_z, clipping_distance)
+            x_coord, y_coord, z_coord = get_depth_meters(x_pixel, y_pixel, radius_meters, frame_result, zeroed_x, zeroed_y, zeroed_z, clipping_distance)
             if x_coord == -1 or y_coord == -1:
                 continue
             # Append to the file until there is an error at which it will close
@@ -231,7 +232,7 @@ def GUI_obj_tracking(pipeline, image, color_ranges, min_radius_object, data_outp
         frame_result = get_all_frames_infrared(pipeline)
         if not frame_result:
             continue        
-        (rs_depth, rs_infrared), timestamp = frame_result
+        (npy_infrared, npy_depth, _, _), timestamp = frame_result
         
         # Start the timer
         if first_time_check:
@@ -243,11 +244,9 @@ def GUI_obj_tracking(pipeline, image, color_ranges, min_radius_object, data_outp
         relative_timestamp = round(((timestamp - start_time) / 1000),3)
         
         ## TODO use rs_infrared to see infrared from camera 1
-        depth_image = np.asanyarray(rs_depth.get_data())
-        infrared_image = np.array(rs_infrared.get_data())
-        depth_colormap = cv2.applyColorMap(cv2.convertScaleAbs(depth_image, alpha=0.10), cv2.COLORMAP_HSV)# Create a colormap from the depth data
+        depth_colormap = cv2.applyColorMap(cv2.convertScaleAbs(npy_depth, alpha=0.10), cv2.COLORMAP_HSV)# Create a colormap from the depth data
         # image the user sees as if it were color
-        cv_color = infrared_image    
+        cv_color = npy_infrared   
         ## Color Tracking by making a mask for each color tracked
 
         for (lower,upper, color_name, radius_meters, mass) in color_ranges:
@@ -260,7 +259,7 @@ def GUI_obj_tracking(pipeline, image, color_ranges, min_radius_object, data_outp
                 continue
             # get.distance is a little slower so only use if necessarycenter = round(aligned_depth_frame.get_distance(int(x),int(y)),4)
 
-            x_coord, y_coord, z_coord = get_depth_meters(x_pixel, y_pixel, radius_meters, rs_depth, rs_infrared, zeroed_x, zeroed_y, zeroed_z, clipping_distance)
+            x_coord, y_coord, z_coord = get_depth_meters(x_pixel, y_pixel, radius_meters, frame_result, zeroed_x, zeroed_y, zeroed_z, clipping_distance)
             if x_coord == -1:
                 continue
             # Append to the file until there is an error at which it will close

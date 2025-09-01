@@ -31,6 +31,8 @@ def find_and_config_device():
     config.enable_stream(rs.stream.depth, 848, 480, rs.format.z16, 60)
     config.enable_stream(rs.stream.color, 848, 480, rs.format.bgr8, 60)
     profile = pipeline.start(config)
+    depth_sensor = profile.get_device().first_depth_sensor()
+    depth_scale = depth_sensor.get_depth_scale()  
     warm_up_camera(pipeline)
     # Let the camera run for a few seconds so you do not get dark images
     
@@ -51,7 +53,11 @@ def find_and_config_device_mult_stream(types_of_streams_saved) -> Any:
         config.enable_stream(rs.stream.color, 848, 480, rs.format.bgr8, 60)
         if types_of_streams_saved == 'all':
             config.enable_stream(rs.stream.infrared, 1, 848, 480, rs.format.y8, 60)
-    
+
+    profile = pipeline.start(config)
+    depth_sensor = profile.get_device().first_depth_sensor()
+    depth_scale = depth_sensor.get_depth_scale()  
+    print("Depth Scale is: ", depth_scale)
     # If you want to use multiple cameras in the future this is useful
     #ctx = rs.context()
     #if len(ctx.devices) > 0:
@@ -89,9 +95,13 @@ def record_bag_file(data_output_folder_path, types_of_streams_saved):
 # For now, just use the Intel Real Sense View if you installed it
 # https://www.intelrealsense.com/sdk-2/
     filepath_bag = os.path.abspath(os.path.join(data_output_folder_path, 'bag.bag'))
-    pipeline, config = find_and_config_device_mult_stream(types_of_streams_saved)
+    pipeline,config = find_and_config_device_mult_stream(types_of_streams_saved)
     config.enable_record_to_file(filepath_bag)
     pipeline.start(config)
+
+    # Get depth scale for later use
+    profile = pipeline.get_active_profile()
+
     warm_up_camera(pipeline)
     time.sleep(1)
     #wait_to_start = input('Hit enter to start and stop recording')
@@ -101,6 +111,7 @@ def record_bag_file(data_output_folder_path, types_of_streams_saved):
     if types_of_streams_saved == 'cd': frames_to_record = time_to_record * 60
     elif types_of_streams_saved == 'id300': frames_to_record = time_to_record * 300
     elif types_of_streams_saved == 'id': frames_to_record = time_to_record * 90
+    else: frames_to_record = time_to_record * 60
 
     # TODO Change this to while true and break at space bar when done testing
     for _ in range(frames_to_record):
@@ -113,7 +124,7 @@ def record_bag_file(data_output_folder_path, types_of_streams_saved):
     # read_bag_file_and_config(types_of_streams_saved, data_output_folder_path, 'bag', filepath_bag)
     print('done recording')
 
-def get_all_frames_color(rs_pipeline) -> Optional[Tuple[Tuple[Any, Any, Any], Any]]:
+def get_all_frames_color(rs_pipeline) -> Optional[Tuple[Tuple[np.ndarray, np.ndarray, Any, Any], Any]]:
     '''
     Returns a tuple containing the OpenCV color and (aligned) RealSense
     depth/color frames, as well as the timestamp of the frames. If either frame
@@ -130,17 +141,19 @@ def get_all_frames_color(rs_pipeline) -> Optional[Tuple[Tuple[Any, Any, Any], An
 
     # Extract color/depth frames
     rs_color = rs_frames_aligned.get_color_frame()
-    rs_depth = rs_frames_aligned.get_depth_frame().as_depth_frame()
-    cv_color = np.array(rs_color.get_data())
-
+    rs_depth = rs_frames_aligned.get_depth_frame()
     # Check that both frames are valid & return false if they aren't
     if not rs_depth or not rs_color:
         return None
+    
+    cv_color = np.array(rs_color.get_data())
+    rs_depth = rs_frames_aligned.get_depth_frame().as_depth_frame()
+    npy_depth = np.asanyarray(rs_depth.get_data())
 
     # Calculate elapsed time from start_datetime, if applicable  
-    return (cv_color, rs_color, rs_depth), timestamp
+    return (cv_color, npy_depth, rs_color, rs_depth), timestamp
 
-def get_all_frames_infrared(rs_pipeline) -> Optional[Tuple[Tuple[Any, Any, Any], Any]]:
+def get_all_frames_infrared(rs_pipeline) -> Optional[Tuple[Tuple[np.ndarray, np.ndarray, Any, Any], Any]]:
     '''
     Returns a tuple containing the OpenCV color and (aligned) RealSense
     depth/color frames, as well as the timestamp of the frames. If either frame
@@ -151,16 +164,19 @@ def get_all_frames_infrared(rs_pipeline) -> Optional[Tuple[Tuple[Any, Any, Any],
     timestamp = rs_frames.get_timestamp()
 
     # Extract color/depth frames
-    rs_infrared = rs_frames.get_infrared_frame()
+    rs_infrared1 = rs_frames.get_infrared_frame()
+    npy_infrared = np.asanyarray(rs_infrared1.get_data())
     rs_depth = rs_frames.get_depth_frame().as_depth_frame()
+    npy_depth = np.asanyarray(rs_depth.get_data())
+    #npy_depth = np.asanyarray(rs_depth.get_data()).astype(np.float64)
+    #npy_depth_meters  = npy_depth * depth_scale
 
     # Check that both frames are valid & return false if they aren't
     if not rs_depth:
         return None
 
     # Calculate elapsed time from start_datetime, if applicable  
-    return (rs_depth, rs_infrared), timestamp
-
+    return (npy_infrared, npy_depth, rs_infrared1, rs_depth),timestamp
 
 def select_clipping_distance(frame, rs_depth) -> Tuple[Any, float, float]:
 # This selects both the background and the TODO  Origin
@@ -174,9 +190,10 @@ def select_clipping_distance(frame, rs_depth) -> Tuple[Any, float, float]:
     clipping_distance =  depth  * 0.99
     return wall, depth, clipping_distance
 
-def get_coordinates_meters(rs_frame, rs_depth, x_pixel: int, y_pixel: int, depth) -> Tuple[float, float, float]:
+def get_coordinates_meters(frame_result, x_pixel: int, y_pixel: int, depth) -> Tuple[float, float, float]:
 # Given the x,y in pixels find the x,y,z in meters    
     
+    (cv_color, npy_depth, rs_frame, rs_depth), timestamp= frame_result
     depth_pixel = [int(x_pixel),int(y_pixel)] # object pixel
     depth_intrin = rs_depth.profile.as_video_stream_profile().intrinsics        
     depth_to_frame_extrin = rs_depth.profile.get_extrinsics_to(rs_frame.profile)
@@ -186,16 +203,21 @@ def get_coordinates_meters(rs_frame, rs_depth, x_pixel: int, y_pixel: int, depth
     frame_point = rs.rs2_transform_point_to_point(depth_to_frame_extrin, depth_point)
     return frame_point
 
-def select_location(frame, rs_frame, rs_depth) -> Tuple[float, Tuple[float, float, float], float]:
+def select_location(frame_result) -> Tuple[float, Tuple[float, float, float], float]:
 # This selects both the background and the TODO  Origin
      # Find distance (depth) to wall & store as clipping distance
     # Note that it is reduced slightly to allow some room for error (*0.95)
+
+    (frame, npy_depth, _, rs_depth), timestamp= frame_result
     wall, depth, clipping_distance = select_clipping_distance(frame, rs_depth)
     depth = round(rs_depth.get_distance(int(wall[0]),int(wall[1])),4) 
-    frame_point = get_coordinates_meters(rs_frame, rs_depth, wall[0], wall[1], depth)
+    frame_point = get_coordinates_meters(frame_result, wall[0], wall[1], depth)
     return clipping_distance, frame_point, depth
 
-def get_depth_meters(x_pixel, y_pixel, radius_meters, rs_depth, rs_frame, zeroed_x, zeroed_y, zeroed_z, clipping_distance) -> Tuple[Optional[float], Optional[float], Optional[float]]:
+def get_depth_meters(x_pixel, y_pixel, radius_meters, frame_result, zeroed_x, zeroed_y, zeroed_z, clipping_distance) -> Tuple[Optional[float], Optional[float], Optional[float]]:
+
+    (_, npy_depth, _, rs_depth), timestamp= frame_result
+                
     try:
         depth = round(rs_depth.get_distance(int(x_pixel),int(y_pixel)),4) 
         if (depth - radius_meters) < 0.1:
@@ -209,7 +231,7 @@ def get_depth_meters(x_pixel, y_pixel, radius_meters, rs_depth, rs_frame, zeroed
         return -1, -1, -1
     
     # Given the location in pixels for x,y and the depth, find the coordinates in meters
-    frame_point = get_coordinates_meters(rs_frame, rs_depth, x_pixel,  y_pixel, depth)
+    frame_point = get_coordinates_meters(frame_result, x_pixel,  y_pixel, depth)
     
     # Round all 3 coordinates to 5 decimal places
     x_coord = round(frame_point[0], 5)
@@ -251,9 +273,8 @@ def select_furthest_distance_color(pipeline) -> Tuple[float, float, float, float
         frame_result = get_all_frames_color(pipeline)
         if not frame_result:
             continue
-        (cv_color, rs_color, rs_depth), _ = frame_result
-        # Find the clipping distance
-        clipping_distance, color_point, zeroed_z = select_location(cv_color, rs_color, rs_depth)
+                # Find the clipping distance
+        clipping_distance, color_point, zeroed_z = select_location(frame_result)
         print('clipping distance is', clipping_distance)
         #TODO later call above to find the origin then call the following after
         # for now this just sets all zeroed values as 0 insted of a specific origin, so the origin is the cent of the camera
@@ -283,14 +304,12 @@ def select_furthest_distance_infrared(pipeline):
         frame_result = get_all_frames_infrared(pipeline)
         if not frame_result:
             continue
-        (rs_depth, rs_infrared), _ = frame_result
-        if not rs_infrared:
-                continue
-        infrared_image = np.asanyarray(rs_infrared.get_data())
+
         # Find distance (depth) to wall & store as clipping distance
         # Note that it is reduced slightly to allow some room for error (*0.95)
          # Find the clipping distance
-        clipping_distance, depth_point, zeroed_z = select_location(infrared_image, rs_infrared, rs_depth)
+        clipping_distance, depth_point, zeroed_z = select_location(frame_result)
+        print('cliping distance is', clipping_distance)
         #TODO later call above to find the origin then call the following after
         # for now this just sets all zeroed values as 0 instead of a specific origin, so the origin is the cent of the camera
         zeroed_x, zeroed_y, zeroed_z = set_the_origin (depth_point)

@@ -139,7 +139,7 @@ def GUI_real_time_color_tracking(image ,color_ranges , min_radius_object, data_o
             print('color in pipe', color)
             
             #self.current_colormap = self.HSV_COLORMAP[color]
-            self.lower,self.upper, self.color, self.radius_meters, self.mass = color_ranges[0]           
+            self.lower,self.upper, self.color, self.radius_meters, self.mass = color_ranges[0]          
             self.color = color
             self.color_ranges = color_ranges
             #self.current_colormap = self.HSV_COLORMAP[color]
@@ -181,7 +181,7 @@ def GUI_real_time_color_tracking(image ,color_ranges , min_radius_object, data_o
                 if not frame_result:
                     continue
             
-                (cv_color, rs_color, rs_depth), timestamp = frame_result
+                (cv_color, npy_depth, rs_color, rs_depth), timestamp= frame_result
                 
                 # Start the timer
                 if first_time_check:
@@ -213,7 +213,7 @@ def GUI_real_time_color_tracking(image ,color_ranges , min_radius_object, data_o
                 if x_pixel == -1:
                     continue
                 # get.distance is a little slower so only use if necessarycenter = round(aligned_depth_frame.get_distance(int(x),int(y)),4)
-                x_coord, y_coord, z_coord = get_depth_meters(x_pixel, y_pixel, self.radius_meters, rs_depth, rs_color, self.zeroed_x, self.zeroed_y, self.zeroed_z, self.z)
+                x_coord, y_coord, z_coord = get_depth_meters(x_pixel, y_pixel, self.radius_meters, frame_result, self.zeroed_x, self.zeroed_y, self.zeroed_z, self.z)
                 if x_coord == -1:
                     continue
                 
@@ -223,8 +223,7 @@ def GUI_real_time_color_tracking(image ,color_ranges , min_radius_object, data_o
 
                 # Create a colormap from the depth data
                 if image.show_depth or image.save_depth:
-                    depth_image = np.asanyarray(rs_depth.get_data())
-                    depth_colormap = cv2.applyColorMap(cv2.convertScaleAbs(depth_image, alpha=0.10), cv2.COLORMAP_HSV)
+                    depth_colormap = cv2.applyColorMap(cv2.convertScaleAbs(npy_depth, alpha=0.10), cv2.COLORMAP_HSV)
                     cv2.putText(depth_colormap, 'Time: ' + str(relative_timestamp), (0,20), cv2.FONT_HERSHEY_SIMPLEX, 0.75, (50,170,50), 2)
                     cv2.circle(depth_colormap, (int(x_pixel), int(y_pixel)), int(radius), (255, 255, 255), 2)
                     # Show depth colormap & color feed
