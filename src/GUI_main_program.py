@@ -169,6 +169,11 @@ class MyGUI(QMainWindow):
         help_menu.addAction(help_action)
         help_action.triggered.connect(self.open_help_window)
         
+        # Camera Combo Box
+        # Make default camera 0: Intel Realsense,1:oakDLite etc.
+        self.Select3DCamera.setCurrentIndex(0)
+        self.Select3DCamera.currentTextChanged.connect(self.on_camera_selected)
+
         # Folder Options Hidden
         self.folder_list.setHidden(True)        # List of folders to put the data into
         self.folder_name.setHidden(True) 
@@ -293,6 +298,10 @@ class MyGUI(QMainWindow):
         if os.path.isfile(f"{cwd}/cam_img_2.png"):
             os.remove(f"{cwd}/cam_img_2.png")
         '''
+    # Function to handle camera selection
+    def on_camera_selected(self, Select3DCamera):
+        self.Select3DCamera = Select3DCamera
+        print(Select3DCamera)
     
     def open_help_window(self):
         self.help_window = HelpWindow()
@@ -452,6 +461,7 @@ class MyGUI(QMainWindow):
 
 
     def color_button_pressed(self):
+        
         self.tracking_info = tracking(types_of_streams_saved = 'cd',
                                          type_of_tracking = 'color',
                                          input_folder = 'color_i',
@@ -961,6 +971,7 @@ class MyGUI(QMainWindow):
         image, color_ranges, min_radius_object, data_output_folder_path  = self.get_settings()
         # config by looking at the camera (remove this from tracking program below)
         # find output folder here instead of 
+        print(self.Select3DCamera)
         if self.tracking_info.types_of_streams_saved =='cd':
         # The color and depth streams need to be aligned for each frame slowing the tracking down
             camera.find_and_config_device()
