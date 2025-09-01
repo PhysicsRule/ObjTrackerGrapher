@@ -105,7 +105,6 @@ def GUI_tracking(pipeline, image, color_ranges, min_radius_object, data_output_f
             
         ## Color Tracking by making a mask for each color tracked
         hsv = make_color_hsv(cv_color)
-        # depth_image = np.asanyarray(rs_depth.get_data())
         depth_colormap = cv2.applyColorMap(cv2.convertScaleAbs(npy_depth, alpha=0.10), cv2.COLORMAP_HSV)# Create a colormap from the depth data
         
 
@@ -243,7 +242,6 @@ def GUI_obj_tracking(pipeline, image, color_ranges, min_radius_object, data_outp
         # Converts time from milliseconds to seconds
         relative_timestamp = round(((timestamp - start_time) / 1000),3)
         
-        ## TODO use rs_infrared to see infrared from camera 1
         depth_colormap = cv2.applyColorMap(cv2.convertScaleAbs(npy_depth, alpha=0.10), cv2.COLORMAP_HSV)# Create a colormap from the depth data
         # image the user sees as if it were color
         cv_color = npy_infrared   

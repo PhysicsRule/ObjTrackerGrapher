@@ -181,7 +181,7 @@ def GUI_real_time_color_tracking(image ,color_ranges , min_radius_object, data_o
                 if not frame_result:
                     continue
             
-                (cv_color, npy_depth, rs_color, rs_depth), timestamp= frame_result
+                (cv_color, npy_depth, _, _), timestamp= frame_result
                 
                 # Start the timer
                 if first_time_check:
@@ -197,10 +197,6 @@ def GUI_real_time_color_tracking(image ,color_ranges , min_radius_object, data_o
                 if (i % 2) == 0:
                     i +=1
                     continue
-
-                # Create a colormap from the depth data TODO add if desired
-                #depth_image = np.asanyarray(rs_depth.get_data())
-                #depth_colormap = cv2.applyColorMap(cv2.convertScaleAbs(depth_image, alpha=0.10), cv2.COLORMAP_HSV)
 
                 #from https://github.com/IntelRealSense/librealsense/issues/2204#issuecomment-414497056 
 

@@ -34,7 +34,7 @@ def GUI_find_hsv_bounds(the_array, src) -> Optional[np.ndarray]:
         cap.set(4,480)
     else:
         # TODO If the webcam doesn't work have another option to change camera
-        frame = src #The rs_color frame as a numpy array
+        frame = src 
 
     # Create a window named Press (s) when done.
     cv2.namedWindow("Press (s) when done")
@@ -65,7 +65,7 @@ def GUI_find_hsv_bounds(the_array, src) -> Optional[np.ndarray]:
         else:
             try:
                 if isinstance(frame, np.ndarray):
-                    frame = src #The rs_color frame as a numpy array
+                    frame = src 
             except NameError:
                 break
 
@@ -314,9 +314,9 @@ def find_object_by_color_with_red(cv_color, color, color_ranges) -> Tuple[Option
 
 def find_Time_x_y_z_from_rs_frames(i,save_image, show_image, frame_result, relative_timestamp, data_output_folder_path, color_ranges, zeroed_x, zeroed_y, zeroed_z, clipping_distance, min_radius_of_object, max_num_point):
     ###TODO setup the trailing image so this will work for other data as well.
-    ## NOT USED
+    ## NOT USED righ now
     
-    (cv_color, npy_depth, rs_color, rs_depth), timestamp= frame_result
+    (cv_color, npy_depth, _, _), timestamp= frame_result
     
     save_trailing_image = False
     if save_trailing_image:

@@ -13,7 +13,7 @@ def GUI_select_bounding_box(pipeline):
         frame_result = get_all_frames_color(pipeline)
         if not frame_result:
             continue
-        (color_image, npy_depth,rs_depth,rs_color), _ = frame_result
+        (color_image, npy_depth,_,_), _ = frame_result
         
 
         depth_colormap = cv2.applyColorMap(cv2.convertScaleAbs(npy_depth, alpha=0.10), cv2.COLORMAP_HSV)# Create a colormap from the depth data
