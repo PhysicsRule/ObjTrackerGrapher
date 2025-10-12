@@ -4788,31 +4788,6 @@ files = [
 ]
 
 [[package]]
-name = "pypozyx"
-version = "1.3.0"
-description = "Python library for Pozyx devices"
-optional = false
-python-versions = "*"
-groups = ["dev"]
-files = [
-    {file = "pypozyx-1.3.0-py2.py3-none-any.whl", hash = "sha256:e21ee3e889362cdddb3c6f755414f9db36ed76038b098a2b34e92ceb1f405fb0"},
-]
-
-[package.dependencies]
-pyserial = ">=3.0"
-
-[[package]]
-name = "pypozyx-i2c"
-version = "1.3.10"
-description = "Python library for Pozyx devices"
-optional = false
-python-versions = "*"
-groups = ["dev"]
-files = [
-    {file = "pypozyx_i2c-1.3.10-py2.py3-none-any.whl", hash = "sha256:b029cc499d0d489f6a1acb16cfa3f3b214c5d3f8b97bf31e29313a34eefbef85"},
-]
-
-[[package]]
 name = "pyqt5"
 version = "5.15.11"
 description = "Python bindings for the Qt cross platform application toolkit"
