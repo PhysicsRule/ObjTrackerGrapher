@@ -4,11 +4,10 @@
 <!-- if '../LICENSE:.' doesn't work use '../LICENSE:.\' -->
 ## To create a executible folder with the program and data files
 1. Open terminal in vscode and switch to bash
-2. In bash type `pip install pyinstaller`
-3. In bash type `pyinstaller --specpath build/ --add-data '..\src\tracker\lib\GUI_Base.ui;.\src\tracker\lib' --add-data '..\LICENSE;.' --add-data '../data;.\data' -D src/GUI_main_program.py`
-4. Copy the dist into a folder on a flash drive or c:drive with a main folder named `3D`
-5. Make sure the data folder has the following folders, if not add: color_i, color_o, infrared_i, infrared_o, other_i, other_o
-6. Check the dist folder for a file called `MY_PROGRAM.exe`
+2. In bash type `poetry run pyinstaller --specpath build/ --add-data '..\src\tracker\lib\GUI_Base.ui;.\src\tracker\lib' --add-data '..\LICENSE;.' --add-data '../data;.\data' -D src/GUI_main_program.py`
+3. It just created a 'dist' folder. Copy the dist into a folder on a flash drive or c:drive with a main folder named `3D`
+4. Make sure the data folder has the following folders, if not add: color_i, color_o, infrared_i, infrared_o, other_i, other_o
+5. Check the dist folder for a file called `MY_PROGRAM.exe`
 
 ## Running the Executable
 1. Double click the *.exe to reun the prgram
