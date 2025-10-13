@@ -8,7 +8,7 @@ Have the folder near your c: drive or on a flashdrive
 1. Install Python 3.7 
 2. Install Intel RealSense SKD 2.0 and pyrealsense2 so you can run python projects with the camera
 ## Install Libraries
-To avoid having to add all of the python libraries individually, install poetry and run `poetry install`
+To avoid having to add all of the python libraries individually, add the requirements.txt.
  ## Download the data folder
 1. Download the data.zip folder into the main folder of your program. There are some sample data files to work with and the program requires them to run
 2. Ignore the data folder by selecting the data folder: cntl-shift-p add gitignore
