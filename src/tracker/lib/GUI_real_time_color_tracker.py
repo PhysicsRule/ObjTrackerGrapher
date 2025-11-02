@@ -13,11 +13,8 @@ import datetime
 import pyrealsense2 as rs
 import keyboard
 
-from PyQt5.QtWidgets import *
-from PyQt5 import uic, QtGui
-from PyQt5.QtCore import *
+from PyQt5 import uic, QtGui, QtCore
 
-from pyqtgraph.Qt import QtGui, QtCore
 import pyqtgraph as pg          # In the future we should have the pyqtgraph locally stored. see discord redources
 import time
 

@@ -20,7 +20,14 @@ dependencies = [
 
 [tool.poetry]
 package-mode = false
+packages = [
+    # Needed so some tools can find the code when you say "import tracker"
+    { include = "tracker", from = "src" }
+]
 
+# These should be dependencies - not dev dependencies. 
+# Dev dependencies are only for tools needed for testing or doing other developer related tasks
+# That are not needed for actually running the program
 [tool.poetry.group.dev.dependencies]
 cycler = "^0.12.1"
 cython = "^3.1.2"

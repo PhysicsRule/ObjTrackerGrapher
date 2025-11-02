@@ -12,14 +12,13 @@ import matplotlib.animation as animation
 from mpl_toolkits import mplot3d
 
 import pandas as pd
-from scipy import *
 from scipy import linalg
 from scipy.signal import lfilter
 from scipy.optimize import least_squares
 from scipy.optimize import curve_fit
 import os
 import time
-from PyQt5.QtWidgets import *
+from PyQt5.QtWidgets import QTableWidgetItem
 
 import numpy as np
 import csv
@@ -234,6 +233,8 @@ def best_fit_fun_graph(fig, axes, Graph_data_window, LineS, LineC, which_paramet
             res_lsq = least_squares(funlinear, x0, loss='soft_l1', f_scale=0.1, args=(horiz_data, vert_data))        
         elif trendline == 'quadratic' or trendline == 'q':
             res_lsq = least_squares(funquadratic, x0, loss='soft_l1', f_scale=0.1, args=(horiz_data, vert_data))        
+        else:
+            raise ValueError("Trendline type not recognized. Expected 'exp', 'sine', 'damped_sine', 'linear' or 'l', 'quadratic' or 'q'")
 
         return res_lsq
 
@@ -482,11 +483,3 @@ def GUI_show_equations_on_table(title_of_table, calc_file_name_path ):
                     equation = row[0]
 
             title_of_table.setItem(row_table ,column, QTableWidgetItem(str(equation)))
-
-            
-            
-
-            
-            
-
-

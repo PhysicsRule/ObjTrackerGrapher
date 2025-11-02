@@ -4,9 +4,9 @@
 ## Used QtDesigner app
 
 from typing import List, Optional, Tuple
-from PyQt5.QtWidgets import *
+from PyQt5.QtWidgets import QMainWindow, QApplication, QDialog, QVBoxLayout, QLabel, QWidget, QLineEdit, QTextBrowser, QAction, QButtonGroup, QTableWidgetItem, QComboBox
 from PyQt5 import uic, QtGui
-from PyQt5.QtCore import *
+from PyQt5.QtCore import QUrl, pyqtSignal, Qt, QThread
 
 from pyqtgraph.Qt import QtGui, QtCore
 import pyqtgraph as pg          # In the future we should have the pyqtgraph locally stored. see discord redources
@@ -99,7 +99,7 @@ class CustomDialog(QDialog):
     def __init__(self, recoding_message, parent=None):
         super(CustomDialog, self).__init__(parent)
         
-        self.setWindowFlags(self.windowFlags() & ~QtCore.Qt.WindowContextHelpButtonHint)
+        self.setWindowFlags(self.windowFlags() & ~Qt.WindowContextHelpButtonHint)
         self.setWindowTitle(recoding_message)
         self.setGeometry(100, 900, 350, 20)
         layout = QVBoxLayout()
@@ -267,6 +267,9 @@ class MyGUI(QMainWindow):
         self.ame_group.addButton(self.select_momentum)
         self.ame_group.addButton(self.select_energy)
         self.select_acceleration.setChecked(True)
+
+        # We don't know the color ranges yet
+        self.color_ranges = None
 
 
         # self.folder_name.returnPressed.connect(self.user_creating_folder)

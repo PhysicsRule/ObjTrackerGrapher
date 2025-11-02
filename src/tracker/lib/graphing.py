@@ -19,7 +19,6 @@ from matplotlib import style
 
 import numpy as np
 import pandas as pd
-from scipy import *
 import os
 
 from scipy.signal import lfilter
@@ -41,6 +40,8 @@ def parameters(acceleration, momentum, energy):
         which_parameter_to_plot =  'P'
     elif energy:
         which_parameter_to_plot =  'E'
+    else:
+        raise ValueError("Must select one of acceleration, momentum, or energy")
     return which_parameter_to_plot
 
 def GUI_graph_setup(graph_widget, which_parameter_to_plot):
@@ -473,7 +474,8 @@ def best_fit_fun(axes, Graph_data_window, LineS, which_parameter_to_plot, calc_f
             res_lsq = least_squares(funlinear, x0, loss='soft_l1', f_scale=0.1, args=(horiz_data, vert_data))        
         elif trendline == 'quadratic' or trendline == 'q':
             res_lsq = least_squares(funquadratic, x0, loss='soft_l1', f_scale=0.1, args=(horiz_data, vert_data))        
-        
+        else:
+            raise ValueError("Trendline type not recognized. Expected 'exp', 'sine', 'damped_sine', 'linear' or 'l', 'quadratic' or 'q'")
         
         
         #robust handels outliers better?
@@ -640,7 +642,8 @@ def best_fit_fun_graph(fig, axes, Graph_data_window, LineS, LineC, which_paramet
             res_lsq = least_squares(funlinear, x0, loss='soft_l1', f_scale=0.1, args=(horiz_data, vert_data))        
         elif trendline == 'quadratic' or trendline == 'q':
             res_lsq = least_squares(funquadratic, x0, loss='soft_l1', f_scale=0.1, args=(horiz_data, vert_data))        
-        
+        else:
+            raise ValueError("Trendline type not recognized. Expected 'exp', 'sine', 'damped_sine', 'linear' or 'l', 'quadratic' or 'q'")
         
         
         #robust handels outliers better?
@@ -681,7 +684,7 @@ def best_fit_fun_graph(fig, axes, Graph_data_window, LineS, LineC, which_paramet
             sigma =  A
             A = 0
         # Put velocity data on the spreadsheet
-        trendline_equation,Graph_data_window[y_lsq_v_var] = generate_data(axes, calc_file_name_path, trendline, y_lsq_v_var, horiz_data, A, sigma, omega, beta, calc_file_name_path)
+        _trendline_equation,Graph_data_window[y_lsq_v_var] = generate_data(axes, calc_file_name_path, trendline, y_lsq_v_var, horiz_data, A, sigma, omega, beta, calc_file_name_path)
 
         # Find the momentum data and equation from the velocity data and equation
         if which_parameter_to_plot in {"p","P"}:
@@ -690,7 +693,7 @@ def best_fit_fun_graph(fig, axes, Graph_data_window, LineS, LineC, which_paramet
             
             mom_A = A*mass
             mom_sigma = sigma *mass
-            trendline_equation,Graph_data_window[p_var] = generate_data(axes, calc_file_name_path, trendline, p_var, horiz_data, mom_A, mom_sigma, omega, beta, calc_file_name_path)
+            _trendline_equation,Graph_data_window[p_var] = generate_data(axes, calc_file_name_path, trendline, p_var, horiz_data, mom_A, mom_sigma, omega, beta, calc_file_name_path)
         
         # Find acceleration data from the trendline of the velocity data
         if which_parameter_to_plot in {"a","A"}:
@@ -703,7 +706,7 @@ def best_fit_fun_graph(fig, axes, Graph_data_window, LineS, LineC, which_paramet
             # quadratic position if v(t)=At+sigma A(t)=A
             sigma =  A
             A = 0
-            trendline_equation,Graph_data_window[y_lsq_a_var] = generate_data(axes, calc_file_name_path, trendline, y_lsq_a_var, horiz_data, A, sigma, omega, beta, calc_file_name_path)
+            _trendline_equation,Graph_data_window[y_lsq_a_var] = generate_data(axes, calc_file_name_path, trendline, y_lsq_a_var, horiz_data, A, sigma, omega, beta, calc_file_name_path)
 
         
     # TODO Finish KE and PE for trendlines similar to post processing

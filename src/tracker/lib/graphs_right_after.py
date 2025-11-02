@@ -14,7 +14,6 @@ import matplotlib.pyplot as plt
 import matplotlib.animation as animation
 
 import pandas as pd
-from scipy import *
 import os
 import time
 
