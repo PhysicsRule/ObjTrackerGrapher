@@ -113,20 +113,22 @@ def record_bag_file(data_output_folder_path, types_of_streams_saved):
     # read_bag_file_and_config(types_of_streams_saved, data_output_folder_path, 'bag', filepath_bag)
     print('done recording')
 
+_rs_align_color = None
+
 def get_all_frames_color(rs_pipeline) -> Optional[Tuple[Tuple[Any, Any, Any], Any]]:
     '''
     Returns a tuple containing the OpenCV color and (aligned) RealSense
     depth/color frames, as well as the timestamp of the frames. If either frame
     doesn't exist, returns `False` instead.
-    '''  
+    '''
+    global _rs_align_color
     # Get & align RealSense frames
     rs_frames = rs_pipeline.wait_for_frames()
     timestamp = rs_frames.get_timestamp()
 
-    # Get OpenCV frame (or handle if it isn't read properly)
-
-    rs_align = rs.align(rs.stream.color)
-    rs_frames_aligned = rs_align.process(rs_frames)
+    if _rs_align_color is None:
+        _rs_align_color = rs.align(rs.stream.color)
+    rs_frames_aligned = _rs_align_color.process(rs_frames)
 
     # Extract color/depth frames
     rs_color = rs_frames_aligned.get_color_frame()

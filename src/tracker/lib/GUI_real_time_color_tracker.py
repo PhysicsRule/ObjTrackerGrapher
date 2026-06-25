@@ -6,6 +6,7 @@ import os
 import argparse
 import queue
 import threading
+from collections import deque
 from typing import Callable, Tuple
 import cv2
 import numpy as np
@@ -35,10 +36,11 @@ def GUI_real_time_color_tracking(image ,color_ranges , min_radius_object, data_o
     class DataGraph(pg.PlotWidget):
         def __init__(self):
             super().__init__()
-            self.timestamps = np.array([], dtype=float)
-            self.xpositions = np.array([], dtype=int)
-            self.ypositions = np.array([], dtype=int)
-            self.zpositions = np.array([], dtype=int)
+            _t_range = 210
+            self.timestamps = deque(maxlen=_t_range)
+            self.xpositions = deque(maxlen=_t_range)
+            self.ypositions = deque(maxlen=_t_range)
+            self.zpositions = deque(maxlen=_t_range)
             
             self.setBackground('w')
             styles = {'color':'r', 'font-size':'18px'}
@@ -63,24 +65,17 @@ def GUI_real_time_color_tracking(image ,color_ranges , min_radius_object, data_o
 
         def update_graph(self, new_data: Tuple[float, float, float, float]):
             self.x_coord, self.y_coord, self.z_coord, timestamp = new_data
-            # Append corresponding data points
-            self.xpositions = np.append(self.xpositions, self.x_coord)
-            self.ypositions = np.append(self.ypositions, self.y_coord)
-            self.zpositions = np.append(self.zpositions, self.z_coord)
+            # Append corresponding data points (deque auto-trims to maxlen)
+            self.xpositions.append(self.x_coord)
+            self.ypositions.append(self.y_coord)
+            self.zpositions.append(self.z_coord)
+            self.timestamps.append(timestamp)
 
-            self.timestamps = np.append(self.timestamps, timestamp)
-
-            # Trim data if it goes too long
-            t_range = 210                   # Number of data points to plot
-            if self.timestamps.size > t_range:
-                self.timestamps = self.timestamps[-t_range:]
-                self.xpositions = self.xpositions[-t_range:]
-                self.ypositions = self.ypositions[-t_range:]
-                self.zpositions = self.zpositions[-t_range:]
             # Update pyqtgraph plots
-            self.xpos.setData(x=self.timestamps, y=self.xpositions)
-            self.ypos.setData(x=self.timestamps, y=self.ypositions)
-            self.zpos.setData(x=self.timestamps, y=self.zpositions)
+            ts = np.array(self.timestamps)
+            self.xpos.setData(x=ts, y=np.array(self.xpositions))
+            self.ypos.setData(x=ts, y=np.array(self.ypositions))
+            self.zpos.setData(x=ts, y=np.array(self.zpositions))
 
             app.processEvents()
 
@@ -167,10 +162,12 @@ def GUI_real_time_color_tracking(image ,color_ranges , min_radius_object, data_o
             # counter for the frames it saves
             i = 0
 
+            csv_file_path = os.path.abspath(os.path.join(data_output_folder_path, self.color + '.csv'))
+            csv_file = open(csv_file_path, 'a')
             # TODO: Between the time that this loop starts, and when the first frame is retrieved is
             # about ~1.2-1.6 seconds. Not sure the impact of that difference
 
-            # Collect data   
+            # Collect data
             while not self.is_stopped():
 
                 # Get frames if valid
@@ -213,10 +210,8 @@ def GUI_real_time_color_tracking(image ,color_ranges , min_radius_object, data_o
                 x_coord, y_coord, z_coord = get_depth_meters(x_pixel, y_pixel, self.radius_meters, rs_depth, rs_color, self.zeroed_x, self.zeroed_y, self.zeroed_z, self.z)
                 if x_coord == -1:
                     continue
-                
-                csv_file_path = os.path.abspath(os.path.join(data_output_folder_path, self.color + '.csv'))   
-                with open(csv_file_path, 'a') as data_to_file:
-                    data_to_file.write(f'{relative_timestamp},{x_coord},{y_coord},{z_coord}\n')      
+
+                csv_file.write(f'{relative_timestamp},{x_coord},{y_coord},{z_coord}\n')      
 
                 # Create a colormap from the depth data
                 if image.show_depth or image.save_depth:
@@ -276,6 +271,7 @@ def GUI_real_time_color_tracking(image ,color_ranges , min_radius_object, data_o
                     print('done')
                     break
 
+            csv_file.close()
             print('end')
             self.camera_thread.stop()
             # Close all OpenCV windows

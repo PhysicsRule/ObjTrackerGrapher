@@ -67,6 +67,7 @@ def load_data(type_of_tracking, input_folder, title_of_table):
     {'color' : "yellow" , 'lower' : (20, 36, 4) , 'upper' : (71, 238, 213), 'radius' : 10 , 'mass' : 0.0},
     {'color' : "orange" , 'lower' : (0, 123, 189), 'upper' : (24, 255, 255) , 'radius' : 10 , 'mass' : 0.0}]
     row = 0
+    title_of_table.setUpdatesEnabled(False)
     title_of_table.setRowCount(len(objects_to_track))
     for object in objects_to_track:
         # Checkbox to chose default colors
@@ -85,6 +86,7 @@ def load_data(type_of_tracking, input_folder, title_of_table):
         item_on_screen.setCheckState(Qt.CheckState.Unchecked)
         title_of_table.setItem(row, 6, item_on_screen )
         row +=1
+    title_of_table.setUpdatesEnabled(True)
 
 
 def reload_table (title_of_table):
@@ -118,14 +120,15 @@ def load_data_objects(title_of_table):
     {'name' : "object5" , 'radius' : 10 , 'mass' : 0.0},
     {'name' : "object6" , 'radius' : 10 , 'mass' : 0.0}]
     row = 0
+    title_of_table.setUpdatesEnabled(False)
     title_of_table.setRowCount(len(objects_to_track))
     for object in objects_to_track:
         # Checkbox to chose default colors
         item = QTableWidgetItem(''.format(row, 0))
         item.setFlags(Qt.ItemFlag.ItemIsUserCheckable|Qt.ItemFlag.ItemIsEnabled)
-        if row == 0: 
+        if row == 0:
             item.setCheckState(Qt.CheckState.Checked)
-        else: 
+        else:
             item.setCheckState(Qt.CheckState.Unchecked)
         title_of_table.setItem(row, 0, item)
         # Columns for default colors
@@ -142,4 +145,5 @@ def load_data_objects(title_of_table):
         item_on_screen.setCheckState(Qt.CheckState.Unchecked)
         title_of_table.setItem(row, 4, item_on_screen )
         row +=1
+    title_of_table.setUpdatesEnabled(True)
 

@@ -137,38 +137,40 @@ def slopes(time_data, _data, PointsToSmooth):
     #print('length of time data', num_of_points)
     i = 0
     while i+1 <= num_of_points:
-        # If i is to small for point smoothing to work 
+        # If i is to small for point smoothing to work
         if i+1 < (PointsToSmooth+1)/2:
-            if i == 0:                  # first data point             
-                derivative_data = np.append(derivative_data,0)
+            if i == 0:                  # first data point
+                derivative_data.append(0)
             else:
                 # find the slope about the point
                 slope = (_data[i+1] -_data[i-1] )/(time_data[i+1]-time_data[i-1])
-                derivative_data = np.append(derivative_data,slope)
+                derivative_data.append(slope)
 
-        # If i is to large for point smoothing to work 
+        # If i is to large for point smoothing to work
         elif i+1 > num_of_points - ((PointsToSmooth-1)/2):
             if i+1 == num_of_points:    # Last data point
                 # The last point will be declared the same as the one before
-                derivative_data = np.append(derivative_data,0)
+                derivative_data.append(0)
             else:
                 # find the slope about the point
                 slope = (_data[i] -_data[i-1] )/(time_data[i]-time_data[i-1])
-                derivative_data = np.append(derivative_data,slope)
+                derivative_data.append(slope)
         # point smooth for the rest of the data. The points closer to the point are weighted
         else:
             if PointsToSmooth == 3:
                 slope = (_data[i+1] -_data[i-1] )/(time_data[i+1]-time_data[i-1])
-                derivative_data = np.append(derivative_data,slope)
+                derivative_data.append(slope)
             if PointsToSmooth == 5:
                 slope = ( 2*((_data[i+1] -_data[i-1] )/(time_data[i+1]-time_data[i-1])) + ((_data[i+2] -_data[i-2] )/(time_data[i+2]-time_data[i-2])) ) /3
-                derivative_data = np.append(derivative_data,slope)
+                derivative_data.append(slope)
             if PointsToSmooth == 7:
                 slope = ( 3*((_data[i+1] -_data[i-1] )/(time_data[i+1]-time_data[i-1])) + 2*((_data[i+2] -_data[i-2] )/(time_data[i+2]-time_data[i-2])) + ((_data[i+3] -_data[i-3] )/(time_data[i+3]-time_data[i-3])) )/6
-                derivative_data = np.append(derivative_data,slope)
+                derivative_data.append(slope)
         i +=1
-    derivative_data[0]=derivative_data[1]
-    derivative_data[-1]=derivative_data[-2]
+    derivative_data = np.array(derivative_data)
+    if len(derivative_data) >= 2:
+        derivative_data[0]=derivative_data[1]
+        derivative_data[-1]=derivative_data[-2]
     return derivative_data
 
 def FindVelandAccTrend(graph_data, PointsToSmooth):

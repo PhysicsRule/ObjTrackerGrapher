@@ -87,84 +87,97 @@ def GUI_tracking(pipeline, image, color_ranges, min_radius_object, data_output_f
     i=0
 
     x_pixel, y_pixel, x_coord, y_coord, z_coord, radius  = -1, -1, -1, -1, -1, 0
-    while True:
-        # Get frames if valid
-        frame_result = get_all_frames_color(pipeline)
-        if not frame_result:
-            continue        
-        (cv_color, rs_color, rs_depth), timestamp = frame_result
 
-        # Start the timer
-        if first_time_check:
-            start_time = timestamp
-            # we might want this later and compare with start that has milliseconds
-            first_time_check = False
+    csv_files = {color_name: open(os.path.abspath(os.path.join(data_output_folder_path, color_name + '.csv')), 'a')
+                 for (_, _, color_name, _, _) in color_ranges}
+    try:
+        while True:
+            # Get frames if valid
+            frame_result = get_all_frames_color(pipeline)
+            if not frame_result:
+                continue
+            (cv_color, rs_color, rs_depth), timestamp = frame_result
 
-            # Converts time from milliseconds to seconds
-        relative_timestamp = round(((timestamp - start_time) / 1000),3)
-            
-        ## Color Tracking by making a mask for each color tracked
-        hsv = make_color_hsv(cv_color)
-        depth_image = np.asanyarray(rs_depth.get_data())
-        depth_colormap = cv2.applyColorMap(cv2.convertScaleAbs(depth_image, alpha=0.10), cv2.COLORMAP_HSV)# Create a colormap from the depth data
+            # Start the timer
+            if first_time_check:
+                start_time = timestamp
+                # we might want this later and compare with start that has milliseconds
+                first_time_check = False
 
-        for (lower,upper, color_name, radius_meters, mass) in color_ranges:
-            # Find location of the object in x,y pixels using color masks
-            mask = None
-            x_pixel, y_pixel, x_coord, y_coord, z_coord, radius  = -1, -1, -1, -1, -1, 0
-            if tracking_info.type_of_tracking == 'color':
-                x_pixel, y_pixel, radius, mask_limited_array = find_object_by_color(cv_color,hsv, lower,upper, color_name, radius_meters, mass, min_radius_object, max_num_point)     
-                if mask_limited_array is None:
-                    continue
-                mask =np.array(mask_limited_array)
-            elif tracking_info.type_of_tracking == 'obj_tracker':
-                cv_image= depth_colormap
-                radius = 0 # showing if tracker is not working
+                # Converts time from milliseconds to seconds
+            relative_timestamp = round(((timestamp - start_time) / 1000),3)
+
+            ## Color Tracking by making a mask for each color tracked
+            hsv = make_color_hsv(cv_color)
+            depth_image = np.asanyarray(rs_depth.get_data())
+            depth_colormap = cv2.applyColorMap(cv2.convertScaleAbs(depth_image, alpha=0.10), cv2.COLORMAP_HSV)# Create a colormap from the depth data
+
+            for (lower,upper, color_name, radius_meters, mass) in color_ranges:
+                # Find location of the object in x,y pixels using color masks
                 mask = None
-                x_pixel, y_pixel, bbox, radius = find_xy_using_tracking_method(tracker, bbox, cv_image)
-                draw_bounding_box(cv_image, bbox)
+                x_pixel, y_pixel, x_coord, y_coord, z_coord, radius  = -1, -1, -1, -1, -1, 0
+                if tracking_info.type_of_tracking == 'color':
+                    x_pixel, y_pixel, radius, mask_limited_array = find_object_by_color(cv_color,hsv, lower,upper, color_name, radius_meters, mass, min_radius_object, max_num_point)
+                    if mask_limited_array is None:
+                        continue
+                    mask =np.array(mask_limited_array)
+                elif tracking_info.type_of_tracking == 'obj_tracker':
+                    cv_image= depth_colormap
+                    radius = 0 # showing if tracker is not working
+                    mask = None
+                    x_pixel, y_pixel, bbox, radius = find_xy_using_tracking_method(tracker, bbox, cv_image)
+                    draw_bounding_box(cv_image, bbox)
 
-            if x_pixel == -1 or y_pixel == -1:
-                continue
-            # get.distance is a little slower so only use if necessarycenter = round(aligned_depth_frame.get_distance(int(x),int(y)),4)
+                if x_pixel == -1 or y_pixel == -1:
+                    continue
+                # get.distance is a little slower so only use if necessarycenter = round(aligned_depth_frame.get_distance(int(x),int(y)),4)
 
-            x_coord, y_coord, z_coord = get_depth_meters(x_pixel, y_pixel, radius_meters, rs_depth, rs_color, zeroed_x, zeroed_y, zeroed_z, clipping_distance)
-            if x_coord == -1 or y_coord == -1:
-                continue
-            # Append to the file until there is an error at which it will close
+                x_coord, y_coord, z_coord = get_depth_meters(x_pixel, y_pixel, radius_meters, rs_depth, rs_color, zeroed_x, zeroed_y, zeroed_z, clipping_distance)
+                if x_coord == -1 or y_coord == -1:
+                    continue
 
-            # Writes the coordinates to each colored object
-            csv_file_path = os.path.abspath(os.path.join(data_output_folder_path, color_name + '.csv'))   
-            with open(csv_file_path, 'a') as data_to_file:
-                data_to_file.write(f'{relative_timestamp},{x_coord},{y_coord},{z_coord}\n')      
+                csv_files[color_name].write(f'{relative_timestamp},{x_coord},{y_coord},{z_coord}\n')
 
-            if color_name == color_ranges[0][2]:
-                for image_to_show in (cv_color,depth_colormap, mask):
-                    cv2.putText(image_to_show, 'Time: ' + str(relative_timestamp), (0,20), cv2.FONT_HERSHEY_SIMPLEX, 0.75, (50,170,50), 2)
-                    cv2.putText(image_to_show, 'X coordinate: ' + str(x_coord), (0,40), cv2.FONT_HERSHEY_SIMPLEX, 0.75, (50,170,50), 2)
-                    cv2.putText(image_to_show, 'Y coordinate: ' + str(y_coord), (0,60), cv2.FONT_HERSHEY_SIMPLEX, 0.75, (50,170,50), 2)
-                    cv2.putText(image_to_show, 'Z coordinate: ' + str(z_coord), (0,80), cv2.FONT_HERSHEY_SIMPLEX, 0.75, (50,170,50), 2)
-            
-        what_to_do_with_images(i, x_pixel, y_pixel, radius,image,depth_colormap,cv_color,mask,data_output_folder_path)
-        
-        # saves the images into an array to convert to a movie when stopped
-        if image.save_video:
-            video_RGB_array.append(cv_color)
-        if image.save_mask:
-            mask_array.append(mask)
-        if image.save_depth:
-            video_depth_array.append(depth_colormap)
+                if color_name == color_ranges[0][2]:
+                    if image.show_RGB or image.save_RGB or image.save_video:
+                        cv2.putText(cv_color, 'Time: ' + str(relative_timestamp), (0,20), cv2.FONT_HERSHEY_SIMPLEX, 0.75, (50,170,50), 2)
+                        cv2.putText(cv_color, 'X coordinate: ' + str(x_coord), (0,40), cv2.FONT_HERSHEY_SIMPLEX, 0.75, (50,170,50), 2)
+                        cv2.putText(cv_color, 'Y coordinate: ' + str(y_coord), (0,60), cv2.FONT_HERSHEY_SIMPLEX, 0.75, (50,170,50), 2)
+                        cv2.putText(cv_color, 'Z coordinate: ' + str(z_coord), (0,80), cv2.FONT_HERSHEY_SIMPLEX, 0.75, (50,170,50), 2)
+                    if image.show_depth or image.save_depth:
+                        cv2.putText(depth_colormap, 'Time: ' + str(relative_timestamp), (0,20), cv2.FONT_HERSHEY_SIMPLEX, 0.75, (50,170,50), 2)
+                        cv2.putText(depth_colormap, 'X coordinate: ' + str(x_coord), (0,40), cv2.FONT_HERSHEY_SIMPLEX, 0.75, (50,170,50), 2)
+                        cv2.putText(depth_colormap, 'Y coordinate: ' + str(y_coord), (0,60), cv2.FONT_HERSHEY_SIMPLEX, 0.75, (50,170,50), 2)
+                        cv2.putText(depth_colormap, 'Z coordinate: ' + str(z_coord), (0,80), cv2.FONT_HERSHEY_SIMPLEX, 0.75, (50,170,50), 2)
+                    if (image.show_mask or image.save_mask) and mask is not None:
+                        cv2.putText(mask, 'Time: ' + str(relative_timestamp), (0,20), cv2.FONT_HERSHEY_SIMPLEX, 0.75, (50,170,50), 2)
+                        cv2.putText(mask, 'X coordinate: ' + str(x_coord), (0,40), cv2.FONT_HERSHEY_SIMPLEX, 0.75, (50,170,50), 2)
+                        cv2.putText(mask, 'Y coordinate: ' + str(y_coord), (0,60), cv2.FONT_HERSHEY_SIMPLEX, 0.75, (50,170,50), 2)
+                        cv2.putText(mask, 'Z coordinate: ' + str(z_coord), (0,80), cv2.FONT_HERSHEY_SIMPLEX, 0.75, (50,170,50), 2)
 
-        i +=1
+            what_to_do_with_images(i, x_pixel, y_pixel, radius,image,depth_colormap,cv_color,mask,data_output_folder_path)
 
-        # exit if spacebar or esc is pressed
-        k = cv2.waitKey(1) & 0xff
-        if k == 27 or k == 32:
-            print('end')
-            # Close all OpenCV windows
-            
-            cv2.destroyAllWindows()
-            break
+            # saves the images into an array to convert to a movie when stopped
+            if image.save_video:
+                video_RGB_array.append(cv_color)
+            if image.save_mask:
+                mask_array.append(mask)
+            if image.save_depth:
+                video_depth_array.append(depth_colormap)
+
+            i +=1
+
+            # exit if spacebar or esc is pressed
+            k = cv2.waitKey(1) & 0xff
+            if k == 27 or k == 32:
+                print('end')
+                # Close all OpenCV windows
+
+                cv2.destroyAllWindows()
+                break
+    finally:
+        for f in csv_files.values():
+            f.close()
 
     # Cleanup after loop break
 
@@ -226,75 +239,81 @@ def GUI_obj_tracking(pipeline, image, color_ranges, min_radius_object, data_outp
     i=0
     x_pixel, y_pixel, x_coord, y_coord, z_coord, radius  = -1, -1, -1, -1, -1, 0
 
-    while True:
-        # Get frames if valid
-        frame_result = get_all_frames_infrared(pipeline)
-        if not frame_result:
-            continue        
-        (rs_depth, rs_infrared), timestamp = frame_result
-        
-        # Start the timer
-        if first_time_check:
-            start_time = timestamp
-            # we might want this later and compare with start that has milliseconds
-            first_time_check = False
-
-        # Converts time from milliseconds to seconds
-        relative_timestamp = round(((timestamp - start_time) / 1000),3)
-        
-        ## TODO use rs_infrared to see infrared from camera 1
-        depth_image = np.asanyarray(rs_depth.get_data())
-        infrared_image = np.array(rs_infrared.get_data())
-        depth_colormap = cv2.applyColorMap(cv2.convertScaleAbs(depth_image, alpha=0.10), cv2.COLORMAP_HSV)# Create a colormap from the depth data
-        # image the user sees as if it were color
-        cv_color = infrared_image    
-        ## Color Tracking by making a mask for each color tracked
-
-        for (lower,upper, color_name, radius_meters, mass) in color_ranges:
-        # tracking_info.type_of_tracking = 'obj_tracker'
-            x_pixel, y_pixel, x_coord, y_coord, z_coord, radius  = -1, -1, -1, -1, -1, 0
-            mask = None
-            x_pixel, y_pixel, bbox, radius = find_xy_using_tracking_method(tracker, bbox, depth_colormap)
-            
-            if x_pixel == -1:
+    csv_files = {color_name: open(os.path.abspath(os.path.join(data_output_folder_path, color_name + '.csv')), 'a')
+                 for (_, _, color_name, _, _) in color_ranges}
+    try:
+        while True:
+            # Get frames if valid
+            frame_result = get_all_frames_infrared(pipeline)
+            if not frame_result:
                 continue
-            # get.distance is a little slower so only use if necessarycenter = round(aligned_depth_frame.get_distance(int(x),int(y)),4)
+            (rs_depth, rs_infrared), timestamp = frame_result
 
-            x_coord, y_coord, z_coord = get_depth_meters(x_pixel, y_pixel, radius_meters, rs_depth, rs_infrared, zeroed_x, zeroed_y, zeroed_z, clipping_distance)
-            if x_coord == -1:
-                continue
-            # Append to the file until there is an error at which it will close
+            # Start the timer
+            if first_time_check:
+                start_time = timestamp
+                # we might want this later and compare with start that has milliseconds
+                first_time_check = False
 
-            # Writes the coordinates to each colored object
-            csv_file_path = os.path.abspath(os.path.join(data_output_folder_path, color_name + '.csv'))   
-            with open(csv_file_path, 'a') as data_to_file:
-                data_to_file.write(f'{relative_timestamp},{x_coord},{y_coord},{z_coord}\n')      
+            # Converts time from milliseconds to seconds
+            relative_timestamp = round(((timestamp - start_time) / 1000),3)
 
-            if color_name == color_ranges[0][2]:
-                for image_to_show in (cv_color,depth_colormap):
-                    cv2.putText(image_to_show, 'Time: ' + str(relative_timestamp), (0,20), cv2.FONT_HERSHEY_SIMPLEX, 0.75, (50,170,50), 2)
-                    cv2.putText(image_to_show, 'X coordinate: ' + str(x_coord), (0,40), cv2.FONT_HERSHEY_SIMPLEX, 0.75, (50,170,50), 2)
-                    cv2.putText(image_to_show, 'Y coordinate: ' + str(y_coord), (0,60), cv2.FONT_HERSHEY_SIMPLEX, 0.75, (50,170,50), 2)
-                    cv2.putText(image_to_show, 'Z coordinate: ' + str(z_coord), (0,80), cv2.FONT_HERSHEY_SIMPLEX, 0.75, (50,170,50), 2)
-                # draw_bounding_box(cv_color, bbox)
-        what_to_do_with_images(i, x_pixel, y_pixel, radius,image,depth_colormap,cv_color,mask,data_output_folder_path)
-        
-        # saves the images into an array to convert to a movie when stopped
-        if image.save_video:
-            video_img_array.append(cv_color)
-        if image.save_depth:
-            video_depth_array.append(depth_colormap)
-        i +=1
+            ## TODO use rs_infrared to see infrared from camera 1
+            depth_image = np.asanyarray(rs_depth.get_data())
+            infrared_image = np.array(rs_infrared.get_data())
+            depth_colormap = cv2.applyColorMap(cv2.convertScaleAbs(depth_image, alpha=0.10), cv2.COLORMAP_HSV)# Create a colormap from the depth data
+            # image the user sees as if it were color
+            cv_color = infrared_image
+            ## Color Tracking by making a mask for each color tracked
 
-        # exit if spacebar or esc is pressed
-        k = cv2.waitKey(1) & 0xff
-        if k == 27 or k == 32:
-            print('end')
-            # Close all OpenCV windows
-            
-                
-            cv2.destroyAllWindows()
-            break
+            for (lower,upper, color_name, radius_meters, mass) in color_ranges:
+            # tracking_info.type_of_tracking = 'obj_tracker'
+                x_pixel, y_pixel, x_coord, y_coord, z_coord, radius  = -1, -1, -1, -1, -1, 0
+                mask = None
+                x_pixel, y_pixel, bbox, radius = find_xy_using_tracking_method(tracker, bbox, depth_colormap)
+
+                if x_pixel == -1:
+                    continue
+                # get.distance is a little slower so only use if necessarycenter = round(aligned_depth_frame.get_distance(int(x),int(y)),4)
+
+                x_coord, y_coord, z_coord = get_depth_meters(x_pixel, y_pixel, radius_meters, rs_depth, rs_infrared, zeroed_x, zeroed_y, zeroed_z, clipping_distance)
+                if x_coord == -1:
+                    continue
+
+                csv_files[color_name].write(f'{relative_timestamp},{x_coord},{y_coord},{z_coord}\n')
+
+                if color_name == color_ranges[0][2]:
+                    if image.show_RGB or image.save_video:
+                        cv2.putText(cv_color, 'Time: ' + str(relative_timestamp), (0,20), cv2.FONT_HERSHEY_SIMPLEX, 0.75, (50,170,50), 2)
+                        cv2.putText(cv_color, 'X coordinate: ' + str(x_coord), (0,40), cv2.FONT_HERSHEY_SIMPLEX, 0.75, (50,170,50), 2)
+                        cv2.putText(cv_color, 'Y coordinate: ' + str(y_coord), (0,60), cv2.FONT_HERSHEY_SIMPLEX, 0.75, (50,170,50), 2)
+                        cv2.putText(cv_color, 'Z coordinate: ' + str(z_coord), (0,80), cv2.FONT_HERSHEY_SIMPLEX, 0.75, (50,170,50), 2)
+                    if image.show_depth or image.save_depth:
+                        cv2.putText(depth_colormap, 'Time: ' + str(relative_timestamp), (0,20), cv2.FONT_HERSHEY_SIMPLEX, 0.75, (50,170,50), 2)
+                        cv2.putText(depth_colormap, 'X coordinate: ' + str(x_coord), (0,40), cv2.FONT_HERSHEY_SIMPLEX, 0.75, (50,170,50), 2)
+                        cv2.putText(depth_colormap, 'Y coordinate: ' + str(y_coord), (0,60), cv2.FONT_HERSHEY_SIMPLEX, 0.75, (50,170,50), 2)
+                        cv2.putText(depth_colormap, 'Z coordinate: ' + str(z_coord), (0,80), cv2.FONT_HERSHEY_SIMPLEX, 0.75, (50,170,50), 2)
+                    # draw_bounding_box(cv_color, bbox)
+            what_to_do_with_images(i, x_pixel, y_pixel, radius,image,depth_colormap,cv_color,mask,data_output_folder_path)
+
+            # saves the images into an array to convert to a movie when stopped
+            if image.save_video:
+                video_img_array.append(cv_color)
+            if image.save_depth:
+                video_depth_array.append(depth_colormap)
+            i +=1
+
+            # exit if spacebar or esc is pressed
+            k = cv2.waitKey(1) & 0xff
+            if k == 27 or k == 32:
+                print('end')
+                # Close all OpenCV windows
+
+                cv2.destroyAllWindows()
+                break
+    finally:
+        for f in csv_files.values():
+            f.close()
 
     # Cleanup after loop break
 

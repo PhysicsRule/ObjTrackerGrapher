@@ -257,7 +257,7 @@ def find_object_by_color(frame, hsv, lower,upper, color_name, radius_meters, mas
 	    # it to compute the minimum enclosing circle and centroid
 
         contour_areas = np.array([cv2.contourArea(contour) for contour in contours])
-        max_index = contour_areas.argsort()[::-1][0]
+        max_index = np.argmax(contour_areas)
         largest_contour = contours[max_index]
         ((x, y), pixel_radius) = cv2.minEnclosingCircle(largest_contour)
         if x is None: 
@@ -303,7 +303,7 @@ def find_object_by_color_with_red(cv_color, color, color_ranges) -> Tuple[Option
     if contours:
         # Just grab largest contour for now; multiple could be done later
         contour_areas = np.array([cv2.contourArea(contour) for contour in contours])
-        max_index = contour_areas.argsort()[::-1][0]
+        max_index = np.argmax(contour_areas)
         largest_contour = contours[max_index]
 
         ((x, y), pixel_radius) = cv2.minEnclosingCircle(largest_contour)
