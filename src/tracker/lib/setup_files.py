@@ -78,8 +78,11 @@ def set_up_id():
 
 def make_csv_files(object_ranges, data_output_folder_path):
     print('The data for each object will be stored in this location:')
-    if not os.path.exists(data_output_folder_path):
-        os.makedirs(data_output_folder_path)
+    try:
+        os.makedirs(data_output_folder_path, exist_ok=True)
+    except OSError as e:
+        print(f'Could not create output folder "{data_output_folder_path}": {e}')
+        raise
     for (_,_,color_name,_,_) in object_ranges:
         csv_file_path = os.path.abspath(os.path.join(data_output_folder_path + '/'+ color_name + '.csv'))
         create_data_file(csv_file_path)

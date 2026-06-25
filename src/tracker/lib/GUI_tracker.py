@@ -19,7 +19,10 @@ def find_lower_upper_bounds_on_screen(the_array):
     # selecting your own color boundaries by tweeking the default
     pipeline = find_and_config_device()
     warm_up_camera(pipeline)
-    (cv_color, rs_color, rs_depth), timestamp = get_all_frames_color(pipeline)
+    frame_result = get_all_frames_color(pipeline)
+    if not frame_result:
+        return None
+    (cv_color, rs_color, rs_depth), timestamp = frame_result
 
     output = GUI_find_hsv_bounds(the_array, cv_color)
     return output
@@ -87,10 +90,14 @@ def GUI_tracking(pipeline, image, color_ranges, min_radius_object, data_output_f
     i=0
 
     x_pixel, y_pixel, x_coord, y_coord, z_coord, radius  = -1, -1, -1, -1, -1, 0
+    cv_color = None
+    depth_colormap = None
+    mask = None
 
-    csv_files = {color_name: open(os.path.abspath(os.path.join(data_output_folder_path, color_name + '.csv')), 'a')
-                 for (_, _, color_name, _, _) in color_ranges}
+    csv_files: dict = {}
     try:
+        for (_, _, color_name, _, _) in color_ranges:
+            csv_files[color_name] = open(os.path.abspath(os.path.join(data_output_folder_path, color_name + '.csv')), 'a')
         while True:
             # Get frames if valid
             frame_result = get_all_frames_color(pipeline)
@@ -185,12 +192,12 @@ def GUI_tracking(pipeline, image, color_ranges, min_radius_object, data_output_f
 
     pipeline.stop()
 
-    if image.save_video:
+    if image.save_video and cv_color is not None:
         height, width, layers = cv_color.shape
         size = (width,height)
         save_video_file(image_file_path, video_RGB_array,'RGB', size)
-    
-    if image.save_mask:
+
+    if image.save_mask and mask is not None:
         if len(mask.shape) == 3:
             height, width, layers = mask.shape
         else:
@@ -200,7 +207,7 @@ def GUI_tracking(pipeline, image, color_ranges, min_radius_object, data_output_f
         mask_array = [cv2.cvtColor(m, cv2.COLOR_GRAY2BGR) if len(m.shape) == 2 else m for m in mask_array]
         save_video_file(image_file_path, mask_array,'mask',size)
 
-    if image.save_depth:
+    if image.save_depth and depth_colormap is not None:
         if len(depth_colormap.shape) == 3:
             height, width, layers = depth_colormap.shape
         else:
@@ -239,9 +246,10 @@ def GUI_obj_tracking(pipeline, image, color_ranges, min_radius_object, data_outp
     i=0
     x_pixel, y_pixel, x_coord, y_coord, z_coord, radius  = -1, -1, -1, -1, -1, 0
 
-    csv_files = {color_name: open(os.path.abspath(os.path.join(data_output_folder_path, color_name + '.csv')), 'a')
-                 for (_, _, color_name, _, _) in color_ranges}
+    csv_files: dict = {}
     try:
+        for (_, _, color_name, _, _) in color_ranges:
+            csv_files[color_name] = open(os.path.abspath(os.path.join(data_output_folder_path, color_name + '.csv')), 'a')
         while True:
             # Get frames if valid
             frame_result = get_all_frames_infrared(pipeline)

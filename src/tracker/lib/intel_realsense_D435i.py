@@ -130,14 +130,13 @@ def get_all_frames_color(rs_pipeline) -> Optional[Tuple[Tuple[Any, Any, Any], An
         _rs_align_color = rs.align(rs.stream.color)
     rs_frames_aligned = _rs_align_color.process(rs_frames)
 
-    # Extract color/depth frames
+    # Extract color/depth frames — check validity before calling .as_depth_frame()/.get_data()
     rs_color = rs_frames_aligned.get_color_frame()
-    rs_depth = rs_frames_aligned.get_depth_frame().as_depth_frame()
-    cv_color = np.array(rs_color.get_data())
-
-    # Check that both frames are valid & return false if they aren't
-    if not rs_depth or not rs_color:
+    rs_depth_raw = rs_frames_aligned.get_depth_frame()
+    if not rs_depth_raw or not rs_color:
         return None
+    rs_depth = rs_depth_raw.as_depth_frame()
+    cv_color = np.array(rs_color.get_data())
 
     # Calculate elapsed time from start_datetime, if applicable  
     return (cv_color, rs_color, rs_depth), timestamp
@@ -152,13 +151,12 @@ def get_all_frames_infrared(rs_pipeline) -> Optional[Tuple[Tuple[Any, Any, Any],
     rs_frames = rs_pipeline.wait_for_frames()
     timestamp = rs_frames.get_timestamp()
 
-    # Extract color/depth frames
+    # Extract color/depth frames — check validity before calling .as_depth_frame()
     rs_infrared = rs_frames.get_infrared_frame()
-    rs_depth = rs_frames.get_depth_frame().as_depth_frame()
-
-    # Check that both frames are valid & return false if they aren't
-    if not rs_depth:
+    rs_depth_raw = rs_frames.get_depth_frame()
+    if not rs_depth_raw:
         return None
+    rs_depth = rs_depth_raw.as_depth_frame()
 
     # Calculate elapsed time from start_datetime, if applicable  
     return (rs_depth, rs_infrared), timestamp
@@ -206,8 +204,8 @@ def get_depth_meters(x_pixel, y_pixel, radius_meters, rs_depth, rs_frame, zeroed
         elif depth > clipping_distance:
             print('too far  ', depth)
             return -1, -1, -1
-    except:
-        print('error in getting depth')
+    except Exception as e:
+        print(f'error in getting depth: {e}')
         return -1, -1, -1
     
     # Given the location in pixels for x,y and the depth, find the coordinates in meters

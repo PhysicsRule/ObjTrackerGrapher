@@ -22,31 +22,34 @@ def make_default_folder(data_input, data_output, color):
     data_output_folder_path = os.path.abspath(os.path.join(dir_path , data_output_folder , ''))
     
     # Create a folder to store all of the data in if it does not already exist
-    if not os.path.exists(data_output_folder_path):
-        os.makedirs(data_output_folder_path)
+    try:
+        os.makedirs(data_output_folder_path, exist_ok=True)
+    except OSError as e:
+        print(f'Could not create output folder "{data_output_folder_path}": {e}')
+        raise
 
        
     print('\nYour folder will be available:\n', data_output_folder_path)
     return data_output_folder, data_output_folder_path
 
-def GUI_creates_an_array_of_csv_files (data_output_folder_path):
+def GUI_creates_an_array_of_csv_files(data_output_folder_path):
 # select multiple files is useful when you want to graph many objects
     file_type = '.csv'
     num_files = 1
     dt = np.dtype([ ('filepath', np.str_, 60), ('filename', np.str_, 30)])
-        
+    file_array = None
+
     for file_name in os.listdir(data_output_folder_path):
         if file_name.endswith(file_type):
             print(file_name)
+            file_np = np.array([((data_output_folder_path), (file_name))], dtype=dt)
             if num_files == 1:
-                file_np = np.array([((data_output_folder_path), (file_name))], dtype=dt)
                 file_array = file_np
                 print('filenp ', file_np)
             else:
-                file_np = np.array([((data_output_folder_path), (file_name))], dtype=dt)
-                file_array = np.hstack((file_array,file_np))
+                file_array = np.hstack((file_array, file_np))
                 print(file_array)
-            num_files +=1
+            num_files += 1
     return file_array
 
 def save_video_file(image_file_path, video_img_array, type_of_image, size):
@@ -85,9 +88,9 @@ def find_objects_to_graph (data_output_folder_path):
             try:
                 np_path = os.path.abspath(os.path.join(data_output_folder_path, np_file_name,''))
                 graph_color_ranges = np.load(np_path)
-            except:
-                print("Couldn't load the npy file with the mass")
-            npy_found = True
+                npy_found = True
+            except Exception as e:
+                print(f"Couldn't load the npy file with the mass: {e}")
     if npy_found == False:                
         # TODO have the user enter the data in the future
         print('Since a npy file of the objects was not saved, mass was set to 1.')
