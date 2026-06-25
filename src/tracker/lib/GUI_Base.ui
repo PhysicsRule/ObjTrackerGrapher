@@ -3,2006 +3,558 @@
  <class>Tracker</class>
  <widget class="QMainWindow" name="Tracker">
   <property name="geometry">
-   <rect>
-    <x>0</x>
-    <y>0</y>
-    <width>1637</width>
-    <height>900</height>
-   </rect>
-  </property>
-  <property name="maximumSize">
-   <size>
-    <width>16777207</width>
-    <height>16777215</height>
-   </size>
+   <rect><x>0</x><y>0</y><width>1637</width><height>900</height></rect>
   </property>
   <property name="font">
-   <font>
-    <pointsize>8</pointsize>
-   </font>
-  </property>
-  <property name="cursor">
-   <cursorShape>ArrowCursor</cursorShape>
+   <font><pointsize>8</pointsize></font>
   </property>
   <property name="windowTitle">
-   <string>Tracker</string>
+   <string>3D Object Tracker</string>
   </property>
   <property name="styleSheet">
-   <string notr="true">border-color: rgb(0, 0, 0);</string>
+   <string notr="true">
+QWidget { background-color: #ffffff; color: #1a3a5c; }
+QGroupBox {
+    border: 2px solid #1a3a5c; border-radius: 4px;
+    margin-top: 26px; background-color: #f0f6ff;
+}
+QGroupBox::title {
+    subcontrol-origin: margin; subcontrol-position: top left;
+    left: 8px; top: 0px; padding: 4px 10px;
+    background-color: #1a3a5c; color: #ffffff;
+    font-size: 9pt; font-weight: bold; border-radius: 3px;
+}
+QPushButton {
+    background-color: #f0f4f8; color: #1a3a5c;
+    border: 1px solid #1a3a5c; border-radius: 3px; padding: 3px 6px;
+}
+QPushButton:hover { background-color: #dae6f0; }
+QPushButton:pressed { background-color: #1a3a5c; color: #ffffff; }
+QLineEdit {
+    background-color: #ffffff; color: #1a3a5c;
+    border: 1px solid #7a9cbf; border-radius: 3px; padding: 2px 4px;
+}
+QLineEdit#folder_name {
+    border: 2px solid #1a3a5c; background-color: #eef4fb;
+    font-size: 9pt; padding: 4px;
+}
+QComboBox {
+    background-color: #ffffff; color: #1a3a5c;
+    border: 1px solid #7a9cbf; border-radius: 3px; padding: 2px 4px;
+}
+QComboBox::drop-down { border: none; }
+QComboBox QAbstractItemView {
+    background-color: #ffffff; color: #1a3a5c;
+    selection-background-color: #1a3a5c; selection-color: #ffffff;
+}
+QTableWidget {
+    background-color: #ffffff; alternate-background-color: #f0f4f8;
+    gridline-color: #b0c4d8; color: #1a3a5c;
+}
+QHeaderView::section {
+    background-color: #1a3a5c; color: #ffffff;
+    border: 1px solid #0d2b4e; font-weight: bold;
+}
+QTableCornerButton::section { background-color: #1a3a5c; }
+QListWidget {
+    background-color: #ffffff; color: #1a3a5c;
+    border: 1px solid #7a9cbf; border-radius: 3px;
+}
+QListWidget::item:selected { background-color: #1a3a5c; color: #ffffff; }
+QCheckBox { color: #1a3a5c; spacing: 5px; }
+QCheckBox::indicator {
+    width: 13px; height: 13px;
+    border: 1px solid #7a9cbf; border-radius: 2px; background-color: #ffffff;
+}
+QCheckBox::indicator:checked { background-color: #1a3a5c; border-color: #1a3a5c; }
+QRadioButton { color: #1a3a5c; spacing: 5px; }
+QRadioButton::indicator {
+    width: 12px; height: 12px; border-radius: 6px;
+    border: 1px solid #7a9cbf; background-color: #ffffff;
+}
+QRadioButton::indicator:checked { background-color: #1a3a5c; border-color: #1a3a5c; }
+QLabel { color: #1a3a5c; }
+QScrollArea { border: none; }
+QScrollBar:vertical { background-color: #f0f4f8; width: 10px; margin: 0px; }
+QScrollBar::handle:vertical { background-color: #7a9cbf; border-radius: 5px; min-height: 30px; }
+QScrollBar::add-line:vertical, QScrollBar::sub-line:vertical { height: 0px; border: none; }
+QScrollBar::add-page:vertical, QScrollBar::sub-page:vertical { background: none; }
+QStatusBar { color: #5a7a9c; }
+   </string>
   </property>
+
   <widget class="QWidget" name="centralwidget">
-   <property name="font">
-    <font>
-     <pointsize>8</pointsize>
-    </font>
-   </property>
-   <widget class="QFrame" name="help_menu_2">
-    <property name="enabled">
-     <bool>true</bool>
-    </property>
+
+   <!-- ═══════════════════════════════════════════════════════
+        LEFT SCROLL PANEL  w=540  (narrowed from 650)
+        Group boxes: x=5 w=520
+        6 px bottom padding in every box.
+        ═══════════════════════════════════════════════════════ -->
+   <widget class="QScrollArea" name="left_scroll_area">
     <property name="geometry">
-     <rect>
-      <x>-80</x>
-      <y>-10</y>
-      <width>1711</width>
-      <height>1030</height>
-     </rect>
+     <rect><x>0</x><y>0</y><width>540</width><height>875</height></rect>
     </property>
-    <property name="palette">
-     <palette>
-      <active>
-       <colorrole role="WindowText">
-        <brush brushstyle="SolidPattern">
-         <color alpha="255">
-          <red>0</red>
-          <green>0</green>
-          <blue>0</blue>
-         </color>
-        </brush>
-       </colorrole>
-       <colorrole role="Button">
-        <brush brushstyle="SolidPattern">
-         <color alpha="255">
-          <red>170</red>
-          <green>0</green>
-          <blue>0</blue>
-         </color>
-        </brush>
-       </colorrole>
-       <colorrole role="Light">
-        <brush brushstyle="SolidPattern">
-         <color alpha="255">
-          <red>255</red>
-          <green>0</green>
-          <blue>0</blue>
-         </color>
-        </brush>
-       </colorrole>
-       <colorrole role="Midlight">
-        <brush brushstyle="SolidPattern">
-         <color alpha="255">
-          <red>212</red>
-          <green>0</green>
-          <blue>0</blue>
-         </color>
-        </brush>
-       </colorrole>
-       <colorrole role="Dark">
-        <brush brushstyle="SolidPattern">
-         <color alpha="255">
-          <red>85</red>
-          <green>0</green>
-          <blue>0</blue>
-         </color>
-        </brush>
-       </colorrole>
-       <colorrole role="Mid">
-        <brush brushstyle="SolidPattern">
-         <color alpha="255">
-          <red>113</red>
-          <green>0</green>
-          <blue>0</blue>
-         </color>
-        </brush>
-       </colorrole>
-       <colorrole role="Text">
-        <brush brushstyle="SolidPattern">
-         <color alpha="255">
-          <red>0</red>
-          <green>0</green>
-          <blue>0</blue>
-         </color>
-        </brush>
-       </colorrole>
-       <colorrole role="BrightText">
-        <brush brushstyle="SolidPattern">
-         <color alpha="255">
-          <red>255</red>
-          <green>255</green>
-          <blue>255</blue>
-         </color>
-        </brush>
-       </colorrole>
-       <colorrole role="ButtonText">
-        <brush brushstyle="SolidPattern">
-         <color alpha="255">
-          <red>0</red>
-          <green>0</green>
-          <blue>0</blue>
-         </color>
-        </brush>
-       </colorrole>
-       <colorrole role="Base">
-        <brush brushstyle="SolidPattern">
-         <color alpha="255">
-          <red>255</red>
-          <green>255</green>
-          <blue>255</blue>
-         </color>
-        </brush>
-       </colorrole>
-       <colorrole role="Window">
-        <brush brushstyle="SolidPattern">
-         <color alpha="255">
-          <red>170</red>
-          <green>0</green>
-          <blue>0</blue>
-         </color>
-        </brush>
-       </colorrole>
-       <colorrole role="Shadow">
-        <brush brushstyle="SolidPattern">
-         <color alpha="255">
-          <red>0</red>
-          <green>0</green>
-          <blue>0</blue>
-         </color>
-        </brush>
-       </colorrole>
-       <colorrole role="AlternateBase">
-        <brush brushstyle="SolidPattern">
-         <color alpha="255">
-          <red>212</red>
-          <green>127</green>
-          <blue>127</blue>
-         </color>
-        </brush>
-       </colorrole>
-       <colorrole role="ToolTipBase">
-        <brush brushstyle="SolidPattern">
-         <color alpha="255">
-          <red>255</red>
-          <green>255</green>
-          <blue>220</blue>
-         </color>
-        </brush>
-       </colorrole>
-       <colorrole role="ToolTipText">
-        <brush brushstyle="SolidPattern">
-         <color alpha="255">
-          <red>0</red>
-          <green>0</green>
-          <blue>0</blue>
-         </color>
-        </brush>
-       </colorrole>
-      </active>
-      <inactive>
-       <colorrole role="WindowText">
-        <brush brushstyle="SolidPattern">
-         <color alpha="255">
-          <red>0</red>
-          <green>0</green>
-          <blue>0</blue>
-         </color>
-        </brush>
-       </colorrole>
-       <colorrole role="Button">
-        <brush brushstyle="SolidPattern">
-         <color alpha="255">
-          <red>170</red>
-          <green>0</green>
-          <blue>0</blue>
-         </color>
-        </brush>
-       </colorrole>
-       <colorrole role="Light">
-        <brush brushstyle="SolidPattern">
-         <color alpha="255">
-          <red>255</red>
-          <green>0</green>
-          <blue>0</blue>
-         </color>
-        </brush>
-       </colorrole>
-       <colorrole role="Midlight">
-        <brush brushstyle="SolidPattern">
-         <color alpha="255">
-          <red>212</red>
-          <green>0</green>
-          <blue>0</blue>
-         </color>
-        </brush>
-       </colorrole>
-       <colorrole role="Dark">
-        <brush brushstyle="SolidPattern">
-         <color alpha="255">
-          <red>85</red>
-          <green>0</green>
-          <blue>0</blue>
-         </color>
-        </brush>
-       </colorrole>
-       <colorrole role="Mid">
-        <brush brushstyle="SolidPattern">
-         <color alpha="255">
-          <red>113</red>
-          <green>0</green>
-          <blue>0</blue>
-         </color>
-        </brush>
-       </colorrole>
-       <colorrole role="Text">
-        <brush brushstyle="SolidPattern">
-         <color alpha="255">
-          <red>0</red>
-          <green>0</green>
-          <blue>0</blue>
-         </color>
-        </brush>
-       </colorrole>
-       <colorrole role="BrightText">
-        <brush brushstyle="SolidPattern">
-         <color alpha="255">
-          <red>255</red>
-          <green>255</green>
-          <blue>255</blue>
-         </color>
-        </brush>
-       </colorrole>
-       <colorrole role="ButtonText">
-        <brush brushstyle="SolidPattern">
-         <color alpha="255">
-          <red>0</red>
-          <green>0</green>
-          <blue>0</blue>
-         </color>
-        </brush>
-       </colorrole>
-       <colorrole role="Base">
-        <brush brushstyle="SolidPattern">
-         <color alpha="255">
-          <red>255</red>
-          <green>255</green>
-          <blue>255</blue>
-         </color>
-        </brush>
-       </colorrole>
-       <colorrole role="Window">
-        <brush brushstyle="SolidPattern">
-         <color alpha="255">
-          <red>170</red>
-          <green>0</green>
-          <blue>0</blue>
-         </color>
-        </brush>
-       </colorrole>
-       <colorrole role="Shadow">
-        <brush brushstyle="SolidPattern">
-         <color alpha="255">
-          <red>0</red>
-          <green>0</green>
-          <blue>0</blue>
-         </color>
-        </brush>
-       </colorrole>
-       <colorrole role="AlternateBase">
-        <brush brushstyle="SolidPattern">
-         <color alpha="255">
-          <red>212</red>
-          <green>127</green>
-          <blue>127</blue>
-         </color>
-        </brush>
-       </colorrole>
-       <colorrole role="ToolTipBase">
-        <brush brushstyle="SolidPattern">
-         <color alpha="255">
-          <red>255</red>
-          <green>255</green>
-          <blue>220</blue>
-         </color>
-        </brush>
-       </colorrole>
-       <colorrole role="ToolTipText">
-        <brush brushstyle="SolidPattern">
-         <color alpha="255">
-          <red>0</red>
-          <green>0</green>
-          <blue>0</blue>
-         </color>
-        </brush>
-       </colorrole>
-      </inactive>
-      <disabled>
-       <colorrole role="WindowText">
-        <brush brushstyle="SolidPattern">
-         <color alpha="255">
-          <red>85</red>
-          <green>0</green>
-          <blue>0</blue>
-         </color>
-        </brush>
-       </colorrole>
-       <colorrole role="Button">
-        <brush brushstyle="SolidPattern">
-         <color alpha="255">
-          <red>170</red>
-          <green>0</green>
-          <blue>0</blue>
-         </color>
-        </brush>
-       </colorrole>
-       <colorrole role="Light">
-        <brush brushstyle="SolidPattern">
-         <color alpha="255">
-          <red>255</red>
-          <green>0</green>
-          <blue>0</blue>
-         </color>
-        </brush>
-       </colorrole>
-       <colorrole role="Midlight">
-        <brush brushstyle="SolidPattern">
-         <color alpha="255">
-          <red>212</red>
-          <green>0</green>
-          <blue>0</blue>
-         </color>
-        </brush>
-       </colorrole>
-       <colorrole role="Dark">
-        <brush brushstyle="SolidPattern">
-         <color alpha="255">
-          <red>85</red>
-          <green>0</green>
-          <blue>0</blue>
-         </color>
-        </brush>
-       </colorrole>
-       <colorrole role="Mid">
-        <brush brushstyle="SolidPattern">
-         <color alpha="255">
-          <red>113</red>
-          <green>0</green>
-          <blue>0</blue>
-         </color>
-        </brush>
-       </colorrole>
-       <colorrole role="Text">
-        <brush brushstyle="SolidPattern">
-         <color alpha="255">
-          <red>85</red>
-          <green>0</green>
-          <blue>0</blue>
-         </color>
-        </brush>
-       </colorrole>
-       <colorrole role="BrightText">
-        <brush brushstyle="SolidPattern">
-         <color alpha="255">
-          <red>255</red>
-          <green>255</green>
-          <blue>255</blue>
-         </color>
-        </brush>
-       </colorrole>
-       <colorrole role="ButtonText">
-        <brush brushstyle="SolidPattern">
-         <color alpha="255">
-          <red>85</red>
-          <green>0</green>
-          <blue>0</blue>
-         </color>
-        </brush>
-       </colorrole>
-       <colorrole role="Base">
-        <brush brushstyle="SolidPattern">
-         <color alpha="255">
-          <red>170</red>
-          <green>0</green>
-          <blue>0</blue>
-         </color>
-        </brush>
-       </colorrole>
-       <colorrole role="Window">
-        <brush brushstyle="SolidPattern">
-         <color alpha="255">
-          <red>170</red>
-          <green>0</green>
-          <blue>0</blue>
-         </color>
-        </brush>
-       </colorrole>
-       <colorrole role="Shadow">
-        <brush brushstyle="SolidPattern">
-         <color alpha="255">
-          <red>0</red>
-          <green>0</green>
-          <blue>0</blue>
-         </color>
-        </brush>
-       </colorrole>
-       <colorrole role="AlternateBase">
-        <brush brushstyle="SolidPattern">
-         <color alpha="255">
-          <red>170</red>
-          <green>0</green>
-          <blue>0</blue>
-         </color>
-        </brush>
-       </colorrole>
-       <colorrole role="ToolTipBase">
-        <brush brushstyle="SolidPattern">
-         <color alpha="255">
-          <red>255</red>
-          <green>255</green>
-          <blue>220</blue>
-         </color>
-        </brush>
-       </colorrole>
-       <colorrole role="ToolTipText">
-        <brush brushstyle="SolidPattern">
-         <color alpha="255">
-          <red>0</red>
-          <green>0</green>
-          <blue>0</blue>
-         </color>
-        </brush>
-       </colorrole>
-      </disabled>
-     </palette>
-    </property>
-    <property name="toolTipDuration">
-     <number>-2</number>
-    </property>
-    <property name="autoFillBackground">
-     <bool>true</bool>
-    </property>
-    <property name="styleSheet">
-     <string notr="true"/>
-    </property>
-    <property name="frameShape">
-     <enum>QFrame::NoFrame</enum>
-    </property>
-    <property name="frameShadow">
-     <enum>QFrame::Raised</enum>
-    </property>
-    <widget class="QLabel" name="step6_label_6">
+    <property name="frameShape"><enum>QFrame::NoFrame</enum></property>
+    <property name="widgetResizable"><bool>false</bool></property>
+    <widget class="QWidget" name="scrollAreaWidgetContents">
      <property name="geometry">
-      <rect>
-       <x>670</x>
-       <y>86</y>
-       <width>461</width>
-       <height>61</height>
-      </rect>
+      <rect><x>0</x><y>0</y><width>530</width><height>797</height></rect>
      </property>
-     <property name="font">
-      <font>
-       <pointsize>8</pointsize>
-       <bold>true</bold>
-      </font>
-     </property>
-     <property name="toolTipDuration">
-      <number>4</number>
-     </property>
-     <property name="styleSheet">
-      <string notr="true">color: rgb(255, 255, 255);</string>
-     </property>
-     <property name="text">
-      <string>Step 6: Position and Velocity will be graphed for you. 
-Select the additional variables you would like graphed</string>
-     </property>
-     <property name="wordWrap">
-      <bool>true</bool>
-     </property>
-    </widget>
-    <widget class="QTableWidget" name="table_widget_color">
-     <property name="geometry">
-      <rect>
-       <x>100</x>
-       <y>380</y>
-       <width>371</width>
-       <height>181</height>
-      </rect>
-     </property>
-     <property name="minimumSize">
-      <size>
-       <width>371</width>
-       <height>181</height>
-      </size>
-     </property>
-     <property name="font">
-      <font>
-       <pointsize>7</pointsize>
-      </font>
-     </property>
-     <property name="editTriggers">
-      <set>QAbstractItemView::AnyKeyPressed|QAbstractItemView::CurrentChanged|QAbstractItemView::DoubleClicked|QAbstractItemView::EditKeyPressed</set>
-     </property>
-     <attribute name="horizontalHeaderMinimumSectionSize">
-      <number>10</number>
-     </attribute>
-     <attribute name="verticalHeaderMinimumSectionSize">
-      <number>20</number>
-     </attribute>
-     <attribute name="verticalHeaderDefaultSectionSize">
-      <number>20</number>
-     </attribute>
-     <column>
-      <property name="text">
-       <string>Use</string>
+
+     <!-- ── Step 1  y=5  h=141  (buttons-bottom=97, data_in_other-bottom=133, +6+2) ── -->
+     <widget class="QGroupBox" name="step1_group">
+      <property name="geometry">
+       <rect><x>5</x><y>5</y><width>520</width><height>141</height></rect>
       </property>
-      <property name="font">
-       <font>
-        <pointsize>7</pointsize>
-       </font>
-      </property>
-     </column>
-     <column>
-      <property name="text">
-       <string>Color</string>
-      </property>
-      <property name="font">
-       <font>
-        <pointsize>7</pointsize>
-       </font>
-      </property>
-     </column>
-     <column>
-      <property name="text">
-       <string>Radius(cm)</string>
-      </property>
-      <property name="font">
-       <font>
-        <pointsize>7</pointsize>
-       </font>
-      </property>
-     </column>
-     <column>
-      <property name="text">
-       <string>Mass(kg)</string>
-      </property>
-      <property name="font">
-       <font>
-        <pointsize>7</pointsize>
-       </font>
-      </property>
-     </column>
-     <column>
-      <property name="text">
-       <string>lower</string>
-      </property>
-     </column>
-     <column>
-      <property name="text">
-       <string>upper</string>
-      </property>
-     </column>
-    </widget>
-    <widget class="QRadioButton" name="select_default_colors">
-     <property name="geometry">
-      <rect>
-       <x>100</x>
-       <y>330</y>
-       <width>101</width>
-       <height>20</height>
-      </rect>
-     </property>
-     <property name="text">
-      <string>Default Colors</string>
-     </property>
-     <property name="checked">
-      <bool>false</bool>
-     </property>
-    </widget>
-    <widget class="QRadioButton" name="select_your_own_colors">
-     <property name="geometry">
-      <rect>
-       <x>200</x>
-       <y>330</y>
-       <width>131</width>
-       <height>20</height>
-      </rect>
-     </property>
-     <property name="text">
-      <string>Your predefined colors</string>
-     </property>
-    </widget>
-    <widget class="QComboBox" name="combo_box_objects">
-     <property name="geometry">
-      <rect>
-       <x>100</x>
-       <y>360</y>
-       <width>431</width>
-       <height>21</height>
-      </rect>
-     </property>
-    </widget>
-    <widget class="QPushButton" name="tracker_button">
-     <property name="geometry">
-      <rect>
-       <x>260</x>
-       <y>720</y>
-       <width>130</width>
-       <height>50</height>
-      </rect>
-     </property>
-     <property name="font">
-      <font>
-       <pointsize>9</pointsize>
-      </font>
-     </property>
-     <property name="text">
-      <string>Run Tracker
-medium fps</string>
-     </property>
-    </widget>
-    <widget class="QPushButton" name="graph_button">
-     <property name="geometry">
-      <rect>
-       <x>680</x>
-       <y>270</y>
-       <width>180</width>
-       <height>50</height>
-      </rect>
-     </property>
-     <property name="font">
-      <font>
-       <pointsize>9</pointsize>
-      </font>
-     </property>
-     <property name="text">
-      <string>Graph Data</string>
-     </property>
-    </widget>
-    <widget class="QPushButton" name="record_bag_button">
-     <property name="geometry">
-      <rect>
-       <x>390</x>
-       <y>720</y>
-       <width>130</width>
-       <height>50</height>
-      </rect>
-     </property>
-     <property name="font">
-      <font>
-       <pointsize>9</pointsize>
-      </font>
-     </property>
-     <property name="toolTipDuration">
-      <number>5</number>
-     </property>
-     <property name="text">
-      <string>Record Bag
-highest fps</string>
-     </property>
-    </widget>
-    <widget class="QTableWidget" name="trendline_table_widget">
-     <property name="geometry">
-      <rect>
-       <x>1079</x>
-       <y>20</y>
-       <width>601</width>
-       <height>271</height>
-      </rect>
-     </property>
-     <property name="maximumSize">
-      <size>
-       <width>16777215</width>
-       <height>16777215</height>
-      </size>
-     </property>
-     <property name="font">
-      <font>
-       <pointsize>8</pointsize>
-      </font>
-     </property>
-     <property name="textElideMode">
-      <enum>Qt::ElideLeft</enum>
-     </property>
-     <property name="rowCount">
-      <number>12</number>
-     </property>
-     <property name="columnCount">
-      <number>3</number>
-     </property>
-     <attribute name="horizontalHeaderVisible">
-      <bool>false</bool>
-     </attribute>
-     <attribute name="horizontalHeaderMinimumSectionSize">
-      <number>50</number>
-     </attribute>
-     <attribute name="horizontalHeaderDefaultSectionSize">
-      <number>150</number>
-     </attribute>
-     <attribute name="verticalHeaderVisible">
-      <bool>true</bool>
-     </attribute>
-     <attribute name="verticalHeaderMinimumSectionSize">
-      <number>10</number>
-     </attribute>
-     <attribute name="verticalHeaderDefaultSectionSize">
-      <number>20</number>
-     </attribute>
-     <row/>
-     <row/>
-     <row/>
-     <row/>
-     <row/>
-     <row/>
-     <row/>
-     <row/>
-     <row/>
-     <row/>
-     <row/>
-     <row/>
-     <column/>
-     <column/>
-     <column/>
-    </widget>
-    <widget class="QWidget" name="gridLayoutWidget">
-     <property name="geometry">
-      <rect>
-       <x>681</x>
-       <y>320</y>
-       <width>961</width>
-       <height>461</height>
-      </rect>
-     </property>
-     <layout class="QGridLayout" name="grid_layout">
-      <property name="spacing">
-       <number>3</number>
-      </property>
-      <item row="0" column="0">
-       <widget class="QWidget" name="graph_widget" native="true">
-        <property name="enabled">
-         <bool>true</bool>
-        </property>
-        <property name="minimumSize">
-         <size>
-          <width>460</width>
-          <height>459</height>
-         </size>
-        </property>
-        <property name="maximumSize">
-         <size>
-          <width>1000</width>
-          <height>459</height>
-         </size>
-        </property>
-        <property name="baseSize">
-         <size>
-          <width>0</width>
-          <height>0</height>
-         </size>
-        </property>
-        <property name="contextMenuPolicy">
-         <enum>Qt::NoContextMenu</enum>
-        </property>
-        <property name="toolTipDuration">
-         <number>2</number>
-        </property>
-        <widget class="PlotWidget" name="DataGraph">
-         <property name="geometry">
-          <rect>
-           <x>0</x>
-           <y>0</y>
-           <width>951</width>
-           <height>441</height>
-          </rect>
-         </property>
-         <property name="font">
-          <font>
-           <pointsize>9</pointsize>
-          </font>
-         </property>
-         <property name="focusPolicy">
-          <enum>Qt::NoFocus</enum>
-         </property>
-        </widget>
-       </widget>
-      </item>
-     </layout>
-    </widget>
-    <widget class="QPushButton" name="real_time_button">
-     <property name="geometry">
-      <rect>
-       <x>129</x>
-       <y>720</y>
-       <width>131</width>
-       <height>50</height>
-      </rect>
-     </property>
-     <property name="palette">
-      <palette>
-       <active>
-        <colorrole role="Button">
-         <brush brushstyle="SolidPattern">
-          <color alpha="255">
-           <red>255</red>
-           <green>158</green>
-           <blue>158</blue>
-          </color>
-         </brush>
-        </colorrole>
-        <colorrole role="Base">
-         <brush brushstyle="SolidPattern">
-          <color alpha="255">
-           <red>255</red>
-           <green>158</green>
-           <blue>158</blue>
-          </color>
-         </brush>
-        </colorrole>
-        <colorrole role="Window">
-         <brush brushstyle="SolidPattern">
-          <color alpha="255">
-           <red>255</red>
-           <green>158</green>
-           <blue>158</blue>
-          </color>
-         </brush>
-        </colorrole>
-       </active>
-       <inactive>
-        <colorrole role="Button">
-         <brush brushstyle="SolidPattern">
-          <color alpha="255">
-           <red>255</red>
-           <green>158</green>
-           <blue>158</blue>
-          </color>
-         </brush>
-        </colorrole>
-        <colorrole role="Base">
-         <brush brushstyle="SolidPattern">
-          <color alpha="255">
-           <red>255</red>
-           <green>158</green>
-           <blue>158</blue>
-          </color>
-         </brush>
-        </colorrole>
-        <colorrole role="Window">
-         <brush brushstyle="SolidPattern">
-          <color alpha="255">
-           <red>255</red>
-           <green>158</green>
-           <blue>158</blue>
-          </color>
-         </brush>
-        </colorrole>
-       </inactive>
-       <disabled>
-        <colorrole role="Button">
-         <brush brushstyle="SolidPattern">
-          <color alpha="255">
-           <red>255</red>
-           <green>158</green>
-           <blue>158</blue>
-          </color>
-         </brush>
-        </colorrole>
-        <colorrole role="Base">
-         <brush brushstyle="SolidPattern">
-          <color alpha="255">
-           <red>255</red>
-           <green>158</green>
-           <blue>158</blue>
-          </color>
-         </brush>
-        </colorrole>
-        <colorrole role="Window">
-         <brush brushstyle="SolidPattern">
-          <color alpha="255">
-           <red>255</red>
-           <green>158</green>
-           <blue>158</blue>
-          </color>
-         </brush>
-        </colorrole>
-       </disabled>
-      </palette>
-     </property>
-     <property name="font">
-      <font>
-       <pointsize>8</pointsize>
-      </font>
-     </property>
-     <property name="text">
-      <string>Run Real-Time Graph
-Low fps</string>
-     </property>
-    </widget>
-    <widget class="QPushButton" name="color_button">
-     <property name="geometry">
-      <rect>
-       <x>100</x>
-       <y>40</y>
-       <width>120</width>
-       <height>55</height>
-      </rect>
-     </property>
-     <property name="text">
-      <string>Color
-16,30,60 fps</string>
-     </property>
-    </widget>
-    <widget class="QPushButton" name="infrared_90_button">
-     <property name="geometry">
-      <rect>
-       <x>230</x>
-       <y>40</y>
-       <width>120</width>
-       <height>55</height>
-      </rect>
-     </property>
-     <property name="focusPolicy">
-      <enum>Qt::NoFocus</enum>
-     </property>
-     <property name="text">
-      <string>Infrared
+      <property name="title"><string>Step 1: Choose Camera / Data Source</string></property>
+
+      <widget class="QLabel" name="step1_label">
+       <property name="geometry"><rect><x>5</x><y>28</y><width>505</width><height>16</height></rect></property>
+       <property name="font"><font><pointsize>8</pointsize></font></property>
+       <property name="text"><string>Color: data/color_o     Infrared: data/infrared_o     Other: data/other_o</string></property>
+      </widget>
+
+      <widget class="QPushButton" name="color_button">
+       <property name="geometry"><rect><x>5</x><y>47</y><width>95</width><height>50</height></rect></property>
+       <property name="font"><font><pointsize>8</pointsize></font></property>
+       <property name="text"><string>Color
+16, 30, 60 fps</string></property>
+      </widget>
+
+      <widget class="QPushButton" name="infrared_90_button">
+       <property name="geometry"><rect><x>103</x><y>47</y><width>95</width><height>50</height></rect></property>
+       <property name="focusPolicy"><enum>Qt::NoFocus</enum></property>
+       <property name="font"><font><pointsize>8</pointsize></font></property>
+       <property name="text"><string>Infrared
 Object tracking
-22 or 90 fps</string>
-     </property>
-    </widget>
-    <widget class="QLineEdit" name="folder_name">
-     <property name="geometry">
-      <rect>
-       <x>100</x>
-       <y>120</y>
-       <width>381</width>
-       <height>22</height>
-      </rect>
-     </property>
-     <property name="text">
-      <string/>
-     </property>
-     <property name="placeholderText">
-      <string>Name of the folder you would like to create[Enter]</string>
-     </property>
-    </widget>
-    <widget class="QPushButton" name="Button3DGraph">
-     <property name="geometry">
-      <rect>
-       <x>860</x>
-       <y>290</y>
-       <width>181</width>
-       <height>21</height>
-      </rect>
-     </property>
-     <property name="font">
-      <font>
-       <pointsize>9</pointsize>
-      </font>
-     </property>
-     <property name="text">
-      <string>3D Graph</string>
-     </property>
-    </widget>
-    <widget class="QLineEdit" name="r_height">
-     <property name="geometry">
-      <rect>
-       <x>920</x>
-       <y>200</y>
-       <width>71</width>
-       <height>22</height>
-      </rect>
-     </property>
-     <property name="text">
-      <string/>
-     </property>
-     <property name="placeholderText">
-      <string>Select reference height in m</string>
-     </property>
-    </widget>
-    <widget class="QComboBox" name="up_axis">
-     <property name="enabled">
-      <bool>true</bool>
-     </property>
-     <property name="geometry">
-      <rect>
-       <x>780</x>
-       <y>200</y>
-       <width>131</width>
-       <height>22</height>
-      </rect>
-     </property>
-     <item>
-      <property name="text">
-       <string>Which axis is up</string>
-      </property>
-     </item>
-     <item>
-      <property name="text">
-       <string>x</string>
-      </property>
-     </item>
-     <item>
-      <property name="text">
-       <string>y</string>
-      </property>
-     </item>
-     <item>
-      <property name="text">
-       <string>z</string>
-      </property>
-     </item>
-    </widget>
-    <widget class="QPushButton" name="save_height_mass">
-     <property name="geometry">
-      <rect>
-       <x>1000</x>
-       <y>190</y>
-       <width>51</width>
-       <height>31</height>
-      </rect>
-     </property>
-     <property name="text">
-      <string>Save</string>
-     </property>
-    </widget>
-    <widget class="QCheckBox" name="save_depth_check">
-     <property name="geometry">
-      <rect>
-       <x>430</x>
-       <y>630</y>
-       <width>211</width>
-       <height>20</height>
-      </rect>
-     </property>
-     <property name="toolTipDuration">
-      <number>2</number>
-     </property>
-     <property name="styleSheet">
-      <string notr="true">color: rgb(20,0,0);</string>
-     </property>
-     <property name="text">
-      <string>Save Depth Video *mp4</string>
-     </property>
-     <property name="checkable">
-      <bool>true</bool>
-     </property>
-    </widget>
-    <widget class="QCheckBox" name="save_image_check">
-     <property name="geometry">
-      <rect>
-       <x>270</x>
-       <y>610</y>
-       <width>121</width>
-       <height>20</height>
-      </rect>
-     </property>
-     <property name="styleSheet">
-      <string notr="true">color: rgb(20,0,0);</string>
-     </property>
-     <property name="text">
-      <string>Save Images</string>
-     </property>
-     <property name="checkable">
-      <bool>true</bool>
-     </property>
-    </widget>
-    <widget class="QCheckBox" name="show_tracking_mask_check">
-     <property name="geometry">
-      <rect>
-       <x>120</x>
-       <y>650</y>
-       <width>191</width>
-       <height>20</height>
-      </rect>
-     </property>
-     <property name="styleSheet">
-      <string notr="true">color: rgb(20,0,0);</string>
-     </property>
-     <property name="text">
-      <string>Show Tracking Mask</string>
-     </property>
-    </widget>
-    <widget class="QCheckBox" name="show_image_check">
-     <property name="geometry">
-      <rect>
-       <x>120</x>
-       <y>610</y>
-       <width>131</width>
-       <height>20</height>
-      </rect>
-     </property>
-     <property name="styleSheet">
-      <string notr="true">color: rgb(20,0,0);</string>
-     </property>
-     <property name="text">
-      <string>Show Image</string>
-     </property>
-     <property name="checked">
-      <bool>true</bool>
-     </property>
-    </widget>
-    <widget class="QCheckBox" name="show_depth_check">
-     <property name="geometry">
-      <rect>
-       <x>120</x>
-       <y>630</y>
-       <width>171</width>
-       <height>20</height>
-      </rect>
-     </property>
-     <property name="styleSheet">
-      <string notr="true">color: rgb(20,0,0);</string>
-     </property>
-     <property name="text">
-      <string>Show Depth</string>
-     </property>
-    </widget>
-    <widget class="QListWidget" name="folder_list">
-     <property name="geometry">
-      <rect>
-       <x>100</x>
-       <y>150</y>
-       <width>381</width>
-       <height>141</height>
-      </rect>
-     </property>
-     <item>
-      <property name="text">
-       <string>List of current folders (don't choose these)</string>
-      </property>
-     </item>
-    </widget>
-    <widget class="QCheckBox" name="save_tracking_mask_check">
-     <property name="geometry">
-      <rect>
-       <x>270</x>
-       <y>650</y>
-       <width>171</width>
-       <height>20</height>
-      </rect>
-     </property>
-     <property name="styleSheet">
-      <string notr="true">color: rgb(20,0,0);</string>
-     </property>
-     <property name="text">
-      <string>Save Tracking Mask</string>
-     </property>
-    </widget>
-    <widget class="QCheckBox" name="save_video">
-     <property name="geometry">
-      <rect>
-       <x>430</x>
-       <y>610</y>
-       <width>141</width>
-       <height>20</height>
-      </rect>
-     </property>
-     <property name="palette">
-      <palette>
-       <active>
-        <colorrole role="WindowText">
-         <brush brushstyle="SolidPattern">
-          <color alpha="255">
-           <red>20</red>
-           <green>0</green>
-           <blue>0</blue>
-          </color>
-         </brush>
-        </colorrole>
-        <colorrole role="Text">
-         <brush brushstyle="SolidPattern">
-          <color alpha="255">
-           <red>20</red>
-           <green>0</green>
-           <blue>0</blue>
-          </color>
-         </brush>
-        </colorrole>
-        <colorrole role="ButtonText">
-         <brush brushstyle="SolidPattern">
-          <color alpha="255">
-           <red>20</red>
-           <green>0</green>
-           <blue>0</blue>
-          </color>
-         </brush>
-        </colorrole>
-        <colorrole role="PlaceholderText">
-         <brush brushstyle="SolidPattern">
-          <color alpha="128">
-           <red>20</red>
-           <green>0</green>
-           <blue>0</blue>
-          </color>
-         </brush>
-        </colorrole>
-       </active>
-       <inactive>
-        <colorrole role="WindowText">
-         <brush brushstyle="SolidPattern">
-          <color alpha="255">
-           <red>20</red>
-           <green>0</green>
-           <blue>0</blue>
-          </color>
-         </brush>
-        </colorrole>
-        <colorrole role="Text">
-         <brush brushstyle="SolidPattern">
-          <color alpha="255">
-           <red>20</red>
-           <green>0</green>
-           <blue>0</blue>
-          </color>
-         </brush>
-        </colorrole>
-        <colorrole role="ButtonText">
-         <brush brushstyle="SolidPattern">
-          <color alpha="255">
-           <red>20</red>
-           <green>0</green>
-           <blue>0</blue>
-          </color>
-         </brush>
-        </colorrole>
-        <colorrole role="PlaceholderText">
-         <brush brushstyle="SolidPattern">
-          <color alpha="128">
-           <red>20</red>
-           <green>0</green>
-           <blue>0</blue>
-          </color>
-         </brush>
-        </colorrole>
-       </inactive>
-       <disabled>
-        <colorrole role="WindowText">
-         <brush brushstyle="SolidPattern">
-          <color alpha="255">
-           <red>20</red>
-           <green>0</green>
-           <blue>0</blue>
-          </color>
-         </brush>
-        </colorrole>
-        <colorrole role="Text">
-         <brush brushstyle="SolidPattern">
-          <color alpha="255">
-           <red>20</red>
-           <green>0</green>
-           <blue>0</blue>
-          </color>
-         </brush>
-        </colorrole>
-        <colorrole role="ButtonText">
-         <brush brushstyle="SolidPattern">
-          <color alpha="255">
-           <red>20</red>
-           <green>0</green>
-           <blue>0</blue>
-          </color>
-         </brush>
-        </colorrole>
-        <colorrole role="PlaceholderText">
-         <brush brushstyle="SolidPattern">
-          <color alpha="128">
-           <red>20</red>
-           <green>0</green>
-           <blue>0</blue>
-          </color>
-         </brush>
-        </colorrole>
-       </disabled>
-      </palette>
-     </property>
-     <property name="layoutDirection">
-      <enum>Qt::LeftToRight</enum>
-     </property>
-     <property name="styleSheet">
-      <string notr="true">color: rgb(20,0,0);</string>
-     </property>
-     <property name="text">
-      <string>Save Images Video *.mp4</string>
-     </property>
-     <property name="checked">
-      <bool>true</bool>
-     </property>
-    </widget>
-    <widget class="QPushButton" name="id300_button">
-     <property name="geometry">
-      <rect>
-       <x>360</x>
-       <y>40</y>
-       <width>120</width>
-       <height>55</height>
-      </rect>
-     </property>
-     <property name="maximumSize">
-      <size>
-       <width>16777215</width>
-       <height>16777212</height>
-      </size>
-     </property>
-     <property name="focusPolicy">
-      <enum>Qt::NoFocus</enum>
-     </property>
-     <property name="text">
-      <string>Infrared(Future)
+22 or 90 fps</string></property>
+      </widget>
+
+      <widget class="QPushButton" name="id300_button">
+       <property name="geometry"><rect><x>201</x><y>47</y><width>95</width><height>50</height></rect></property>
+       <property name="focusPolicy"><enum>Qt::NoFocus</enum></property>
+       <property name="font"><font><pointsize>8</pointsize></font></property>
+       <property name="text"><string>Infrared (Future)
 Object Tracking
-300 fps (thin)</string>
-     </property>
-    </widget>
-    <widget class="QPushButton" name="track_from_bag_button">
-     <property name="geometry">
-      <rect>
-       <x>520</x>
-       <y>720</y>
-       <width>130</width>
-       <height>50</height>
-      </rect>
-     </property>
-     <property name="font">
-      <font>
-       <pointsize>9</pointsize>
-      </font>
-     </property>
-     <property name="text">
-      <string>Track from
- Bag File</string>
-     </property>
-    </widget>
-    <widget class="QRadioButton" name="select_acceleration">
-     <property name="geometry">
-      <rect>
-       <x>680</x>
-       <y>140</y>
-       <width>95</width>
-       <height>20</height>
-      </rect>
-     </property>
-     <property name="text">
-      <string>Acceleration</string>
-     </property>
-     <property name="checked">
-      <bool>true</bool>
-     </property>
-    </widget>
-    <widget class="QRadioButton" name="select_energy">
-     <property name="geometry">
-      <rect>
-       <x>680</x>
-       <y>200</y>
-       <width>111</width>
-       <height>20</height>
-      </rect>
-     </property>
-     <property name="text">
-      <string>Energy(Future)</string>
-     </property>
-    </widget>
-    <widget class="QRadioButton" name="select_momentum">
-     <property name="geometry">
-      <rect>
-       <x>680</x>
-       <y>170</y>
-       <width>95</width>
-       <height>20</height>
-      </rect>
-     </property>
-     <property name="text">
-      <string>Momentum</string>
-     </property>
-    </widget>
-    <widget class="QRadioButton" name="define_colors">
-     <property name="geometry">
-      <rect>
-       <x>340</x>
-       <y>330</y>
-       <width>141</width>
-       <height>17</height>
-      </rect>
-     </property>
-     <property name="inputMethodHints">
-      <set>Qt::ImhLatinOnly</set>
-     </property>
-     <property name="text">
-      <string>Define colors  now</string>
-     </property>
-    </widget>
-    <widget class="QTableWidget" name="table_widget_color_2">
-     <property name="geometry">
-      <rect>
-       <x>100</x>
-       <y>380</y>
-       <width>431</width>
-       <height>181</height>
-      </rect>
-     </property>
-     <property name="minimumSize">
-      <size>
-       <width>371</width>
-       <height>181</height>
-      </size>
-     </property>
-     <property name="font">
-      <font>
-       <pointsize>7</pointsize>
-      </font>
-     </property>
-     <property name="editTriggers">
-      <set>QAbstractItemView::AnyKeyPressed|QAbstractItemView::CurrentChanged|QAbstractItemView::DoubleClicked|QAbstractItemView::EditKeyPressed</set>
-     </property>
-     <attribute name="horizontalHeaderMinimumSectionSize">
-      <number>10</number>
-     </attribute>
-     <attribute name="verticalHeaderMinimumSectionSize">
-      <number>20</number>
-     </attribute>
-     <attribute name="verticalHeaderDefaultSectionSize">
-      <number>20</number>
-     </attribute>
-     <column>
-      <property name="text">
-       <string>Use</string>
-      </property>
-      <property name="font">
-       <font>
-        <pointsize>7</pointsize>
-       </font>
-      </property>
-     </column>
-     <column>
-      <property name="text">
-       <string>Name</string>
-      </property>
-      <property name="font">
-       <font>
-        <pointsize>8</pointsize>
-       </font>
-      </property>
-     </column>
-     <column>
-      <property name="text">
-       <string>Radius(cm)</string>
-      </property>
-      <property name="font">
-       <font>
-        <pointsize>8</pointsize>
-       </font>
-      </property>
-     </column>
-     <column>
-      <property name="text">
-       <string>Mass(kg)</string>
-      </property>
-      <property name="font">
-       <font>
-        <pointsize>8</pointsize>
-       </font>
-      </property>
-     </column>
-     <column>
-      <property name="text">
-       <string>lower</string>
-      </property>
-     </column>
-     <column>
-      <property name="text">
-       <string>upper</string>
-      </property>
-     </column>
-     <column>
-      <property name="text">
-       <string>OnScreen</string>
-      </property>
-      <property name="font">
-       <font>
-        <pointsize>8</pointsize>
-       </font>
-      </property>
-     </column>
-    </widget>
-    <widget class="QLineEdit" name="lineEdit_define_color_name">
-     <property name="geometry">
-      <rect>
-       <x>100</x>
-       <y>360</y>
-       <width>101</width>
-       <height>21</height>
-      </rect>
-     </property>
-     <property name="text">
-      <string/>
-     </property>
-     <property name="maxLength">
-      <number>32765</number>
-     </property>
-     <property name="placeholderText">
-      <string>predefined name[Enter]</string>
-     </property>
-    </widget>
-    <widget class="QPushButton" name="find_lower_upper_button">
-     <property name="geometry">
-      <rect>
-       <x>380</x>
-       <y>360</y>
-       <width>151</width>
-       <height>23</height>
-      </rect>
-     </property>
-     <property name="text">
-      <string>Modify Colors OnScreen </string>
-     </property>
-    </widget>
-    <widget class="QCheckBox" name="data_in_other">
-     <property name="geometry">
-      <rect>
-       <x>790</x>
-       <y>40</y>
-       <width>141</width>
-       <height>51</height>
-      </rect>
-     </property>
-     <property name="font">
-      <font>
-       <pointsize>8</pointsize>
-      </font>
-     </property>
-     <property name="layoutDirection">
-      <enum>Qt::LeftToRight</enum>
-     </property>
-     <property name="autoFillBackground">
-      <bool>false</bool>
-     </property>
-     <property name="text">
-      <string>Data came from another source
-Saved as a .csv file
-Time, x,y, z (Skeletal Tracker)</string>
-     </property>
-    </widget>
-    <widget class="QPushButton" name="skeletal_button">
-     <property name="geometry">
-      <rect>
-       <x>620</x>
-       <y>40</y>
-       <width>151</width>
-       <height>55</height>
-      </rect>
-     </property>
-     <property name="font">
-      <font>
-       <pointsize>7</pointsize>
-      </font>
-     </property>
-     <property name="focusPolicy">
-      <enum>Qt::StrongFocus</enum>
-     </property>
-     <property name="text">
-      <string>Link to Skeletal Tracker
+300 fps</string></property>
+      </widget>
+
+      <widget class="QPushButton" name="other_folder">
+       <property name="geometry"><rect><x>299</x><y>47</y><width>95</width><height>50</height></rect></property>
+       <property name="font"><font><pointsize>8</pointsize></font></property>
+       <property name="text"><string>Own Data
+into other_o
+and graph</string></property>
+      </widget>
+
+      <widget class="QPushButton" name="skeletal_button">
+       <property name="geometry"><rect><x>397</x><y>47</y><width>118</width><height>50</height></rect></property>
+       <property name="font"><font><pointsize>8</pointsize></font></property>
+       <property name="text"><string>Link to Skeletal Tracker
 Copy data into other_o
-and graph</string>
-     </property>
-    </widget>
-    <widget class="QPushButton" name="other_folder">
-     <property name="geometry">
-      <rect>
-       <x>490</x>
-       <y>40</y>
-       <width>120</width>
-       <height>55</height>
-      </rect>
-     </property>
-     <property name="text">
-      <string>Put you own data
-into other_o folder
-and graph</string>
-     </property>
-    </widget>
-    <widget class="QPushButton" name="find_trendlines_button">
-     <property name="geometry">
-      <rect>
-       <x>1300</x>
-       <y>290</y>
-       <width>181</width>
-       <height>21</height>
-      </rect>
-     </property>
-     <property name="text">
-      <string>Find Trendlines</string>
-     </property>
-    </widget>
-    <widget class="QLabel" name="step1_label">
-     <property name="geometry">
-      <rect>
-       <x>100</x>
-       <y>15</y>
-       <width>641</width>
-       <height>21</height>
-      </rect>
-     </property>
-     <property name="font">
-      <font>
-       <pointsize>8</pointsize>
-       <bold>true</bold>
-      </font>
-     </property>
-     <property name="accessibleDescription">
-      <string/>
-     </property>
-     <property name="styleSheet">
-      <string notr="true">color: rgb(255, 255, 255);</string>
-     </property>
-     <property name="text">
-      <string>Step 1: Choose Location/Type of Data to Track (location for color is in data/color_o for example)</string>
-     </property>
-     <property name="textFormat">
-      <enum>Qt::PlainText</enum>
-     </property>
-    </widget>
-    <widget class="QLabel" name="step2_label_2">
-     <property name="geometry">
-      <rect>
-       <x>100</x>
-       <y>290</y>
-       <width>571</width>
-       <height>41</height>
-      </rect>
-     </property>
-     <property name="font">
-      <font>
-       <pointsize>8</pointsize>
-       <bold>true</bold>
-      </font>
-     </property>
-     <property name="accessibleDescription">
-      <string/>
-     </property>
-     <property name="styleSheet">
-      <string notr="true">color: rgb(255, 255, 255);</string>
-     </property>
-     <property name="frameShape">
-      <enum>QFrame::StyledPanel</enum>
-     </property>
-     <property name="text">
-      <string>Step 3: If using color tracker... choose how you want to determine colors to track.
-Don't forget to enter the mass if you want momentum graphs.</string>
-     </property>
-     <property name="textFormat">
-      <enum>Qt::PlainText</enum>
-     </property>
-    </widget>
-    <widget class="QLabel" name="step3_label_3">
-     <property name="geometry">
-      <rect>
-       <x>100</x>
-       <y>100</y>
-       <width>571</width>
-       <height>21</height>
-      </rect>
-     </property>
-     <property name="maximumSize">
-      <size>
-       <width>16777215</width>
-       <height>16777210</height>
-      </size>
-     </property>
-     <property name="font">
-      <font>
-       <pointsize>8</pointsize>
-       <bold>true</bold>
-      </font>
-     </property>
-     <property name="accessibleDescription">
-      <string/>
-     </property>
-     <property name="styleSheet">
-      <string notr="true">color: rgb(255, 255, 255);</string>
-     </property>
-     <property name="text">
-      <string>Step 2: Type in the folder you want to track to or graph from. Then hit ENTER.</string>
-     </property>
-     <property name="textFormat">
-      <enum>Qt::PlainText</enum>
-     </property>
-    </widget>
-    <widget class="QLabel" name="step4_label_4">
-     <property name="geometry">
-      <rect>
-       <x>100</x>
-       <y>570</y>
-       <width>571</width>
-       <height>41</height>
-      </rect>
-     </property>
-     <property name="font">
-      <font>
-       <pointsize>8</pointsize>
-       <bold>true</bold>
-      </font>
-     </property>
-     <property name="accessibleDescription">
-      <string/>
-     </property>
-     <property name="styleSheet">
-      <string notr="true">color: rgb(255, 255, 255);</string>
-     </property>
-     <property name="frameShape">
-      <enum>QFrame::StyledPanel</enum>
-     </property>
-     <property name="frameShadow">
-      <enum>QFrame::Sunken</enum>
-     </property>
-     <property name="text">
-      <string>Step 4: If tracking...choose frames to display/save. 
-They all slow down the process except for saving video</string>
-     </property>
-     <property name="textFormat">
-      <enum>Qt::PlainText</enum>
-     </property>
-    </widget>
-    <widget class="QLabel" name="step5_label_5">
-     <property name="geometry">
-      <rect>
-       <x>100</x>
-       <y>670</y>
-       <width>571</width>
-       <height>41</height>
-      </rect>
-     </property>
-     <property name="maximumSize">
-      <size>
-       <width>16777215</width>
-       <height>16777210</height>
-      </size>
-     </property>
-     <property name="font">
-      <font>
-       <pointsize>8</pointsize>
-       <bold>true</bold>
-      </font>
-     </property>
-     <property name="accessibleDescription">
-      <string/>
-     </property>
-     <property name="styleSheet">
-      <string notr="true">color: rgb(255, 255, 255);</string>
-     </property>
-     <property name="lineWidth">
-      <number>-5</number>
-     </property>
-     <property name="text">
-      <string>Step 5: If tracking with D435i 3D camera...Choose the type of tracking.</string>
-     </property>
-     <property name="textFormat">
-      <enum>Qt::PlainText</enum>
-     </property>
-    </widget>
-    <widget class="QLabel" name="step7_label_7">
-     <property name="geometry">
-      <rect>
-       <x>680</x>
-       <y>220</y>
-       <width>461</width>
-       <height>61</height>
-      </rect>
-     </property>
-     <property name="font">
-      <font>
-       <pointsize>8</pointsize>
-       <bold>true</bold>
-      </font>
-     </property>
-     <property name="toolTipDuration">
-      <number>4</number>
-     </property>
-     <property name="styleSheet">
-      <string notr="true">color: rgb(255, 255, 255);</string>
-     </property>
-     <property name="text">
-      <string>Step 7: Once you have graphed the data, zoom in,
-then see it in 3D or find trendlines</string>
-     </property>
-     <property name="wordWrap">
-      <bool>true</bool>
-     </property>
-    </widget>
-    <widget class="QTableWidget" name="table_widget_objects">
-     <property name="geometry">
-      <rect>
-       <x>100</x>
-       <y>380</y>
-       <width>431</width>
-       <height>181</height>
-      </rect>
-     </property>
-     <property name="minimumSize">
-      <size>
-       <width>371</width>
-       <height>181</height>
-      </size>
-     </property>
-     <property name="font">
-      <font>
-       <pointsize>7</pointsize>
-      </font>
-     </property>
-     <property name="focusPolicy">
-      <enum>Qt::NoFocus</enum>
-     </property>
-     <property name="editTriggers">
-      <set>QAbstractItemView::AnyKeyPressed|QAbstractItemView::CurrentChanged|QAbstractItemView::DoubleClicked|QAbstractItemView::EditKeyPressed</set>
-     </property>
-     <attribute name="horizontalHeaderMinimumSectionSize">
-      <number>10</number>
-     </attribute>
-     <attribute name="verticalHeaderMinimumSectionSize">
-      <number>20</number>
-     </attribute>
-     <attribute name="verticalHeaderDefaultSectionSize">
-      <number>20</number>
-     </attribute>
-     <column>
-      <property name="text">
-       <string>Use</string>
+and graph</string></property>
+      </widget>
+
+      <widget class="QCheckBox" name="data_in_other">
+       <property name="geometry"><rect><x>5</x><y>100</y><width>510</width><height>33</height></rect></property>
+       <property name="font"><font><pointsize>8</pointsize></font></property>
+       <property name="text"><string>Data came from another source — Saved as a .csv file (Time, x, y, z)</string></property>
+      </widget>
+     </widget>
+
+     <!-- ── Step 2  y=151  h=140  (folder_list-bottom=132, +6+2) ── -->
+     <widget class="QGroupBox" name="step2_group">
+      <property name="geometry">
+       <rect><x>5</x><y>151</y><width>520</width><height>140</height></rect>
       </property>
-      <property name="font">
-       <font>
-        <pointsize>7</pointsize>
-       </font>
+      <property name="title"><string>Step 2: Output Folder</string></property>
+
+      <widget class="QLabel" name="step3_label_3">
+       <property name="geometry"><rect><x>5</x><y>28</y><width>505</width><height>16</height></rect></property>
+       <property name="font"><font><pointsize>8</pointsize></font></property>
+       <property name="text"><string>Type the folder name to track to or graph from, then press Enter.</string></property>
+      </widget>
+
+      <widget class="QLineEdit" name="folder_name">
+       <property name="geometry"><rect><x>5</x><y>47</y><width>505</width><height>28</height></rect></property>
+       <property name="font"><font><pointsize>8</pointsize></font></property>
+       <property name="text"><string/></property>
+       <property name="placeholderText"><string>Name of the folder you would like to create [Enter]</string></property>
+      </widget>
+
+      <widget class="QListWidget" name="folder_list">
+       <property name="geometry"><rect><x>5</x><y>80</y><width>505</width><height>52</height></rect></property>
+       <property name="font"><font><pointsize>8</pointsize></font></property>
+       <item><property name="text"><string>List of current folders (don't choose these)</string></property></item>
+      </widget>
+     </widget>
+
+     <!-- ── Step 3  y=296  h=250  (tables-bottom=242, +6+2) ── -->
+     <widget class="QGroupBox" name="step3_group">
+      <property name="geometry">
+       <rect><x>5</x><y>296</y><width>520</width><height>250</height></rect>
       </property>
-     </column>
-     <column>
-      <property name="text">
-       <string>Name</string>
+      <property name="title"><string>Step 3: Color Setup (Color Tracker)</string></property>
+
+      <widget class="QLabel" name="step2_label_2">
+       <property name="geometry"><rect><x>5</x><y>28</y><width>505</width><height>16</height></rect></property>
+       <property name="font"><font><pointsize>8</pointsize></font></property>
+       <property name="text"><string>Choose how to determine colors to track. Enter mass for momentum graphs.</string></property>
+      </widget>
+
+      <widget class="QRadioButton" name="select_default_colors">
+       <property name="geometry"><rect><x>5</x><y>47</y><width>105</width><height>20</height></rect></property>
+       <property name="font"><font><pointsize>8</pointsize></font></property>
+       <property name="text"><string>Default Colors</string></property>
+       <property name="checked"><bool>false</bool></property>
+      </widget>
+
+      <widget class="QRadioButton" name="select_your_own_colors">
+       <property name="geometry"><rect><x>113</x><y>47</y><width>145</width><height>20</height></rect></property>
+       <property name="font"><font><pointsize>8</pointsize></font></property>
+       <property name="text"><string>Your predefined colors</string></property>
+      </widget>
+
+      <widget class="QRadioButton" name="define_colors">
+       <property name="geometry"><rect><x>261</x><y>47</y><width>150</width><height>20</height></rect></property>
+       <property name="font"><font><pointsize>8</pointsize></font></property>
+       <property name="text"><string>Define colors now</string></property>
+      </widget>
+
+      <widget class="QLineEdit" name="lineEdit_define_color_name">
+       <property name="geometry"><rect><x>5</x><y>71</y><width>115</width><height>24</height></rect></property>
+       <property name="font"><font><pointsize>8</pointsize></font></property>
+       <property name="placeholderText"><string>predefined name [Enter]</string></property>
+      </widget>
+
+      <widget class="QComboBox" name="combo_box_objects">
+       <property name="geometry"><rect><x>123</x><y>71</y><width>192</width><height>24</height></rect></property>
+       <property name="font"><font><pointsize>8</pointsize></font></property>
+      </widget>
+
+      <widget class="QPushButton" name="find_lower_upper_button">
+       <property name="geometry"><rect><x>318</x><y>71</y><width>172</width><height>24</height></rect></property>
+       <property name="font"><font><pointsize>8</pointsize></font></property>
+       <property name="text"><string>Modify Colors OnScreen</string></property>
+      </widget>
+
+      <!-- Three overlapping tables — Python shows/hides based on radio selection -->
+      <widget class="QTableWidget" name="table_widget_color">
+       <property name="geometry"><rect><x>5</x><y>99</y><width>505</width><height>143</height></rect></property>
+       <property name="font"><font><pointsize>7</pointsize></font></property>
+       <property name="editTriggers"><set>QAbstractItemView::AnyKeyPressed|QAbstractItemView::CurrentChanged|QAbstractItemView::DoubleClicked|QAbstractItemView::EditKeyPressed</set></property>
+       <attribute name="horizontalHeaderMinimumSectionSize"><number>10</number></attribute>
+       <attribute name="verticalHeaderMinimumSectionSize"><number>20</number></attribute>
+       <attribute name="verticalHeaderDefaultSectionSize"><number>20</number></attribute>
+       <column><property name="text"><string>Use</string></property></column>
+       <column><property name="text"><string>Color</string></property></column>
+       <column><property name="text"><string>Radius(cm)</string></property></column>
+       <column><property name="text"><string>Mass(kg)</string></property></column>
+       <column><property name="text"><string>lower</string></property></column>
+       <column><property name="text"><string>upper</string></property></column>
+      </widget>
+
+      <widget class="QTableWidget" name="table_widget_color_2">
+       <property name="geometry"><rect><x>5</x><y>99</y><width>505</width><height>143</height></rect></property>
+       <property name="font"><font><pointsize>7</pointsize></font></property>
+       <property name="editTriggers"><set>QAbstractItemView::AnyKeyPressed|QAbstractItemView::CurrentChanged|QAbstractItemView::DoubleClicked|QAbstractItemView::EditKeyPressed</set></property>
+       <attribute name="horizontalHeaderMinimumSectionSize"><number>10</number></attribute>
+       <attribute name="verticalHeaderMinimumSectionSize"><number>20</number></attribute>
+       <attribute name="verticalHeaderDefaultSectionSize"><number>20</number></attribute>
+       <column><property name="text"><string>Use</string></property></column>
+       <column><property name="text"><string>Name</string></property></column>
+       <column><property name="text"><string>Radius(cm)</string></property></column>
+       <column><property name="text"><string>Mass(kg)</string></property></column>
+       <column><property name="text"><string>lower</string></property></column>
+       <column><property name="text"><string>upper</string></property></column>
+       <column><property name="text"><string>OnScreen</string></property></column>
+      </widget>
+
+      <widget class="QTableWidget" name="table_widget_objects">
+       <property name="geometry"><rect><x>5</x><y>99</y><width>505</width><height>143</height></rect></property>
+       <property name="font"><font><pointsize>7</pointsize></font></property>
+       <property name="focusPolicy"><enum>Qt::NoFocus</enum></property>
+       <property name="editTriggers"><set>QAbstractItemView::AnyKeyPressed|QAbstractItemView::CurrentChanged|QAbstractItemView::DoubleClicked|QAbstractItemView::EditKeyPressed</set></property>
+       <attribute name="horizontalHeaderMinimumSectionSize"><number>10</number></attribute>
+       <attribute name="verticalHeaderMinimumSectionSize"><number>20</number></attribute>
+       <attribute name="verticalHeaderDefaultSectionSize"><number>20</number></attribute>
+       <column><property name="text"><string>Use</string></property></column>
+       <column><property name="text"><string>Name</string></property></column>
+       <column><property name="text"><string>Radius(cm)</string></property></column>
+       <column><property name="text"><string>Mass(kg)</string></property></column>
+       <column><property name="text"><string>lower</string></property></column>
+       <column><property name="text"><string>upper</string></property></column>
+       <column><property name="text"><string>OnScreen</string></property></column>
+      </widget>
+     </widget>
+
+     <!-- ── Step 4  y=551  h=119
+          CHANGED: save_image_check removed; save_video moved to x=200 y=47.
+          Two columns: Show (x=5) | Save (x=200). Last row y=91 h=20 → +6+2=119 ── -->
+     <widget class="QGroupBox" name="step4_group">
+      <property name="geometry">
+       <rect><x>5</x><y>551</y><width>520</width><height>119</height></rect>
       </property>
-      <property name="font">
-       <font>
-        <pointsize>8</pointsize>
-       </font>
+      <property name="title"><string>Step 4: Display and Save Options</string></property>
+
+      <widget class="QLabel" name="step4_label_4">
+       <property name="geometry"><rect><x>5</x><y>28</y><width>505</width><height>16</height></rect></property>
+       <property name="font"><font><pointsize>8</pointsize></font></property>
+       <property name="text"><string>These all slow down tracking except for saving video.</string></property>
+      </widget>
+
+      <widget class="QCheckBox" name="show_image_check">
+       <property name="geometry"><rect><x>5</x><y>47</y><width>120</width><height>20</height></rect></property>
+       <property name="font"><font><pointsize>8</pointsize></font></property>
+       <property name="text"><string>Show Image</string></property>
+       <property name="checked"><bool>true</bool></property>
+      </widget>
+
+      <widget class="QCheckBox" name="show_depth_check">
+       <property name="geometry"><rect><x>5</x><y>69</y><width>120</width><height>20</height></rect></property>
+       <property name="font"><font><pointsize>8</pointsize></font></property>
+       <property name="text"><string>Show Depth</string></property>
+      </widget>
+
+      <widget class="QCheckBox" name="show_tracking_mask_check">
+       <property name="geometry"><rect><x>5</x><y>91</y><width>185</width><height>20</height></rect></property>
+       <property name="font"><font><pointsize>8</pointsize></font></property>
+       <property name="text"><string>Show Tracking Mask</string></property>
+      </widget>
+
+      <!-- save_video moved here (was x=415); save_image_check removed -->
+      <widget class="QCheckBox" name="save_video">
+       <property name="geometry"><rect><x>200</x><y>47</y><width>200</width><height>20</height></rect></property>
+       <property name="font"><font><pointsize>8</pointsize></font></property>
+       <property name="text"><string>Save Images Video *.mp4</string></property>
+       <property name="checked"><bool>true</bool></property>
+      </widget>
+
+      <widget class="QCheckBox" name="save_depth_check">
+       <property name="geometry"><rect><x>200</x><y>69</y><width>210</width><height>20</height></rect></property>
+       <property name="font"><font><pointsize>8</pointsize></font></property>
+       <property name="text"><string>Save Depth Video *mp4</string></property>
+      </widget>
+
+      <widget class="QCheckBox" name="save_tracking_mask_check">
+       <property name="geometry"><rect><x>200</x><y>91</y><width>171</width><height>20</height></rect></property>
+       <property name="font"><font><pointsize>8</pointsize></font></property>
+       <property name="text"><string>Save Tracking Mask</string></property>
+      </widget>
+     </widget>
+
+     <!-- ── Step 5 + Run Tracker (merged)  y=675  h=116
+          D435i note + 4 run buttons + bag warning.
+          Last widget (label) bottom=108  +6+2=116                   ── -->
+     <widget class="QGroupBox" name="step5_group">
+      <property name="geometry">
+       <rect><x>5</x><y>675</y><width>520</width><height>116</height></rect>
       </property>
-     </column>
-     <column>
-      <property name="text">
-       <string>Radius(cm)</string>
-      </property>
-      <property name="font">
-       <font>
-        <pointsize>8</pointsize>
-       </font>
-      </property>
-     </column>
-     <column>
-      <property name="text">
-       <string>Mass(kg)</string>
-      </property>
-      <property name="font">
-       <font>
-        <pointsize>8</pointsize>
-       </font>
-      </property>
-     </column>
-     <column>
-      <property name="text">
-       <string>lower</string>
-      </property>
-     </column>
-     <column>
-      <property name="text">
-       <string>upper</string>
-      </property>
-     </column>
-     <column>
-      <property name="text">
-       <string>OnScreen</string>
-      </property>
-      <property name="font">
-       <font>
-        <pointsize>8</pointsize>
-       </font>
-      </property>
-     </column>
-    </widget>
-    <widget class="QLabel" name="label">
-     <property name="geometry">
-      <rect>
-       <x>370</x>
-       <y>770</y>
-       <width>251</width>
-       <height>31</height>
-      </rect>
-     </property>
-     <property name="styleSheet">
-      <string notr="true">color: rgb(255, 255, 255);</string>
-     </property>
-     <property name="text">
-      <string>New bag files need new names or errors occur
-Will record for a few seconds and stop</string>
-     </property>
+      <property name="title"><string>Step 5: 3D Camera (D435i) — Run Tracker</string></property>
+
+      <widget class="QLabel" name="step5_label_5">
+       <property name="geometry"><rect><x>5</x><y>28</y><width>505</width><height>18</height></rect></property>
+       <property name="font"><font><pointsize>8</pointsize></font></property>
+       <property name="text"><string>If tracking with D435i — axis and height settings are in the right panel.</string></property>
+      </widget>
+
+      <widget class="QPushButton" name="real_time_button">
+       <property name="geometry"><rect><x>5</x><y>49</y><width>120</width><height>38</height></rect></property>
+       <property name="font"><font><pointsize>9</pointsize></font></property>
+       <property name="text"><string>Run Real-Time Graph
+Low fps</string></property>
+      </widget>
+
+      <widget class="QPushButton" name="tracker_button">
+       <property name="geometry"><rect><x>129</x><y>49</y><width>120</width><height>38</height></rect></property>
+       <property name="font"><font><pointsize>9</pointsize></font></property>
+       <property name="text"><string>Run Tracker
+medium fps</string></property>
+      </widget>
+
+      <widget class="QPushButton" name="record_bag_button">
+       <property name="geometry"><rect><x>253</x><y>49</y><width>120</width><height>38</height></rect></property>
+       <property name="font"><font><pointsize>9</pointsize></font></property>
+       <property name="text"><string>Record Bag
+highest fps</string></property>
+      </widget>
+
+      <widget class="QPushButton" name="track_from_bag_button">
+       <property name="geometry"><rect><x>377</x><y>49</y><width>120</width><height>38</height></rect></property>
+       <property name="font"><font><pointsize>9</pointsize></font></property>
+       <property name="text"><string>Track from
+ Bag File</string></property>
+      </widget>
+
+      <widget class="QLabel" name="label">
+       <property name="geometry"><rect><x>5</x><y>90</y><width>505</width><height>18</height></rect></property>
+       <property name="font"><font><pointsize>7</pointsize></font></property>
+       <property name="text"><string>New bag files need new names or errors occur  •  Will stop after a few seconds</string></property>
+      </widget>
+     </widget>
+
     </widget>
    </widget>
-   <widget class="QComboBox" name="combo_test">
+
+   <!-- Legacy zero-size placeholder -->
+   <widget class="QFrame" name="help_menu_2">
+    <property name="geometry"><rect><x>0</x><y>0</y><width>0</width><height>0</height></rect></property>
+    <property name="frameShape"><enum>QFrame::NoFrame</enum></property>
+    <property name="frameShadow"><enum>QFrame::Plain</enum></property>
+   </widget>
+
+   <!-- ═══════════════════════════════════════════════════════
+        RIGHT PANEL — two-column layout
+        Left column  x=545  w=796  (step6 top, graph below)
+        Right column x=1345 w=284  (step7, full height)
+        4 px gap between columns.  Right edge = 1629.
+        ═══════════════════════════════════════════════════════ -->
+
+   <!-- ── Step 6 (left column top)  x=545 y=2 w=440 h=141
+        Radio buttons, axis controls, and graph action buttons
+        each on a single compact row.
+        last-widget-bottom=133  +6+2=141                            ── -->
+   <widget class="QGroupBox" name="step6Group">
     <property name="geometry">
-     <rect>
-      <x>10</x>
-      <y>260</y>
-      <width>0</width>
-      <height>0</height>
-     </rect>
+     <rect><x>594</x><y>2</y><width>440</width><height>141</height></rect>
     </property>
+    <property name="title"><string>Step 6: Configure and Launch Graphs</string></property>
+
+    <widget class="QLabel" name="step6_label_6">
+     <property name="geometry"><rect><x>5</x><y>28</y><width>425</width><height>16</height></rect></property>
+     <property name="font"><font><pointsize>8</pointsize></font></property>
+     <property name="text"><string>Position &amp; Velocity always graphed — select additional variables:</string></property>
+    </widget>
+
+    <widget class="QRadioButton" name="select_acceleration">
+     <property name="geometry"><rect><x>5</x><y>47</y><width>108</width><height>20</height></rect></property>
+     <property name="font"><font><pointsize>8</pointsize></font></property>
+     <property name="text"><string>Acceleration</string></property>
+     <property name="checked"><bool>true</bool></property>
+    </widget>
+
+    <widget class="QRadioButton" name="select_momentum">
+     <property name="geometry"><rect><x>116</x><y>47</y><width>108</width><height>20</height></rect></property>
+     <property name="font"><font><pointsize>8</pointsize></font></property>
+     <property name="text"><string>Momentum</string></property>
+    </widget>
+
+    <widget class="QRadioButton" name="select_energy">
+     <property name="geometry"><rect><x>227</x><y>47</y><width>115</width><height>20</height></rect></property>
+     <property name="font"><font><pointsize>8</pointsize></font></property>
+     <property name="text"><string>Energy (Future)</string></property>
+    </widget>
+
+    <widget class="QComboBox" name="up_axis">
+     <property name="geometry"><rect><x>5</x><y>70</y><width>118</width><height>24</height></rect></property>
+     <property name="font"><font><pointsize>8</pointsize></font></property>
+     <item><property name="text"><string>Which axis is up</string></property></item>
+     <item><property name="text"><string>x</string></property></item>
+     <item><property name="text"><string>y</string></property></item>
+     <item><property name="text"><string>z</string></property></item>
+    </widget>
+
+    <widget class="QLineEdit" name="r_height">
+     <property name="geometry"><rect><x>126</x><y>70</y><width>110</width><height>24</height></rect></property>
+     <property name="font"><font><pointsize>8</pointsize></font></property>
+     <property name="placeholderText"><string>Reference height (m)</string></property>
+    </widget>
+
+    <widget class="QPushButton" name="save_height_mass">
+     <property name="geometry"><rect><x>239</x><y>67</y><width>55</width><height>30</height></rect></property>
+     <property name="font"><font><pointsize>8</pointsize></font></property>
+     <property name="text"><string>Save</string></property>
+    </widget>
+
+    <widget class="QPushButton" name="graph_button">
+     <property name="geometry"><rect><x>5</x><y>99</y><width>130</width><height>34</height></rect></property>
+     <property name="font"><font><pointsize>9</pointsize></font></property>
+     <property name="text"><string>Graph Data</string></property>
+    </widget>
+
+    <widget class="QPushButton" name="Button3DGraph">
+     <property name="geometry"><rect><x>139</x><y>99</y><width>130</width><height>34</height></rect></property>
+     <property name="font"><font><pointsize>9</pointsize></font></property>
+     <property name="text"><string>3D Graph</string></property>
+    </widget>
+
+    <widget class="QPushButton" name="find_trendlines_button">
+     <property name="geometry"><rect><x>273</x><y>99</y><width>130</width><height>34</height></rect></property>
+     <property name="font"><font><pointsize>8</pointsize></font></property>
+     <property name="text"><string>Find Trendlines</string></property>
+    </widget>
    </widget>
+
+   <!-- ── Step 7 (right column, full height)  x=1345 y=2 w=284 h=870
+        Columns 2 & 3 halved: defaultSectionSize 80 (was 160).
+        Table: x=5 y=51 w=270 h=811  (bottom=862, +6+2≈870)        ── -->
+   <widget class="QGroupBox" name="step7Group">
+    <property name="geometry">
+     <rect><x>1175</x><y>2</y><width>454</width><height>870</height></rect>
+    </property>
+    <property name="title"><string>Step 7: Trendline Analysis</string></property>
+
+    <widget class="QLabel" name="step7_label_7">
+     <property name="geometry"><rect><x>5</x><y>28</y><width>440</width><height>20</height></rect></property>
+     <property name="font"><font><pointsize>8</pointsize></font></property>
+     <property name="text"><string>After graphing: zoom in, then find trendlines.</string></property>
+    </widget>
+
+    <widget class="QTableWidget" name="trendline_table_widget">
+     <property name="geometry"><rect><x>5</x><y>51</y><width>440</width><height>811</height></rect></property>
+     <property name="font"><font><pointsize>8</pointsize></font></property>
+     <property name="textElideMode"><enum>Qt::ElideLeft</enum></property>
+     <property name="rowCount"><number>12</number></property>
+     <property name="columnCount"><number>3</number></property>
+     <attribute name="horizontalHeaderVisible"><bool>false</bool></attribute>
+     <attribute name="horizontalHeaderMinimumSectionSize"><number>30</number></attribute>
+     <attribute name="horizontalHeaderDefaultSectionSize"><number>80</number></attribute>
+     <attribute name="verticalHeaderVisible"><bool>true</bool></attribute>
+     <attribute name="verticalHeaderMinimumSectionSize"><number>10</number></attribute>
+     <attribute name="verticalHeaderDefaultSectionSize"><number>16</number></attribute>
+     <row/><row/><row/><row/><row/><row/>
+     <row/><row/><row/><row/><row/><row/>
+     <column/><column/><column/>
+    </widget>
+   </widget>
+
+   <!-- ── Graph (left column below step6)  x=545 y=146 w=796 h=729
+        Starts 3 px below step6Group (y=2+141+3=146).
+        Right edge 545+796=1341; gap to step7 (x=1345) = 4 px.
+        Bottom 146+729=875 = window content area bottom.            ── -->
+   <widget class="QWidget" name="gridLayoutWidget">
+    <property name="geometry">
+     <rect><x>530</x><y>146</y><width>641</width><height>729</height></rect>
+    </property>
+    <layout class="QGridLayout" name="grid_layout">
+     <property name="spacing"><number>2</number></property>
+     <item row="0" column="0">
+      <widget class="QWidget" name="graph_widget" native="true">
+       <property name="enabled"><bool>true</bool></property>
+       <property name="minimumSize"><size><width>300</width><height>400</height></size></property>
+       <property name="maximumSize"><size><width>1400</width><height>800</height></size></property>
+       <property name="contextMenuPolicy"><enum>Qt::NoContextMenu</enum></property>
+       <widget class="PlotWidget" name="DataGraph">
+        <property name="geometry">
+         <rect><x>0</x><y>0</y><width>637</width><height>721</height></rect>
+        </property>
+        <property name="font"><font><pointsize>9</pointsize></font></property>
+        <property name="focusPolicy"><enum>Qt::NoFocus</enum></property>
+       </widget>
+      </widget>
+     </item>
+    </layout>
+   </widget>
+
+   <!-- Legacy hidden combo -->
+   <widget class="QComboBox" name="combo_test">
+    <property name="geometry"><rect><x>10</x><y>260</y><width>0</width><height>0</height></rect></property>
+   </widget>
+
   </widget>
+
   <widget class="QStatusBar" name="statusbar"/>
-  <widget class="QToolBar" name="toolBar">
-   <property name="windowTitle">
-    <string>toolBar</string>
-   </property>
-   <attribute name="toolBarArea">
-    <enum>TopToolBarArea</enum>
-   </attribute>
-   <attribute name="toolBarBreak">
-    <bool>false</bool>
-   </attribute>
-  </widget>
-  <widget class="QToolBar" name="toolBar_2">
-   <property name="windowTitle">
-    <string>toolBar_2</string>
-   </property>
-   <attribute name="toolBarArea">
-    <enum>TopToolBarArea</enum>
-   </attribute>
-   <attribute name="toolBarBreak">
-    <bool>false</bool>
-   </attribute>
-  </widget>
-  <widget class="QToolBar" name="toolBar_3">
-   <property name="windowTitle">
-    <string>toolBar_3</string>
-   </property>
-   <attribute name="toolBarArea">
-    <enum>TopToolBarArea</enum>
-   </attribute>
-   <attribute name="toolBarBreak">
-    <bool>false</bool>
-   </attribute>
-  </widget>
-  <widget class="QToolBar" name="toolBar_4">
-   <property name="windowTitle">
-    <string>toolBar_4</string>
-   </property>
-   <attribute name="toolBarArea">
-    <enum>TopToolBarArea</enum>
-   </attribute>
-   <attribute name="toolBarBreak">
-    <bool>false</bool>
-   </attribute>
-  </widget>
-  <action name="actionRun_2">
-   <property name="enabled">
-    <bool>false</bool>
-   </property>
-   <property name="text">
-    <string>Run</string>
-   </property>
-   <property name="visible">
-    <bool>false</bool>
-   </property>
-   <property name="iconVisibleInMenu">
-    <bool>false</bool>
-   </property>
-  </action>
-  <action name="actionClose">
-   <property name="text">
-    <string>Close</string>
-   </property>
-  </action>
+
  </widget>
  <customwidgets>
   <customwidget>
