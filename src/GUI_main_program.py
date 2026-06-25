@@ -72,7 +72,7 @@ class mlpcanvas(FigureCanvasQTAgg):
 
     def __init__(self):
         self.fig, self.axes = plt.subplots(nrows=3, ncols=3, figsize=(10,4.5), sharex=True)
-        plt.subplots_adjust(left=0.1, bottom=None, right=None, top=None, wspace=0.7, hspace=0.7)
+        plt.subplots_adjust(left=0.1, bottom=0.15, right=0.98, top=0.97, wspace=0.35, hspace=0.7)
         super(mlpcanvas, self).__init__(self.fig)
 
     def clear(self):
@@ -81,6 +81,7 @@ class mlpcanvas(FigureCanvasQTAgg):
         self.axes = self.fig.subplots(nrows=3, ncols=3, sharex=True, sharey=False,
                        squeeze=True, subplot_kw=None,
                        gridspec_kw=None)
+        self.fig.subplots_adjust(left=0.1, bottom=0.15, right=0.98, top=0.97, wspace=0.35, hspace=0.7)
 
     '''class mlpcanvas_3D(FigureCanvasQTAgg):
     def __init__(self):
@@ -201,6 +202,9 @@ class MyGUI(QMainWindow):
         self.Button3DGraph.setHidden(True)
         # Setting the bounds for the trendlines and the output equations / functions
         self.trendline_table_widget.setHidden(True)
+        self.trendline_table_widget.setColumnWidth(0, 136)
+        self.trendline_table_widget.setColumnWidth(1, 136)
+        self.trendline_table_widget.setColumnWidth(2, 136)
         self.find_trendlines_button.setHidden(True)
 
         self.id300_button.setHidden(True)
@@ -680,7 +684,7 @@ class MyGUI(QMainWindow):
             return src, type_of_tracking, self.image, self.color_ranges, min_radius_object, data_output_folder_path, self.tracking_info.input_folder, self.tracking_info.output_folder
 
         #  self.image = get_settings_to_pass(self)
-        self.image = image_option(self.show_image_check.isChecked(), self.save_image_check.isChecked(), self.show_depth_check.isChecked(), self.save_depth_check.isChecked(), self.show_tracking_mask_check.isChecked(),self.save_tracking_mask_check.isChecked(), self.save_video.isChecked())
+        self.image = image_option(self.show_image_check.isChecked(), False, self.show_depth_check.isChecked(), self.save_depth_check.isChecked(), self.show_tracking_mask_check.isChecked(),self.save_tracking_mask_check.isChecked(), self.save_video.isChecked())
         
 
         ## TODO Add spot in GUI for this later. How do I do this?
@@ -769,6 +773,8 @@ class MyGUI(QMainWindow):
         self.find_trendlines_button.setHidden(False)
         title_of_table.setColumnCount(len(csv_files_array))
         title_of_table.setRowCount(30)
+        for col in range(len(csv_files_array)):
+            title_of_table.setColumnWidth(col, 136)
         
         title_of_table.setVerticalHeaderItem(0, QTableWidgetItem('object name(color)'))
         title_of_table.setVerticalHeaderItem(1, QTableWidgetItem('mass (kg)'))
