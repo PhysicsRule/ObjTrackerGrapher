@@ -23,10 +23,10 @@ def GUI_select_bounding_box(pipeline):
         tracker = select_object_tracker_method()
         # Select the object to track
         print('select object')
-        bbox = cv2.selectROI('ROI Selection', color_image, False)          
+        bbox = cv2.selectROI('Step 2 of 2: Draw box around object -> ENTER', color_image, False)
         ret = tracker.init(depth_colormap, bbox)
         print(bbox)
-        cv2.destroyWindow('ROI Selection')
+        cv2.destroyAllWindows()
         check_no_selection = False
     return bbox, ret, tracker
 
@@ -47,10 +47,10 @@ def GUI_select_bounding_box_infrared(pipeline):
         tracker = select_object_tracker_method()
         # Select the object to track
         print('select object')
-        bbox = cv2.selectROI('ROI Selection', infrared_image, False)          
+        bbox = cv2.selectROI('Step 2 of 2: Draw box around object -> ENTER', infrared_image, False)
         ret = tracker.init(depth_colormap, bbox)
         print(bbox)
-        cv2.destroyWindow('ROI Selection')
+        cv2.destroyAllWindows()
         check_no_selection = False
     return bbox, ret, tracker
 

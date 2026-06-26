@@ -162,14 +162,13 @@ def get_all_frames_infrared(rs_pipeline) -> Optional[Tuple[Tuple[Any, Any, Any],
     return (rs_depth, rs_infrared), timestamp
 
 
-def select_clipping_distance(frame, rs_depth) -> Tuple[Any, float, float]:
+def select_clipping_distance(frame, rs_depth, window_title: str = 'Select background: draw box -> ENTER') -> Tuple[Any, float, float]:
 # This selects both the background and the TODO  Origin
      # Find distance (depth) to wall & store as clipping distance
     # Note that it is reduced slightly to allow some room for error (*0.95)
     print('Select a box at a distance further than points will be collected.')
     print('Any colored object beyond that point will not be tracked, but may slow down the data collection')
-    wall = cv2.selectROI('ROI Selection', frame, False)
-    #wall = cv2.selectROI('Select an object/wall behind the movement to remove unwanted data. Then ENTER. Then SPACEBAR', frame, False)
+    wall = cv2.selectROI(window_title, frame, False)
     depth = round(rs_depth.get_distance(wall[0], wall[1]), 4)
     clipping_distance =  depth  * 0.99
     return wall, depth, clipping_distance
@@ -186,11 +185,11 @@ def get_coordinates_meters(rs_frame, rs_depth, x_pixel: int, y_pixel: int, depth
     frame_point = rs.rs2_transform_point_to_point(depth_to_frame_extrin, depth_point)
     return frame_point
 
-def select_location(frame, rs_frame, rs_depth) -> Tuple[float, Tuple[float, float, float], float]:
+def select_location(frame, rs_frame, rs_depth, window_title: str = 'Select background: draw box -> ENTER') -> Tuple[float, Tuple[float, float, float], float]:
 # This selects both the background and the TODO  Origin
      # Find distance (depth) to wall & store as clipping distance
     # Note that it is reduced slightly to allow some room for error (*0.95)
-    wall, depth, clipping_distance = select_clipping_distance(frame, rs_depth)
+    wall, depth, clipping_distance = select_clipping_distance(frame, rs_depth, window_title)
     depth = round(rs_depth.get_distance(int(wall[0]),int(wall[1])),4) 
     frame_point = get_coordinates_meters(rs_frame, rs_depth, wall[0], wall[1], depth)
     return clipping_distance, frame_point, depth
@@ -253,7 +252,7 @@ def select_furthest_distance_color(pipeline) -> Tuple[float, float, float, float
             continue
         (cv_color, rs_color, rs_depth), _ = frame_result
         # Find the clipping distance
-        clipping_distance, color_point, zeroed_z = select_location(cv_color, rs_color, rs_depth)
+        clipping_distance, color_point, zeroed_z = select_location(cv_color, rs_color, rs_depth, 'Select background wall -> ENTER -> then SPACEBAR to start')
         print('clipping distance is', clipping_distance)
         #TODO later call above to find the origin then call the following after
         # for now this just sets all zeroed values as 0 insted of a specific origin, so the origin is the cent of the camera
@@ -264,10 +263,9 @@ def select_furthest_distance_color(pipeline) -> Tuple[float, float, float, float
     while space != 32:
          space = cv2.waitKey(1) & 0xff
     # Remove ROI selection window, as it is no longer necessary
-    cv2.destroyWindow('ROI Selection')
-    #cv2.destroyWindow('ROI Selection')
+    cv2.destroyAllWindows()
 
-    return zeroed_x, zeroed_y, zeroed_z, clipping_distance 
+    return zeroed_x, zeroed_y, zeroed_z, clipping_distance
 
 
 def select_furthest_distance_infrared(pipeline):
@@ -290,7 +288,7 @@ def select_furthest_distance_infrared(pipeline):
         # Find distance (depth) to wall & store as clipping distance
         # Note that it is reduced slightly to allow some room for error (*0.95)
          # Find the clipping distance
-        clipping_distance, depth_point, zeroed_z = select_location(infrared_image, rs_infrared, rs_depth)
+        clipping_distance, depth_point, zeroed_z = select_location(infrared_image, rs_infrared, rs_depth, 'Step 1 of 2: Select background wall -> ENTER -> SPACEBAR')
         #TODO later call above to find the origin then call the following after
         # for now this just sets all zeroed values as 0 instead of a specific origin, so the origin is the cent of the camera
         zeroed_x, zeroed_y, zeroed_z = set_the_origin (depth_point)
@@ -300,9 +298,9 @@ def select_furthest_distance_infrared(pipeline):
     space = 0
     while space != 32:
         space = cv2.waitKey(1) & 0xff
-    
+
     # Remove ROI selection window, as it is no longer necessary
-    cv2.destroyWindow('ROI Selection')
+    cv2.destroyAllWindows()
 
     return zeroed_x, zeroed_y, zeroed_z, clipping_distance
 
